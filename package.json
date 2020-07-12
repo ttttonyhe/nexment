@@ -1,0 +1,36 @@
+{
+  "name": "nexment",
+  "version": "0.0.1",
+  "main": "dist/nexment.cjs.js",
+  "module": "dist/nexment.esm.js",
+  "browser": "dist/nexment.umd.js",
+  "devDependencies": {
+    "@types/ms": "^0.7.30",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rollup": "^1.0.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-local-resolve": "^1.0.7",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-typescript": "^1.0.0",
+    "ts-node": "^7.0.1",
+    "tslib": "^1.9.3",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "build": "rollup -c && tsc -p ./scripts",
+    "dev": "rollup -c -w",
+    "test": "ts-node test/test.ts",
+    "pretest": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/main.d.ts"
+}
