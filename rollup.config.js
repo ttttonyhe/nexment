@@ -3,19 +3,31 @@ import commonjs from 'rollup-plugin-commonjs';
 import typescript from 'rollup-plugin-typescript';
 import sass from 'rollup-plugin-sass';
 import clear from 'rollup-plugin-clear'
+import babel from '@rollup/plugin-babel';
 
 import pkg from './package.json';
 
 export default [
 	// browser-friendly UMD build
 	{
-		input: 'src/main.ts',
+		input: 'src/index.ts',
 		output: {
 			name: 'nexment',
 			file: pkg.browser,
 			format: 'umd'
 		},
 		plugins: [
+			babel({
+				babelHelpers: 'runtime',
+				exclude: 'node_modules/**',
+				presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+				extensions: ['.js', '.jsx', '.ts', '.tsx'],
+				plugins: [
+					['@babel/plugin-transform-runtime', {
+						useESModules: true
+					}]
+				]
+			}),
 			clear({
 				// required, point out which directories should be clear.
 				targets: ['dist'],
@@ -38,9 +50,20 @@ export default [
 	// an array for the `output` option, where we can specify 
 	// `file` and `format` for each target)
 	{
-		input: 'src/main.ts',
-		external: ['react'],
+		input: 'src/index.ts',
+		external: ['react', /@babel\/runtime/],
 		plugins: [
+			babel({
+				babelHelpers: 'runtime',
+				exclude: 'node_modules/**',
+				presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+				extensions: ['.js', '.jsx', '.ts', '.tsx'],
+				plugins: [
+					['@babel/plugin-transform-runtime', {
+						useESModules: true
+					}]
+				]
+			}),
 			sass({
 				insert: true
 			}),

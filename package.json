@@ -5,14 +5,20 @@
   "module": "dist/nexment.esm.js",
   "browser": "dist/nexment.umd.js",
   "devDependencies": {
-    "@types/ms": "^0.7.30",
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@rollup/plugin-babel": "^5.1.0",
+    "@types/babel__core": "^7.1.9",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
+    "leancloud-storage": "^4.6.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "rollup": "^1.0.0",
-    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-clear": "^2.0.7",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-local-resolve": "^1.0.7",
@@ -32,5 +38,8 @@
   "files": [
     "dist"
   ],
-  "types": "./dist/main.d.ts"
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.10.4"
+  }
 }
