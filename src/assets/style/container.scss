@@ -1,0 +1,11 @@
+.nm-container {
+  background: #333;
+  color: #fff;
+  width: 100%;
+  .nm-comment-list {
+    background: #999;
+    ul{
+      padding: 0px;
+    }
+  }
+}
