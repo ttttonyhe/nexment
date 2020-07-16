@@ -7,7 +7,7 @@ import React from 'react';
 import '../../assets/style/container.scss';
 import getIdentifier from '../../lib/utils/getIdentifier';
 import generateCommentID from '../../lib/utils/generateCommentID';
-import getCommentsList from '../../lib/database/getCommentsList';
+import CommentsList from '../../components/sections/CommentsList';
 
 const NexmentContainer = () => {
   return (
@@ -26,31 +26,7 @@ const NexmentContainer = () => {
       >
         Get ID
       </button>
-      <button
-        onClick={async () => {
-          console.log(await getCommentsList('/fuck'));
-        }}
-      >
-        Get Data
-      </button>
-      <section className="nm-comment-list">
-        <ul>
-          <li>
-            <div className="nm-comment-item">
-              <div className="nm-comment-item-left">
-                <img src="" alt="" />
-              </div>
-              <div className="nm-comment-item-right">
-                <div>
-                  <h2>Name</h2>
-                  <em>Date</em>
-                </div>
-                <p>Content</p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </section>
+      <CommentsList pageKey={getIdentifier().identifierData} />
     </div>
   );
 };
