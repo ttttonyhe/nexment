@@ -1,7 +1,7 @@
 import AV from './initiation';
 import useSWR from 'swr';
 
-interface commentsItemType {
+export interface commentsItemType {
   ID: number;
   identifier: string;
   name: string;
@@ -50,11 +50,12 @@ const ListGet = async (
   try {
     if (typeof queryKey === 'string') {
       // querykey is of type string, querying identifier
-      query.equalTo('identifier', queryKey);
+      query.equalTo('identifier', queryKey)
     } else {
       // querykey is of type number, querying replies
       query.equalTo('reply', queryKey);
     }
+    query.descending('createdAt');
     return await query.find().then(
       async (
         items: {

@@ -1,8 +1,31 @@
-import useComments from '../../lib/database/getCommentsList';
+import useComments, {
+  commentsItemType,
+} from '../../lib/database/getCommentsList';
 import React from 'react';
+import Modal from '../modal';
 
-const CommentsList = (Props: { pageKey: string }) => {
-  const { commentsData, isLoading, isError } = useComments(Props.pageKey);
+const CommentsList = (Props: { type: string; pageKey: string }) => {
+  // Reusable data list
+  let { commentsData, isLoading, isError } = useComments(Props.pageKey);
+  // Modal states
+  const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
+  const [modalReplyTo, setModalReplyTo] = React.useState<string>('');
+  const [modalContent, setModalContent] = React.useState<commentsItemType[]>(
+    []
+  );
+
+  /**
+   * Modal toggling function
+   *
+   * @param {commentsItemType[]} replies
+   * @param {string} replyTo
+   */
+  const toggleModal = (replies: commentsItemType[], replyTo: string) => {
+    setModalContent(replies);
+    setModalReplyTo(replyTo);
+    setModalVisibility(true);
+  };
+
   if (isLoading) {
     return <div>Loading....</div>;
   } else if (isError) {
@@ -26,6 +49,20 @@ const CommentsList = (Props: { pageKey: string }) => {
                           <h5>{replyItem.name}</h5>
                           <p>
                             @{item.name}: {replyItem.content}
+                            {replyItem.replyList.length ? (
+                              <button
+                                onClick={() => {
+                                  toggleModal(
+                                    replyItem.replyList,
+                                    replyItem.name
+                                  );
+                                }}
+                              >
+                                view
+                              </button>
+                            ) : (
+                              ''
+                            )}
                           </p>
                         </div>
                       </li>
@@ -40,6 +77,15 @@ const CommentsList = (Props: { pageKey: string }) => {
             </li>
           )}
         </ul>
+        {modalVisibility ? (
+          <Modal
+            type="repliesList"
+            content={modalContent}
+            replyTo={modalReplyTo}
+          />
+        ) : (
+          ''
+        )}
       </div>
     );
   }

@@ -1,3 +1,4 @@
+// LeanCloud storage initiation
 const AV = require('leancloud-storage');
 
 AV.init({
