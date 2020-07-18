@@ -1,6 +1,5 @@
 import React from 'react';
 import RepliesList from '../sections/RepliesList';
-import { commentsItemType } from '../../lib/database/getCommentsList';
 
 /**
  * Modal component
@@ -8,7 +7,14 @@ import { commentsItemType } from '../../lib/database/getCommentsList';
  * @param {{ type: string; content: commentsItemType[]; replyTo?: string }} Props
  * @returns
  */
-const Modal = (Props: { type: string; content: commentsItemType[]; replyTo?: string }) => {
+const Modal = (Props: {
+  type: string;
+  content: any;
+  replyTo?: string;
+  pageKey: string;
+  replyToID?: number;
+  replyToOID?: string;
+}) => {
   switch (Props.type) {
     case 'repliesList':
       return (
@@ -16,6 +22,9 @@ const Modal = (Props: { type: string; content: commentsItemType[]; replyTo?: str
           <RepliesList
             dataContent={Props.content}
             replyTo={Props.replyTo}
+            pageKey={Props.pageKey}
+            replyToID={Props.replyToID}
+            replyToOID={Props.replyToOID}
           />
         </div>
       );

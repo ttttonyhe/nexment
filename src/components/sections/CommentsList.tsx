@@ -1,18 +1,21 @@
-import useComments, {
-  commentsItemType,
-} from '../../lib/database/getCommentsList';
+import useComments from '../../lib/database/getCommentsList';
 import React from 'react';
 import Modal from '../modal';
+import CommentsArea from '../../components/sections/CommentsArea';
 
 const CommentsList = (Props: { type: string; pageKey: string }) => {
   // Reusable data list
-  let { commentsData, isLoading, isError } = useComments(Props.pageKey);
+  const { commentsData, isLoading, isError } = useComments(Props.pageKey);
+
   // Modal states
-  const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
-  const [modalReplyTo, setModalReplyTo] = React.useState<string>('');
-  const [modalContent, setModalContent] = React.useState<commentsItemType[]>(
-    []
-  );
+  const [modalVisibility, setModalVisibility] = React.useState<{
+    [propsName: string]: boolean;
+  }>({});
+
+  // Comment state
+  const [replyToID, setReplyToID] = React.useState<number>();
+  const [replyToOID, setReplyToOID] = React.useState<string>();
+  const [commentsAreaRandom, setRandom] = React.useState<number>(Math.random());
 
   /**
    * Modal toggling function
@@ -20,10 +23,12 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
    * @param {commentsItemType[]} replies
    * @param {string} replyTo
    */
-  const toggleModal = (replies: commentsItemType[], replyTo: string) => {
-    setModalContent(replies);
-    setModalReplyTo(replyTo);
-    setModalVisibility(true);
+  const toggleModal = (repliesBelongOID: string) => {
+    setModalVisibility((prevState: any) => {
+      const nowState = { ...prevState };
+      nowState[repliesBelongOID] = true;
+      return nowState;
+    });
   };
 
   if (isLoading) {
@@ -31,15 +36,35 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
   } else if (isError) {
     return <div>Error.</div>;
   } else {
+    console.log(commentsData);
     return (
       <div>
+        <CommentsArea
+          pageKey={Props.pageKey}
+          replyTo={replyToID}
+          replyToOID={replyToOID}
+          primaryReplyTo={undefined}
+          primaryReplyToOID={undefined}
+          random={commentsAreaRandom}
+        />
         <ul>
           {commentsData !== undefined && commentsData.length ? (
             commentsData.map(item => (
               <li key={item.ID}>
                 <div>
                   <h5>{item.name}</h5>
-                  <p>{item.content}</p>
+                  <p>
+                    {item.content}
+                    <button
+                      onClick={() => {
+                        setReplyToID(item.ID);
+                        setReplyToOID(item.OID);
+                        setRandom(Math.random());
+                      }}
+                    >
+                      reply
+                    </button>
+                  </p>
                 </div>
                 <div>
                   <ul>
@@ -49,13 +74,19 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                           <h5>{replyItem.name}</h5>
                           <p>
                             @{item.name}: {replyItem.content}
-                            {replyItem.replyList.length ? (
+                            <button
+                              onClick={() => {
+                                setReplyToID(replyItem.ID);
+                                setReplyToOID(replyItem.OID);
+                                setRandom(Math.random());
+                              }}
+                            >
+                              reply
+                            </button>
+                            {replyItem.hasReplies ? (
                               <button
                                 onClick={() => {
-                                  toggleModal(
-                                    replyItem.replyList,
-                                    replyItem.name
-                                  );
+                                  toggleModal(replyItem.OID);
                                 }}
                               >
                                 view
@@ -64,6 +95,21 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                               ''
                             )}
                           </p>
+                        </div>
+                        <div>
+                          {replyItem.hasReplies &&
+                          modalVisibility[replyItem.OID] ? (
+                            <Modal
+                              type="repliesList"
+                              content={replyItem.replyList}
+                              replyTo={replyItem.name}
+                              replyToID={replyItem.ID}
+                              replyToOID={replyItem.OID}
+                              pageKey={Props.pageKey}
+                            />
+                          ) : (
+                            ''
+                          )}
                         </div>
                       </li>
                     ))}
@@ -77,15 +123,6 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
             </li>
           )}
         </ul>
-        {modalVisibility ? (
-          <Modal
-            type="repliesList"
-            content={modalContent}
-            replyTo={modalReplyTo}
-          />
-        ) : (
-          ''
-        )}
       </div>
     );
   }

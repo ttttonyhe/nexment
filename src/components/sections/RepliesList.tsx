@@ -1,25 +1,57 @@
 import React from 'react';
+import '../../assets/style/reply.scss';
 import { commentsItemType } from 'lib/database/getCommentsList';
-import '../../assets/style/modal.scss';
+import CommentsArea from '../../components/sections/CommentsArea';
 
 const RepliesList = (Props: {
   dataContent: commentsItemType[];
   replyTo?: string;
+  pageKey: string;
+  replyToID?: number;
+  replyToOID?: string;
 }) => {
-  // Modal visibility
-  const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
-  const [modalReplyTo, setModalReplyTo] = React.useState<string>('');
-  const [modalContent, setModalContent] = React.useState<commentsItemType[]>(
-    []
-  );
+  // Modal states
+  const [modalVisibility, setModalVisibility] = React.useState<{
+    [propsName: string]: boolean;
+  }>({});
 
-  const toggleModal = (replies: commentsItemType[], replyTo: string) => {
-    setModalContent(replies);
-    setModalReplyTo(replyTo);
-    setModalVisibility(true);
+  // Comment state
+  const [replyToID, setReplyToID] = React.useState<number>(
+    Props.replyToID ? Props.replyToID : 0
+  );
+  const [replyToOID, setReplyToOID] = React.useState<string>(
+    Props.replyToOID ? Props.replyToOID : ''
+  );
+  const [commentsAreaRandom, setRandom] = React.useState<number>(Math.random());
+
+
+  /**
+   * Modal toggling function
+   *
+   * @param {string} repliesBelongOID
+   */
+  const toggleModal = (repliesBelongOID: string) => {
+    /** 
+     * State updating solution
+     * refer to https://blog.csdn.net/vandavidchou/article/details/102618866
+    */
+    setModalVisibility((prevState: any) => {
+      const nowState = { ...prevState };
+      nowState[repliesBelongOID] = true;
+      return nowState;
+    });
   };
+
   return (
-    <div className="nexment-modal">
+    <div className="nexment-reply-container">
+      <CommentsArea
+        pageKey={Props.pageKey}
+        replyTo={replyToID}
+        replyToOID={replyToOID}
+        primaryReplyTo={Props.replyToID}
+        primaryReplyToOID={Props.replyToOID}
+        random={commentsAreaRandom}
+      />
       <ul>
         {Props.dataContent !== undefined && Props.dataContent.length ? (
           Props.dataContent.map(item => (
@@ -28,10 +60,19 @@ const RepliesList = (Props: {
                 <h5>{item.name}</h5>
                 <p>
                   @{Props.replyTo}: {item.content}
-                  {item.replyList.length ? (
+                  <button
+                    onClick={() => {
+                      setReplyToID(item.ID);
+                      setReplyToOID(item.OID);
+                      setRandom(Math.random());
+                    }}
+                  >
+                    reply
+                  </button>
+                  {item.hasReplies ? (
                     <button
                       onClick={() => {
-                        toggleModal(item.replyList,item.name);
+                        toggleModal(item.OID);
                       }}
                     >
                       view
@@ -41,6 +82,21 @@ const RepliesList = (Props: {
                   )}
                 </p>
               </div>
+              {/* Replies */}
+              <div>
+                {// Recursive reply modal
+                item.hasReplies && modalVisibility[item.OID] ? (
+                  <RepliesList
+                    dataContent={item.replyList}
+                    replyTo={item.name}
+                    pageKey={Props.pageKey}
+                    replyToID={item.ID}
+                    replyToOID={item.OID}
+                  />
+                ) : (
+                  ''
+                )}
+              </div>
             </li>
           ))
         ) : (
@@ -49,12 +105,6 @@ const RepliesList = (Props: {
           </li>
         )}
       </ul>
-
-      {modalVisibility ? (
-        <RepliesList replyTo={modalReplyTo} dataContent={modalContent} />
-      ) : (
-        ''
-      )}
     </div>
   );
 };
