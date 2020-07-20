@@ -100,6 +100,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                           {replyItem.hasReplies &&
                           modalVisibility[replyItem.OID] ? (
                             <Modal
+                              key={replyItem.OID}
                               type="repliesList"
                               content={replyItem.replyList}
                               replyTo={replyItem.name}

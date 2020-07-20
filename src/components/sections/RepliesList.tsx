@@ -24,17 +24,16 @@ const RepliesList = (Props: {
   );
   const [commentsAreaRandom, setRandom] = React.useState<number>(Math.random());
 
-
   /**
    * Modal toggling function
    *
    * @param {string} repliesBelongOID
    */
   const toggleModal = (repliesBelongOID: string) => {
-    /** 
+    /**
      * State updating solution
      * refer to https://blog.csdn.net/vandavidchou/article/details/102618866
-    */
+     */
     setModalVisibility((prevState: any) => {
       const nowState = { ...prevState };
       nowState[repliesBelongOID] = true;
@@ -87,6 +86,7 @@ const RepliesList = (Props: {
                 {// Recursive reply modal
                 item.hasReplies && modalVisibility[item.OID] ? (
                   <RepliesList
+                    key={item.OID}
                     dataContent={item.replyList}
                     replyTo={item.name}
                     pageKey={Props.pageKey}
