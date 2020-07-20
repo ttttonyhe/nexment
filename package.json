@@ -14,8 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "lint": "tsdx lint"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -34,11 +33,14 @@
     "@types/react-dom": "^16.9.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-showdown": "^2.1.0",
+    "react-tiny-popover": "^5.1.0",
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "components": "^0.1.0",
     "leancloud-storage": "^4.6.1",
     "rollup-plugin-sass": "^1.2.2",
     "swr": "^0.2.3"
