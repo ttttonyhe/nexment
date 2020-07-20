@@ -2,6 +2,8 @@ import React from 'react';
 import usingSaveComment from '../../lib/database/saveComment';
 import generateCommentID from '../../lib/utils/generateCommentID';
 import { refetchData } from '../../lib/database/getCommentsList';
+import '../../assets/style/commentarea.scss';
+import EmojiCard from '../controls/emojiCard/index';
 
 const CommentsArea = (Props: {
   pageKey: string;
@@ -20,10 +22,15 @@ const CommentsArea = (Props: {
   const [commentEmail, setCommentEmail] = React.useState<string>('');
   const [commentContent, setCommentContent] = React.useState<string>('');
 
+  // Temporary comment state for content addons
+  const [tempCommentContent, setTempCommentContent] = React.useState<
+    string | undefined
+  >();
+
   // Resetting state
   const [resetStatus, setResetStatus] = React.useState<boolean>(false);
 
-  /** 
+  /**
    * Listen to replyTo / random change
    * random is a random number
    * designed to make reset status false when replying to the previous comment
@@ -31,6 +38,12 @@ const CommentsArea = (Props: {
   React.useEffect(() => {
     setResetStatus(false);
   }, [Props.replyTo, Props.random]);
+
+  // Process data sending from content addons
+  const handleAddon = (content: string) => {
+    setTempCommentContent(commentContent + content);
+    setCommentContent(commentContent + content);
+  };
 
   // Input change handlers
   const handleNameChange = (e: {
@@ -46,6 +59,7 @@ const CommentsArea = (Props: {
   const handleContentChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
+    setTempCommentContent(undefined);
     setCommentContent(e.target.value);
   };
 
@@ -63,7 +77,7 @@ const CommentsArea = (Props: {
       replyOID: replyingToOID,
     });
     // Refetch data using swr mutate
-    refetchData('/fuck');
+    refetchData(Props.pageKey);
   };
 
   // Reset reply to initial
@@ -78,6 +92,7 @@ const CommentsArea = (Props: {
       <textarea
         placeholder="Enter some text"
         onChange={handleContentChange}
+        value={tempCommentContent}
       ></textarea>
       <button
         onClick={() => {
@@ -87,6 +102,7 @@ const CommentsArea = (Props: {
         Send
       </button>
       <button onClick={resetReplyTo}>reset reply</button>
+      <EmojiCard handler={handleAddon} />
       <div>
         <h5>
           {commentName}({commentEmail})
