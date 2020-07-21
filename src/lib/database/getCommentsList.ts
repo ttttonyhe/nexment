@@ -39,9 +39,7 @@ const useComments = (
   isLoading: boolean;
   isError: string;
 } => {
-  const { data, error } = useSWR(pageKey, ListGet, {
-    revalidateOnFocus: false,
-  });
+  const { data, error } = useSWR(pageKey, ListGet);
   return {
     commentsData: data,
     isLoading: !error && !data,
