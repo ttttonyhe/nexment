@@ -1,3 +1,13 @@
-.nexment-modal{
-    background: #999;
+.nexment-modal {
+  background: #999;
+}
+
+.rodal-dialog {
+  width: fit-content;
+  height: fit-content !important;
+  max-height: 90vh !important;
+  @media screen and (max-width: 1280px) {
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
 }

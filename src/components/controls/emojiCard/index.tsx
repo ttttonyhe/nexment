@@ -7,22 +7,33 @@ const EmojiCard = (Props: { handler: any }) => {
   const [emojiPopoverStatus, setEmojiPopoverStatus] = React.useState<boolean>(
     false
   );
+  const toggleEmojiCard = () => {
+    setEmojiPopoverStatus(!emojiPopoverStatus);
+  };
   const emojiContent = () => {
     return (
       <div className="nexment-emoji-container">
         {emojis.map(cate => {
           return (
-            <div>
-              <h5>{cate[0]}</h5>
-              {cate.slice(1).map(item => {
-                return <p
-                  onClick={() => {
-                    Props.handler(item);
-                  }}
-                >
-                  {item}
-                </p>;
-              })}
+            <div className="nexment-emoji-section">
+              <div className="nexment-emoji-section-header">
+                <b>{cate[0]}</b>
+              </div>
+              <div className="nexment-emoji-section-box">
+                <div className="nexment-emoji-section-container">
+                  {cate.slice(1).map(item => {
+                    return (
+                      <span
+                        onClick={() => {
+                          Props.handler(item);
+                        }}
+                      >
+                        {item}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           );
         })}
@@ -35,10 +46,10 @@ const EmojiCard = (Props: { handler: any }) => {
       position={'top'}
       content={emojiContent}
       onClickOutside={() => {
-        setEmojiPopoverStatus(false);
+        toggleEmojiCard();
       }}
     >
-      <button onClick={() => setEmojiPopoverStatus(true)}>emoji</button>
+      <button onClick={() => toggleEmojiCard()}>emoji</button>
     </Popover>
   );
 };

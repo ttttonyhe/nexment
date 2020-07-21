@@ -1,5 +1,8 @@
 import React from 'react';
 import RepliesList from '../sections/RepliesList';
+import Rodal from 'rodal';
+import 'rodal/lib/rodal.css';
+import '../../assets/style/modal.scss';
 
 /**
  * Modal component
@@ -14,18 +17,42 @@ const Modal = (Props: {
   pageKey: string;
   replyToID?: number;
   replyToOID?: string;
+  visibilityFunction?: Function;
+  replyItem?:any;
 }) => {
   switch (Props.type) {
     case 'repliesList':
+      // Modal state
+      const [repliesModalStatus, setRepliesModalStatus] = React.useState<
+        boolean
+      >(true);
+      // Modal closing event handler
+      const handleClose = () => {
+        setRepliesModalStatus(false);
+        if (Props.visibilityFunction) {
+          // Change visibility state in CommentsList
+          Props.visibilityFunction(Props.replyToOID);
+        }
+      };
       return (
         <div>
-          <RepliesList
-            dataContent={Props.content}
-            replyTo={Props.replyTo}
-            pageKey={Props.pageKey}
-            replyToID={Props.replyToID}
-            replyToOID={Props.replyToOID}
-          />
+          <Rodal
+            visible={repliesModalStatus}
+            onClose={() => {
+              handleClose();
+            }}
+            showCloseButton={true}
+            animation="fade"
+          >
+            <RepliesList
+              dataContent={Props.content}
+              replyTo={Props.replyTo}
+              pageKey={Props.pageKey}
+              replyToID={Props.replyToID}
+              replyToOID={Props.replyToOID}
+              replyItem={Props.replyItem}
+            />
+          </Rodal>
         </div>
       );
     default:

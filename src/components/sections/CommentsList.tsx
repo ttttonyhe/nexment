@@ -26,7 +26,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
   const toggleModal = (repliesBelongOID: string) => {
     setModalVisibility((prevState: any) => {
       const nowState = { ...prevState };
-      nowState[repliesBelongOID] = true;
+      nowState[repliesBelongOID] = nowState[repliesBelongOID] ? false : true;
       return nowState;
     });
   };
@@ -107,6 +107,8 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                               replyToID={replyItem.ID}
                               replyToOID={replyItem.OID}
                               pageKey={Props.pageKey}
+                              visibilityFunction={toggleModal}
+                              replyItem={replyItem}
                             />
                           ) : (
                             ''
