@@ -15,7 +15,7 @@ const EmojiCard = (Props: { handler: any }) => {
       <div className="nexment-emoji-container">
         {emojis.map(cate => {
           return (
-            <div className="nexment-emoji-section">
+            <div className="nexment-emoji-section" key={'cate' + cate}>
               <div className="nexment-emoji-section-header">
                 <b>{cate[0]}</b>
               </div>
@@ -24,6 +24,7 @@ const EmojiCard = (Props: { handler: any }) => {
                   {cate.slice(1).map(item => {
                     return (
                       <span
+                        key={'emoji' + item}
                         onClick={() => {
                           Props.handler(item);
                         }}

@@ -1,11 +1,43 @@
-.nm-container {
-  background: #333;
-  color: #fff;
+.nexment-container {
   width: 100%;
-  .nm-comment-list {
-    background: #999;
-    ul{
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+  padding: 20px;
+  .nexment-comment-list {
+    ul {
       padding: 0px;
+    }
+  }
+}
+
+.nexment-container-error {
+  max-width: 300px;
+  background: #f7f8f9;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  padding: 10px 20px;
+  h2 {
+    margin: 0px;
+    letter-spacing: 0.3px;
+    svg {
+      width: 20px;
+      height: 20px;
+      transform: translateY(3.25px);
+      margin-right: 5px;
+    }
+  }
+  p {
+    margin: 0px;
+    padding-left: 25px;
+    letter-spacing: 0.3px;
+    color: #687a86;
+    span {
+      background: #687a86;
+      border-radius: 3px;
+      margin-right: 5px;
+      font-weight: 600;
+      color: #fff;
+      padding: 0px 5px;
     }
   }
 }

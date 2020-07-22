@@ -3,6 +3,7 @@ import RepliesList from '../sections/RepliesList';
 import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
+import { nexmentConfigType } from 'components/container';
 
 /**
  * Modal component
@@ -12,52 +13,50 @@ import '../../assets/style/modal.scss';
  */
 const Modal = (Props: {
   type: string;
-  content: any;
+  content?: any;
   replyTo?: string;
-  pageKey: string;
+  pageKey?: string;
   replyToID?: number;
   replyToOID?: string;
   visibilityFunction?: Function;
-  replyItem?:any;
+  replyItem?: any;
+  config: nexmentConfigType;
 }) => {
-  switch (Props.type) {
-    case 'repliesList':
-      // Modal state
-      const [repliesModalStatus, setRepliesModalStatus] = React.useState<
-        boolean
-      >(true);
-      // Modal closing event handler
-      const handleClose = () => {
-        setRepliesModalStatus(false);
-        if (Props.visibilityFunction) {
-          // Change visibility state in CommentsList
-          Props.visibilityFunction(Props.replyToOID);
-        }
-      };
-      return (
-        <div>
-          <Rodal
-            visible={repliesModalStatus}
-            onClose={() => {
-              handleClose();
-            }}
-            showCloseButton={true}
-            animation="fade"
-          >
-            <RepliesList
-              dataContent={Props.content}
-              replyTo={Props.replyTo}
-              pageKey={Props.pageKey}
-              replyToID={Props.replyToID}
-              replyToOID={Props.replyToOID}
-              replyItem={Props.replyItem}
-            />
-          </Rodal>
-        </div>
-      );
-    default:
-      return <div>Not a valid Modal</div>;
-  }
+  // Modal state
+  const [repliesModalStatus, setRepliesModalStatus] = React.useState<boolean>(
+    true
+  );
+  // Modal closing event handler
+  const handleClose = () => {
+    setRepliesModalStatus(!repliesModalStatus);
+    if (Props.visibilityFunction) {
+      // Change visibility state in CommentsList
+      Props.visibilityFunction(Props.replyToOID);
+    }
+  };
+  return (
+    <Rodal
+      visible={repliesModalStatus}
+      onClose={() => {
+        handleClose();
+      }}
+      animation="fade"
+      className="nexment-modal-replies"
+    >
+      <div className="nexment-modal-text">
+        <h1>Replies</h1>
+      </div>
+      <RepliesList
+        dataContent={Props.content}
+        replyTo={Props.replyTo}
+        pageKey={Props.pageKey ? Props.pageKey : ''}
+        replyToID={Props.replyToID}
+        replyToOID={Props.replyToOID}
+        replyItem={Props.replyItem}
+        config={Props.config}
+      />
+    </Rodal>
+  );
 };
 
 export default Modal;

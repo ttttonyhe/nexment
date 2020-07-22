@@ -5,6 +5,8 @@ import CommentsArea from '../../components/sections/CommentsArea';
 import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
+import { nexmentConfigType } from '../container/index';
+import { format } from 'timeago.js';
 
 const RepliesList = (Props: {
   dataContent: commentsItemType[];
@@ -14,6 +16,7 @@ const RepliesList = (Props: {
   replyToOID?: string;
   visibilityFunction?: Function;
   replyItem?: any;
+  config: nexmentConfigType;
 }) => {
   // Modal states
   const [modalVisibility, setModalVisibility] = React.useState<{
@@ -51,6 +54,17 @@ const RepliesList = (Props: {
     toggleModal(OID);
   };
 
+  const adminBadge = (name: string, email: string) => {
+    if (
+      name === Props.config.admin.name &&
+      email === Props.config.admin.email
+    ) {
+      return <span className="nexment-admin-badge">Admin</span>;
+    } else {
+      return '';
+    }
+  };
+
   return (
     <div className="nexment-reply-container">
       <CommentsArea
@@ -60,6 +74,7 @@ const RepliesList = (Props: {
         primaryReplyTo={Props.replyToID}
         primaryReplyToOID={Props.replyToOID}
         random={commentsAreaRandom}
+        config={Props.config}
       />
       <ul>
         <li>
@@ -72,7 +87,10 @@ const RepliesList = (Props: {
           Props.dataContent.map(item => (
             <li key={item.ID}>
               <div>
-                <h5>{item.name}</h5>
+                <h5>
+                  {item.name}({format(item.date)})({item.tag})
+                  {adminBadge(item.name, item.email)}
+                </h5>
                 <p>
                   @{Props.replyTo}: {item.content}
                   <button
@@ -116,6 +134,7 @@ const RepliesList = (Props: {
                       replyToID={item.ID}
                       replyToOID={item.OID}
                       replyItem={item}
+                      config={Props.config}
                     />
                   </Rodal>
                 ) : (

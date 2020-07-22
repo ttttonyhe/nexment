@@ -2,10 +2,20 @@ import useComments from '../../lib/database/getCommentsList';
 import React from 'react';
 import Modal from '../modal';
 import CommentsArea from '../../components/sections/CommentsArea';
+import { nexmentConfigType } from '../container/index';
+import '../../assets/style/commentslist.scss';
+import { format } from 'timeago.js';
 
-const CommentsList = (Props: { type: string; pageKey: string }) => {
+const CommentsList = (Props: {
+  type: string;
+  pageKey: string;
+  config: nexmentConfigType;
+}) => {
   // Reusable data list
-  const { commentsData, isLoading, isError } = useComments(Props.pageKey);
+  const { commentsData, isLoading, isError } = useComments(
+    Props.pageKey,
+    Props.config
+  );
 
   // Modal states
   const [modalVisibility, setModalVisibility] = React.useState<{
@@ -31,12 +41,22 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
     });
   };
 
+  const adminBadge = (name: string, email: string) => {
+    if (
+      name === Props.config.admin.name &&
+      email === Props.config.admin.email
+    ) {
+      return <span className="nexment-admin-badge">Admin</span>;
+    } else {
+      return '';
+    }
+  };
+
   if (isLoading) {
     return <div>Loading....</div>;
   } else if (isError) {
     return <div>Error.</div>;
   } else {
-    console.log(commentsData);
     return (
       <div>
         <CommentsArea
@@ -46,13 +66,17 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
           primaryReplyTo={undefined}
           primaryReplyToOID={undefined}
           random={commentsAreaRandom}
+          config={Props.config}
         />
         <ul>
           {commentsData !== undefined && commentsData.length ? (
             commentsData.map(item => (
               <li key={item.ID}>
                 <div>
-                  <h5>{item.name}</h5>
+                  <h5>
+                    {item.name} ({format(item.date)})({item.tag})
+                    {adminBadge(item.name, item.email)}
+                  </h5>
                   <p>
                     {item.content}
                     <button
@@ -71,7 +95,10 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                     {item.replyList.map(replyItem => (
                       <li key={replyItem.ID}>
                         <div>
-                          <h5>{replyItem.name}</h5>
+                          <h5>
+                            {replyItem.name}({format(replyItem.date)})({replyItem.tag})
+                            {adminBadge(replyItem.name, replyItem.email)}
+                          </h5>
                           <p>
                             @{item.name}: {replyItem.content}
                             <button
@@ -109,6 +136,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                               pageKey={Props.pageKey}
                               visibilityFunction={toggleModal}
                               replyItem={replyItem}
+                              config={Props.config}
                             />
                           ) : (
                             ''

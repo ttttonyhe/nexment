@@ -4,6 +4,11 @@ import generateCommentID from '../../lib/utils/generateCommentID';
 import { refetchData } from '../../lib/database/getCommentsList';
 import '../../assets/style/commentarea.scss';
 import EmojiCard from '../controls/emojiCard/index';
+import { nexmentConfigType } from 'components/container';
+import VerificationModal from '../modal/verification';
+import leanCloud from '../../lib/database/initiation';
+import { reactLocalStorage } from 'reactjs-localstorage';
+import TagCard from '../controls/tagCard';
 
 const CommentsArea = (Props: {
   pageKey: string;
@@ -12,15 +17,50 @@ const CommentsArea = (Props: {
   primaryReplyTo: number | undefined;
   primaryReplyToOID: string | undefined;
   random?: number;
+  config: nexmentConfigType;
 }) => {
+  const AV = leanCloud(
+    Props.config.leancloud.appId,
+    Props.config.leancloud.appKey,
+    Props.config.leancloud.serverURL
+  );
+
   // Get initial replyto / replytoOID
   const primaryReplyTo = Props.primaryReplyTo;
   const primaryReplyToOID = Props.primaryReplyToOID;
 
+  // Get commenter info from local storage
+  const getCommenterInfo = (type: string) => {
+    if (reactLocalStorage.getObject('nexment-commenterInfo')) {
+      return reactLocalStorage.getObject('nexment-commenterInfo')[type];
+    } else {
+      return '';
+    }
+  };
+  // Store commenter info in local storage
+  const setCommenterInfo = (info: {
+    name: string;
+    email: string;
+    tag: string;
+  }) => {
+    reactLocalStorage.setObject('nexment-commenterInfo', info);
+  };
+
   // Current comment states
-  const [commentName, setCommentName] = React.useState<string>('');
-  const [commentEmail, setCommentEmail] = React.useState<string>('');
+  const [commentName, setCommentName] = React.useState<string>(
+    AV.User.current()
+      ? AV.User.current().attributes.username
+      : getCommenterInfo('name')
+  );
+  const [commentEmail, setCommentEmail] = React.useState<string>(
+    AV.User.current()
+      ? AV.User.current().attributes.email
+      : getCommenterInfo('email')
+  );
   const [commentContent, setCommentContent] = React.useState<string>('');
+  const [commentTag, setCommentTag] = React.useState<string>(
+    getCommenterInfo('tag')
+  );
 
   // Temporary comment state for content addons
   const [tempCommentContent, setTempCommentContent] = React.useState<
@@ -29,6 +69,9 @@ const CommentsArea = (Props: {
 
   // Resetting state
   const [resetStatus, setResetStatus] = React.useState<boolean>(false);
+
+  // Modal state
+  const [modalStatus, setModalStatus] = React.useState<boolean>(false);
 
   /**
    * Listen to replyTo / random change
@@ -50,11 +93,17 @@ const CommentsArea = (Props: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setCommentName(e.target.value);
+    if (e.target.value === Props.config.admin.name && !AV.User.current()) {
+      setModalStatus(true);
+    }
   };
   const handleEmailChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setCommentEmail(e.target.value);
+    if (e.target.value === Props.config.admin.email && !AV.User.current()) {
+      setModalStatus(true);
+    }
   };
   const handleContentChange = (e: {
     target: { value: React.SetStateAction<string> };
@@ -62,22 +111,46 @@ const CommentsArea = (Props: {
     setTempCommentContent(undefined);
     setCommentContent(e.target.value);
   };
+  const handleTagChange = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setCommentTag(e.target.value);
+  };
 
   // Comment submitting function
   const sendComment = async () => {
     let replyingTo = resetStatus ? primaryReplyTo : Props.replyTo;
     let replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID;
-    await usingSaveComment({
-      ID: generateCommentID().idData,
-      identifier: Props.pageKey,
-      name: commentName,
-      email: commentEmail,
-      content: commentContent,
-      reply: replyingTo,
-      replyOID: replyingToOID,
-    });
-    // Refetch data using swr mutate
-    refetchData(Props.pageKey);
+    const returnData = await usingSaveComment(
+      {
+        ID: generateCommentID().idData,
+        identifier: Props.pageKey,
+        name: commentName,
+        email: commentEmail,
+        content: commentContent,
+        tag: commentTag,
+        reply: replyingTo,
+        replyOID: replyingToOID,
+      },
+      Props.config
+    );
+    if (returnData.status === 500) {
+      alert('Comment sending error');
+    } else if (returnData.status === 501) {
+      setModalStatus(true);
+    } else {
+      // Comment success
+      // Store commenter info
+      setCommenterInfo({
+        name: commentName,
+        email: commentEmail,
+        tag: commentTag,
+      });
+      // Set content to empty
+      setCommentContent('');
+      // Refetch data using swr mutate
+      refetchData(Props.pageKey);
+    }
   };
 
   // Reset reply to initial
@@ -87,8 +160,14 @@ const CommentsArea = (Props: {
 
   return (
     <div>
-      <input placeholder="name" onChange={handleNameChange}></input>
-      <input placeholder="email" onChange={handleEmailChange}></input>
+      <input
+        placeholder={commentName ? commentName : "Email"}
+        onChange={handleNameChange}
+      ></input>
+      <input
+        placeholder={commentEmail ? commentEmail : "Email"}
+        onChange={handleEmailChange}
+      ></input>
       <textarea
         placeholder="Enter some text"
         onChange={handleContentChange}
@@ -103,6 +182,15 @@ const CommentsArea = (Props: {
       </button>
       <button onClick={resetReplyTo}>reset reply</button>
       <EmojiCard handler={handleAddon} />
+      <button
+        onClick={() => {
+          AV.User.logOut();
+          window.location.reload();
+        }}
+      >
+        logout
+      </button>
+      <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
       <div>
         <h5>
           {commentName}({commentEmail})
@@ -113,7 +201,17 @@ const CommentsArea = (Props: {
           Replying to OID:
           {resetStatus ? primaryReplyToOID : Props.replyToOID}
         </p>
+        <p>Tag: {commentTag}</p>
       </div>
+      {/* Modals */}
+      {modalStatus ? (
+        <VerificationModal
+          config={Props.config}
+          visibilityFunction={setModalStatus}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 };
