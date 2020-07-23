@@ -5,6 +5,8 @@ import CommentsArea from '../../components/sections/CommentsArea';
 import { nexmentConfigType } from '../container/index';
 import '../../assets/style/commentslist.scss';
 import { format } from 'timeago.js';
+const md5 = require('js-md5');
+import Icons from '../icons/index';
 
 const CommentsList = (Props: {
   type: string;
@@ -46,7 +48,7 @@ const CommentsList = (Props: {
       name === Props.config.admin.name &&
       email === Props.config.admin.email
     ) {
-      return <span className="nexment-admin-badge">Admin</span>;
+      return <div className="nexment-admin-badge">{Icons().admin}</div>;
     } else {
       return '';
     }
@@ -68,61 +70,89 @@ const CommentsList = (Props: {
           random={commentsAreaRandom}
           config={Props.config}
         />
-        <ul>
+        <ul className="nexment-comments-list">
           {commentsData !== undefined && commentsData.length ? (
             commentsData.map(item => (
-              <li key={item.ID}>
-                <div>
-                  <h5>
-                    {item.name} ({format(item.date)})({item.tag})
+              <li className="nexment-comments-list-item" key={item.ID}>
+                <div
+                  className="nexment-comments-div"
+                  onClick={() => {
+                    setReplyToID(item.ID);
+                    setReplyToOID(item.OID);
+                    setRandom(Math.random());
+                  }}
+                >
+                  <div className="nexment-comments-avatar">
+                    <img
+                      src={
+                        'https://gravatar.loli.net/avatar/' + md5(item.email)
+                      }
+                    />
                     {adminBadge(item.name, item.email)}
-                  </h5>
-                  <p>
-                    {item.content}
-                    <button
-                      onClick={() => {
-                        setReplyToID(item.ID);
-                        setReplyToOID(item.OID);
-                        setRandom(Math.random());
-                      }}
+                  </div>
+                  <div className="nexment-comments-title">
+                    <h5>
+                      {item.name}
+                      <span> · </span>
+                      <b>{format(item.date)}</b>
+                    </h5>
+                    <p className="nexment-comments-des">{item.tag}</p>
+                    <p
+                      className={
+                        'nexment-comments-content ' +
+                        (item.tag ? '' : 'margin-top')
+                      }
                     >
-                      reply
-                    </button>
-                  </p>
+                      {item.content}
+                      <em className="nexment-reply-icon">{Icons().reply}</em>
+                    </p>
+                  </div>
                 </div>
+
                 <div>
-                  <ul>
+                  <ul className="nexment-comments-reply-list">
                     {item.replyList.map(replyItem => (
-                      <li key={replyItem.ID}>
-                        <div>
-                          <h5>
-                            {replyItem.name}({format(replyItem.date)})({replyItem.tag})
-                            {adminBadge(replyItem.name, replyItem.email)}
-                          </h5>
-                          <p>
-                            @{item.name}: {replyItem.content}
-                            <button
-                              onClick={() => {
-                                setReplyToID(replyItem.ID);
-                                setReplyToOID(replyItem.OID);
-                                setRandom(Math.random());
-                              }}
-                            >
-                              reply
-                            </button>
-                            {replyItem.hasReplies ? (
-                              <button
-                                onClick={() => {
-                                  toggleModal(replyItem.OID);
-                                }}
-                              >
-                                view
-                              </button>
-                            ) : (
-                              ''
-                            )}
-                          </p>
-                        </div>
+                      <div className="nexment-comments-list-item-div" key={replyItem.ID}>
+                        <li
+                          className="nexment-comments-list-item"
+                          onClick={() => {
+                            if (replyItem.hasReplies) {
+                              toggleModal(replyItem.OID);
+                            } else {
+                              setReplyToID(replyItem.ID);
+                              setReplyToOID(replyItem.OID);
+                              setRandom(Math.random());
+                            }
+                          }}
+                        >
+                          <div className="nexment-comments-div">
+                            <div className="nexment-comments-avatar">
+                              <img
+                                src={
+                                  'https://gravatar.loli.net/avatar/' +
+                                  md5(replyItem.email)
+                                }
+                              />
+                              {adminBadge(replyItem.name, replyItem.email)}
+                            </div>
+                            <div className="nexment-comments-title">
+                              <h5>
+                                {replyItem.name}
+                                <span> · </span>
+                                <b>{format(replyItem.date)}</b>
+                              </h5>
+                              <p className="nexment-comments-content margin-top-reply">
+                                <b className="nexment-comments-replyto">
+                                  @{item.name}
+                                </b>
+                                {replyItem.content}
+                                <em className="nexment-reply-icon-reply">
+                                  {Icons().reply}
+                                </em>
+                              </p>
+                            </div>
+                          </div>
+                        </li>
                         <div>
                           {replyItem.hasReplies &&
                           modalVisibility[replyItem.OID] ? (
@@ -142,7 +172,7 @@ const CommentsList = (Props: {
                             ''
                           )}
                         </div>
-                      </li>
+                      </div>
                     ))}
                   </ul>
                 </div>

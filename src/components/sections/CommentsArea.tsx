@@ -61,6 +61,7 @@ const CommentsArea = (Props: {
   const [commentTag, setCommentTag] = React.useState<string>(
     getCommenterInfo('tag')
   );
+  const [commentEwr, setCommentEwr] = React.useState<boolean>(false);
 
   // Temporary comment state for content addons
   const [tempCommentContent, setTempCommentContent] = React.useState<
@@ -131,6 +132,7 @@ const CommentsArea = (Props: {
         tag: commentTag,
         reply: replyingTo,
         replyOID: replyingToOID,
+        ewr: commentEwr,
       },
       Props.config
     );
@@ -161,11 +163,11 @@ const CommentsArea = (Props: {
   return (
     <div>
       <input
-        placeholder={commentName ? commentName : "Email"}
+        placeholder={commentName ? commentName : 'Email'}
         onChange={handleNameChange}
       ></input>
       <input
-        placeholder={commentEmail ? commentEmail : "Email"}
+        placeholder={commentEmail ? commentEmail : 'Email'}
         onChange={handleEmailChange}
       ></input>
       <textarea
@@ -191,6 +193,13 @@ const CommentsArea = (Props: {
         logout
       </button>
       <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
+      <button
+        onClick={() => {
+          setCommentEwr(!commentEwr);
+        }}
+      >
+        email when replied
+      </button>
       <div>
         <h5>
           {commentName}({commentEmail})
@@ -202,6 +211,7 @@ const CommentsArea = (Props: {
           {resetStatus ? primaryReplyToOID : Props.replyToOID}
         </p>
         <p>Tag: {commentTag}</p>
+        <p>Ewr: {commentEwr ? 'true' : 'false'}</p>
       </div>
       {/* Modals */}
       {modalStatus ? (
