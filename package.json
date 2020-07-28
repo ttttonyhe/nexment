@@ -1,5 +1,5 @@
 {
-  "version": "0.0.4",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,7 +24,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "nexment-dev",
+  "name": "nexment",
   "author": "HelipengTony",
   "module": "dist/nexment.esm.js",
   "devDependencies": {
