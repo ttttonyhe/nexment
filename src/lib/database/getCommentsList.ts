@@ -79,7 +79,7 @@ const useComments = (
         // Store all reply data
         items.map(async item => {
           if (item.get('reply') !== undefined) {
-            if (repliesData[item.get('reply').toString()] == undefined) {
+            if (repliesData[item.get('reply').toString()] === undefined) {
               repliesData[item.get('reply').toString()] = [];
             }
             repliesData[item.get('reply').toString()].push({
@@ -110,7 +110,7 @@ const useComments = (
                   );
                 }
               });
-              return replyItemData;
+              return replyItemData.reverse();
             };
             // Get all corresponding replies of current comment
             let replyItemData: any[] = [];

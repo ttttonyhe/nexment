@@ -1,7 +1,6 @@
 import React from 'react';
 import '../../assets/style/container.scss';
 import getIdentifier from '../../lib/utils/getIdentifier';
-import generateCommentID from '../../lib/utils/generateCommentID';
 import CommentsList from '../../components/sections/CommentsList';
 
 export interface nexmentConfigType {
@@ -32,20 +31,6 @@ const NexmentContainer = (Props: { config: nexmentConfigType }) => {
   // Render structure
   const nexmentContainer = (
     <div className="nexment-container">
-      <button
-        onClick={() => {
-          console.log(getIdentifier());
-        }}
-      >
-        Get Identifier
-      </button>
-      <button
-        onClick={() => {
-          console.log(generateCommentID());
-        }}
-      >
-        Get ID
-      </button>
       {/* FIXME: (a ? a : b) code style improvement */}
       <CommentsList type="primary" pageKey={pageKey} config={Props.config} />
     </div>

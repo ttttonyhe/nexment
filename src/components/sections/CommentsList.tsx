@@ -7,6 +7,8 @@ import '../../assets/style/commentslist.scss';
 import { format } from 'timeago.js';
 const md5 = require('js-md5');
 import Icons from '../icons/index';
+import MarkdownView from 'react-showdown';
+import ContentLoader from 'react-content-loader';
 
 const CommentsList = (Props: {
   type: string;
@@ -19,6 +21,9 @@ const CommentsList = (Props: {
     Props.config
   );
 
+  // Loading state
+  const [loadingStatus, setLoadingStatus] = React.useState<boolean>(false);
+
   // Modal states
   const [modalVisibility, setModalVisibility] = React.useState<{
     [propsName: string]: boolean;
@@ -27,6 +32,7 @@ const CommentsList = (Props: {
   // Comment state
   const [replyToID, setReplyToID] = React.useState<number>();
   const [replyToOID, setReplyToOID] = React.useState<string>();
+  const [replyToName, setReplyToName] = React.useState<string>();
   const [commentsAreaRandom, setRandom] = React.useState<number>(Math.random());
 
   /**
@@ -55,7 +61,26 @@ const CommentsList = (Props: {
   };
 
   if (isLoading) {
-    return <div>Loading....</div>;
+    return (
+      <div className="nexment-loading">
+        <ContentLoader
+          speed={2}
+          width={100}
+          style={{ width: '100%' }}
+          height={124}
+          backgroundColor="#f3f3f3"
+          foregroundColor="#ecebeb"
+        >
+          <rect x="52" y="8" rx="3" ry="3" width="100%" height="10" />
+          <rect x="52" y="30" rx="3" ry="3" width="80%" height="10" />
+          <rect x="52" y="56" rx="3" ry="3" width="6" height="38" />
+          <rect x="69" y="56" rx="3" ry="3" width="60%" height="6" />
+          <rect x="69" y="72" rx="3" ry="3" width="50%" height="6" />
+          <rect x="69" y="88" rx="3" ry="3" width="30%" height="6" />
+          <circle cx="20" cy="24" r="20" />
+        </ContentLoader>
+      </div>
+    );
   } else if (isError) {
     return <div>Error.</div>;
   } else {
@@ -65,21 +90,58 @@ const CommentsList = (Props: {
           pageKey={Props.pageKey}
           replyTo={replyToID}
           replyToOID={replyToOID}
+          replyToName={replyToName}
           primaryReplyTo={undefined}
           primaryReplyToOID={undefined}
+          primaryReplyToName={undefined}
           random={commentsAreaRandom}
           config={Props.config}
+          reloadFunc={setLoadingStatus}
         />
+        <div className="nexment-header">
+          <div>
+            <h1>{commentsData ? commentsData.length : 0} Comments</h1>
+          </div>
+          <div>
+            <p>Powered by Nexment</p>
+          </div>
+        </div>
+        <ul className="nexment-comments-list">
+          {loadingStatus ? (
+            <div className="nexment-loading-index">
+              <ContentLoader
+                speed={2}
+                width={100}
+                style={{ width: '100%' }}
+                height={45}
+                backgroundColor="#f3f3f3"
+                foregroundColor="#ecebeb"
+              >
+                <rect x="52" y="8" rx="3" ry="3" width="100%" height="10" />
+                <rect x="52" y="30" rx="3" ry="3" width="80%" height="10" />
+                <circle cx="20" cy="24" r="20" />
+              </ContentLoader>
+            </div>
+          ) : (
+            ''
+          )}
+        </ul>
         <ul className="nexment-comments-list">
           {commentsData !== undefined && commentsData.length ? (
             commentsData.map(item => (
-              <li className="nexment-comments-list-item" key={item.ID}>
+              <li
+                className="nexment-comments-list-item"
+                key={item.ID}
+                id={item.ID.toString()}
+              >
                 <div
                   className="nexment-comments-div"
                   onClick={() => {
                     setReplyToID(item.ID);
                     setReplyToOID(item.OID);
+                    setReplyToName(item.name);
                     setRandom(Math.random());
+                    window.location.href = '#nexment-comment-area';
                   }}
                 >
                   <div className="nexment-comments-avatar">
@@ -95,24 +157,32 @@ const CommentsList = (Props: {
                       {item.name}
                       <span> · </span>
                       <b>{format(item.date)}</b>
+                      <em className="nexment-reply-icon">{Icons().reply}</em>
                     </h5>
                     <p className="nexment-comments-des">{item.tag}</p>
-                    <p
+                    <div
                       className={
                         'nexment-comments-content ' +
                         (item.tag ? '' : 'margin-top')
                       }
                     >
-                      {item.content}
-                      <em className="nexment-reply-icon">{Icons().reply}</em>
-                    </p>
+                      <MarkdownView
+                        markdown={item.content}
+                        options={{ tables: true, emoji: true }}
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div>
                   <ul className="nexment-comments-reply-list">
+                    {/* Replies should be ascend-sorted */}
                     {item.replyList.map(replyItem => (
-                      <div className="nexment-comments-list-item-div" key={replyItem.ID}>
+                      <div
+                        className="nexment-comments-list-item-div"
+                        key={replyItem.ID}
+                        id={replyItem.ID.toString()}
+                      >
                         <li
                           className="nexment-comments-list-item"
                           onClick={() => {
@@ -121,7 +191,9 @@ const CommentsList = (Props: {
                             } else {
                               setReplyToID(replyItem.ID);
                               setReplyToOID(replyItem.OID);
+                              setReplyToName(replyItem.name);
                               setRandom(Math.random());
+                              window.location.href = '#nexment-comment-area';
                             }
                           }}
                         >
@@ -140,16 +212,28 @@ const CommentsList = (Props: {
                                 {replyItem.name}
                                 <span> · </span>
                                 <b>{format(replyItem.date)}</b>
-                              </h5>
-                              <p className="nexment-comments-content margin-top-reply">
-                                <b className="nexment-comments-replyto">
-                                  @{item.name}
-                                </b>
-                                {replyItem.content}
+                                {replyItem.hasReplies ? (
+                                  <b className="nexment-comments-replyto">
+                                    <span> · </span>
+                                    {replyItem.replyList.length}{' '}
+                                    {replyItem.replyList.length > 1
+                                      ? 'replies'
+                                      : 'reply'}
+                                    {Icons().down}
+                                  </b>
+                                ) : (
+                                  ''
+                                )}
                                 <em className="nexment-reply-icon-reply">
                                   {Icons().reply}
                                 </em>
-                              </p>
+                              </h5>
+                              <div className="nexment-comments-content margin-top-reply">
+                                <MarkdownView
+                                  markdown={replyItem.content}
+                                  options={{ tables: true, emoji: true }}
+                                />
+                              </div>
                             </div>
                           </div>
                         </li>
@@ -163,6 +247,7 @@ const CommentsList = (Props: {
                               replyTo={replyItem.name}
                               replyToID={replyItem.ID}
                               replyToOID={replyItem.OID}
+                              replyToName={replyItem.name}
                               pageKey={Props.pageKey}
                               visibilityFunction={toggleModal}
                               replyItem={replyItem}

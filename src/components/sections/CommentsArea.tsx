@@ -9,15 +9,23 @@ import VerificationModal from '../modal/verification';
 import leanCloud from '../../lib/database/initiation';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import TagCard from '../controls/tagCard';
+import TextareaAutosize from 'react-textarea-autosize';
+import Icons from '../icons/index';
+import MarkdownView from 'react-showdown';
+import 'github-markdown-css';
+import Floater from 'react-floater';
 
 const CommentsArea = (Props: {
   pageKey: string;
   replyTo: number | undefined;
   replyToOID: string | undefined;
+  replyToName: string | undefined;
   primaryReplyTo: number | undefined;
   primaryReplyToOID: string | undefined;
+  primaryReplyToName: string | undefined;
   random?: number;
   config: nexmentConfigType;
+  reloadFunc?: Function;
 }) => {
   const AV = leanCloud(
     Props.config.leancloud.appId,
@@ -28,6 +36,7 @@ const CommentsArea = (Props: {
   // Get initial replyto / replytoOID
   const primaryReplyTo = Props.primaryReplyTo;
   const primaryReplyToOID = Props.primaryReplyToOID;
+  const primaryReplyToName = Props.primaryReplyToName;
 
   // Get commenter info from local storage
   const getCommenterInfo = (type: string) => {
@@ -73,6 +82,9 @@ const CommentsArea = (Props: {
 
   // Modal state
   const [modalStatus, setModalStatus] = React.useState<boolean>(false);
+
+  // Markdown preview state
+  const [previewStatus, setPreviewStatus] = React.useState<boolean>(false);
 
   /**
    * Listen to replyTo / random change
@@ -120,6 +132,9 @@ const CommentsArea = (Props: {
 
   // Comment submitting function
   const sendComment = async () => {
+    if (Props.reloadFunc) {
+      Props.reloadFunc(true);
+    }
     let replyingTo = resetStatus ? primaryReplyTo : Props.replyTo;
     let replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID;
     const returnData = await usingSaveComment(
@@ -136,6 +151,9 @@ const CommentsArea = (Props: {
       },
       Props.config
     );
+    if (Props.reloadFunc) {
+      Props.reloadFunc(false);
+    }
     if (returnData.status === 500) {
       alert('Comment sending error');
     } else if (returnData.status === 501) {
@@ -150,8 +168,11 @@ const CommentsArea = (Props: {
       });
       // Set content to empty
       setCommentContent('');
+      setTempCommentContent('');
       // Refetch data using swr mutate
       refetchData(Props.pageKey);
+      // Jump to replied to item
+      window.location.href = '#' + replyingTo;
     }
   };
 
@@ -160,47 +181,158 @@ const CommentsArea = (Props: {
     setResetStatus(true);
   };
 
+  // Get who are we replying to
+  const getReplyTo = () => {
+    if (resetStatus) {
+      return primaryReplyToName;
+    } else {
+      return Props.replyToName;
+    }
+  };
+
+  const getReplyDisplay = () => {
+    if (resetStatus) {
+      if (primaryReplyToName) {
+        return 'nexment-replying';
+      } else {
+        return '';
+      }
+    } else {
+      if (primaryReplyToName || Props.replyToName) {
+        return 'nexment-replying';
+      } else {
+        return '';
+      }
+    }
+  };
+
   return (
-    <div>
-      <input
-        placeholder={commentName ? commentName : 'Email'}
-        onChange={handleNameChange}
-      ></input>
-      <input
-        placeholder={commentEmail ? commentEmail : 'Email'}
-        onChange={handleEmailChange}
-      ></input>
-      <textarea
-        placeholder="Enter some text"
-        onChange={handleContentChange}
-        value={tempCommentContent}
-      ></textarea>
-      <button
-        onClick={() => {
-          sendComment();
-        }}
-      >
-        Send
-      </button>
-      <button onClick={resetReplyTo}>reset reply</button>
-      <EmojiCard handler={handleAddon} />
-      <button
-        onClick={() => {
-          AV.User.logOut();
-          window.location.reload();
-        }}
-      >
-        logout
-      </button>
-      <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
-      <button
-        onClick={() => {
-          setCommentEwr(!commentEwr);
-        }}
-      >
-        email when replied
-      </button>
-      <div>
+    <div className="nexment-comment-area" id="nexment-comment-area">
+      <div className="nexment-comment-area-top">
+        <input
+          placeholder={commentName ? commentName : 'Name'}
+          onChange={handleNameChange}
+        ></input>
+        <input
+          placeholder={commentEmail ? commentEmail : 'Email'}
+          onChange={handleEmailChange}
+        ></input>
+      </div>
+      <div className="nexment-comment-area-middle">
+        <TextareaAutosize
+          placeholder="Enter some text..."
+          onChange={handleContentChange}
+          value={tempCommentContent}
+          className={previewStatus ? 'nexment-previewing' : ''}
+        />
+        {previewStatus ? (
+          <div className="nexment-md-preview markdown-body">
+            <MarkdownView
+              markdown={commentContent ? commentContent : 'Nothing to preview'}
+              options={{ tables: true, emoji: true }}
+            />
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
+      <div className="nexment-comment-area-bottom">
+        <div>
+          <Floater
+            offset={5}
+            eventDelay={0}
+            placement="top"
+            event="hover"
+            content="Reset Reply"
+          >
+            <button onClick={resetReplyTo} className={getReplyDisplay()}>
+              {getReplyDisplay() === 'nexment-replying'
+                ? Icons().resetFill
+                : Icons().resetReply}
+              <em>{getReplyTo()}</em>
+              <b>{Icons().cancel}</b>
+            </button>
+          </Floater>
+          <Floater
+            offset={5}
+            eventDelay={0}
+            placement="top"
+            event="hover"
+            content="Emoji"
+          >
+            <EmojiCard handler={handleAddon} />
+          </Floater>
+          <Floater
+            offset={5}
+            eventDelay={0}
+            placement="top"
+            event="hover"
+            content="Description Tag"
+          >
+            <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
+          </Floater>
+          <Floater
+            placement="top"
+            event="hover"
+            content={commentEwr ? 'Unsubscribe' : 'Subscribe'}
+            offset={5}
+            eventDelay={0}
+          >
+            <button
+              onClick={() => {
+                setCommentEwr(!commentEwr);
+              }}
+            >
+              {commentEwr ? Icons().email : Icons().emailFill}
+            </button>
+          </Floater>
+          <Floater
+            offset={5}
+            eventDelay={0}
+            placement="top"
+            event="hover"
+            content={previewStatus ? 'Close Preview' : 'Preview'}
+          >
+            <button
+              onClick={() => {
+                setPreviewStatus(!previewStatus);
+              }}
+            >
+              {previewStatus ? Icons().markdownFill : Icons().markdown}
+            </button>
+          </Floater>
+          {AV.User.current() ? (
+            <Floater
+              offset={5}
+              eventDelay={0}
+              placement="top"
+              event="hover"
+              content="Admin Logout"
+            >
+              <button
+                onClick={() => {
+                  AV.User.logOut();
+                  window.location.reload();
+                }}
+              >
+                {Icons().logout}
+              </button>
+            </Floater>
+          ) : (
+            ''
+          )}
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              sendComment();
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+      {/*<div>
         <h5>
           {commentName}({commentEmail})
         </h5>
@@ -213,6 +345,7 @@ const CommentsArea = (Props: {
         <p>Tag: {commentTag}</p>
         <p>Ewr: {commentEwr ? 'true' : 'false'}</p>
       </div>
+      */}
       {/* Modals */}
       {modalStatus ? (
         <VerificationModal

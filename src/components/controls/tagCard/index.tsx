@@ -1,5 +1,6 @@
 import React from 'react';
 import Popover from 'react-tiny-popover';
+import Icons from '../../icons/index';
 
 const TagCard = (Props: { tag: string; handler: any }) => {
   // Popover state
@@ -41,7 +42,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
       }}
     >
       <button onClick={() => setTagPopoverStatus(!tagPopoverStatus)}>
-        tag
+        {Icons().tag}
       </button>
     </Popover>
   );

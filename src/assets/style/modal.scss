@@ -1,6 +1,9 @@
 .nexment-modal {
   background: #999;
 }
+.rodal {
+  outline: none;
+}
 
 .rodal-dialog {
   padding: 30px !important;
@@ -8,13 +11,36 @@
 }
 
 .nexment-modal-replies {
+  .rodal-close {
+    position: absolute;
+    cursor: pointer;
+    top: 35px;
+    right: 35px;
+    width: 20px;
+    height: 20px;
+  }
+  .nexment-modal-text {
+    h1 {
+      margin: 0px;
+      letter-spacing: 0.5px;
+      font-size: 25px;
+    }
+    p {
+      margin: 0px;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+  }
   .rodal-dialog {
-    width: 45% !important;;
-    height: fit-content !important;
+    width: 95% !important;
+    height: 90vh !important;
     max-height: 90vh !important;
-    @media screen and (max-width: 1280px) {
-      height: 100vh !important;
-      max-height: 100vh !important;
+    overflow: hidden;
+    overflow-y: auto;
+    @media screen and (min-width: 1000px) {
+      width: 75vh !important;
     }
   }
 }

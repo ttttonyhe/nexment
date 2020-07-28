@@ -13,7 +13,6 @@ const App = () => {
     admin: {
       name: 'TonyHe',
       email: 'he@holptech.com',
-      pwd: '12345678',
     },
   };
   return (
@@ -22,8 +21,11 @@ const App = () => {
       <style>
         {`
         .example-container{
-          width:750px;
+          width:650px;
           margin:0 auto;
+          padding: 20px;
+          border-left: 1px solid #eee;
+          border-right: 1px solid #eee;
         }`}
       </style>
     </div>

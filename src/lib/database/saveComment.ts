@@ -51,69 +51,75 @@ const useSavingComment = async (
       status: 501,
     };
   } else {
-    const commentsStorageClass = AV.Object.extend('nexment_comments');
-    const commentsStorage = new commentsStorageClass();
-    commentsStorage.set('identifier', info.identifier);
-    commentsStorage.set('ID', info.ID);
-    commentsStorage.set('name', info.name);
-    commentsStorage.set('email', info.email);
-    commentsStorage.set('content', info.content);
-    if (info.reply !== undefined) {
-      // Set reply ID for current comment
-      commentsStorage.set('reply', info.reply);
+    if (info.identifier && info.ID && info.name && info.email && info.content) {
+      const commentsStorageClass = AV.Object.extend('nexment_comments');
+      const commentsStorage = new commentsStorageClass();
+      commentsStorage.set('identifier', info.identifier);
+      commentsStorage.set('ID', info.ID);
+      commentsStorage.set('name', info.name);
+      commentsStorage.set('email', info.email);
+      commentsStorage.set('content', info.content);
+      if (info.reply !== undefined) {
+        // Set reply ID for current comment
+        commentsStorage.set('reply', info.reply);
 
-      // Get reply-to comment object
-      const replyToObject = await AV.Object.createWithoutData(
-        'nexment_comments',
-        info.replyOID
-      );
-      replyToObject.set('hasReplies', true);
+        // Get reply-to comment object
+        const replyToObject = await AV.Object.createWithoutData(
+          'nexment_comments',
+          info.replyOID
+        );
+        replyToObject.set('hasReplies', true);
 
-      // Email when replied
-      const query = new AV.Query('nexment_comments');
-      const replyToEmailStatus = await query
-        .get(info.replyOID)
-        .then((item: { get: (arg0: string) => any }) => {
-          return [item.get('emailWhenReplied'), item.get('email')];
-        });
-      if (replyToEmailStatus[0]) {
-        sendEmail(
-          replyToEmailStatus[1],
-          window.location.href,
-          md.render('From ' + info.name + ' : ' + info.content)
+        // Email when replied
+        const query = new AV.Query('nexment_comments');
+        const replyToEmailStatus = await query
+          .get(info.replyOID)
+          .then((item: { get: (arg0: string) => any }) => {
+            return [item.get('emailWhenReplied'), item.get('email')];
+          });
+        if (replyToEmailStatus[0]) {
+          sendEmail(
+            replyToEmailStatus[1],
+            window.location.href,
+            md.render('From ' + info.name + ' : ' + info.content)
+          );
+        }
+
+        // Save reply-to comment object
+        await replyToObject.save().then(
+          () => {
+            console.log('nb');
+          },
+          (error: any) => {
+            console.log(error);
+          }
         );
       }
-
-      // Save reply-to comment object
-      await replyToObject.save().then(
-        () => {
-          console.log('nb');
+      if (info.tag !== undefined) {
+        commentsStorage.set('tag', info.tag);
+      }
+      if (info.ewr !== undefined) {
+        commentsStorage.set('emailWhenReplied', info.ewr);
+      }
+      return await commentsStorage.save().then(
+        (savedComment: any) => {
+          return {
+            status: 201,
+            savedComment: savedComment,
+          };
         },
-        (error: any) => {
-          console.log(error);
+        () => {
+          // 异常处理
+          return {
+            status: 500,
+          };
         }
       );
+    } else {
+      return {
+        status: 501,
+      };
     }
-    if (info.tag !== undefined) {
-      commentsStorage.set('tag', info.tag);
-    }
-    if (info.ewr !== undefined) {
-      commentsStorage.set('emailWhenReplied', info.ewr);
-    }
-    return await commentsStorage.save().then(
-      (savedComment: any) => {
-        return {
-          status: 201,
-          savedComment: savedComment,
-        };
-      },
-      () => {
-        // 异常处理
-        return {
-          status: 500,
-        };
-      }
-    );
   }
 };
 

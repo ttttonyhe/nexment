@@ -18,6 +18,7 @@ const Modal = (Props: {
   pageKey?: string;
   replyToID?: number;
   replyToOID?: string;
+  replyToName?: string;
   visibilityFunction?: Function;
   replyItem?: any;
   config: nexmentConfigType;
@@ -40,18 +41,17 @@ const Modal = (Props: {
       onClose={() => {
         handleClose();
       }}
-      animation="fade"
+      animation="slideUp"
+      duration={200}
       className="nexment-modal-replies"
     >
-      <div className="nexment-modal-text">
-        <h1>Replies</h1>
-      </div>
       <RepliesList
         dataContent={Props.content}
         replyTo={Props.replyTo}
         pageKey={Props.pageKey ? Props.pageKey : ''}
         replyToID={Props.replyToID}
         replyToOID={Props.replyToOID}
+        replyToName={Props.replyToName}
         replyItem={Props.replyItem}
         config={Props.config}
       />
