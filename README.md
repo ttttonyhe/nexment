@@ -4,6 +4,7 @@
 <br/>
 
 ## Installation
+Nexment is currently only available for React.js projects, Vue version is WIP.
 ### Part I - LeanCloud
 1. Register / Login [LeanCloud](https://leancloud.cn/dashboard/login.html#/signup)
 2. Create an App in [Dashboard](https://leancloud.cn/dashboard/applist.html#/apps)
