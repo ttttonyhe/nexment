@@ -1,6 +1,18 @@
 # Nexment
 > Another lovely comments library based on LeanCloud
 
+![nexment_2.png](https://i.loli.net/2020/07/29/MsAdYw4cPWiIHk3.png)
+
+<br/>
+
+## Docs
+Visit Nexment documentation site at [https://nexment.ouorz.com](https://nexment.ouorz.com)
+
+<br/>
+
+## Demo
+Visit Nexment demo site at [https://nexment-demo.ouorz.com](https://nexment-demo.ouorz.com)
+
 <br/>
 
 ## Installation
@@ -13,6 +25,7 @@ Nexment is currently only available for React.js projects, Vue version is WIP.
 5. Go to Your App => **Settings** tab => App keys
 6. Copy AppID and AppKey
 7. Configure REST API Server URL. For configuration instructions, see [How to Specify API Server URL (Chinese)](https://leancloud.cn/docs/custom-api-domain-guide.html#hash810845114)
+8. Go to Your App => **Settings** tab => Security and add your project domain to Web secure domains
 
 <br/>
 
@@ -58,3 +71,17 @@ Use the nexment component:
 1.  管理模式
     1. 评论精选
     2. 评论 Label
+
+<br/>
+
+## Donation
+Your name will be on the list [Donation](https://www.ouorz.com/donation)
+<br/>
+
+![Donate](https://i.loli.net/2019/02/18/5c6a80afd1e26.png)
+
+<br/>
+
+File an issue if you encountered any problem
+<br/>
+I will reply you as soon as possible
