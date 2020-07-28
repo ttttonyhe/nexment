@@ -1,7 +1,7 @@
 # Nexment
 > Another lovely comments library based on LeanCloud
 
-![nexment_2.png](https://i.loli.net/2020/07/29/MsAdYw4cPWiIHk3.png)
+![nexment_1.png](https://i.loli.net/2020/07/29/ovJRpK7zEMjH63t.png)
 
 <br/>
 
