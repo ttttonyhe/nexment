@@ -8,7 +8,6 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "nexment-dev": "^0.0.3",
     "react-app-polyfill": "^1.0.0"
   },
   "alias": {
@@ -19,6 +18,7 @@
   "devDependencies": {
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.8.4",
+    "nexment-dev": "^0.0.4",
     "parcel": "^1.12.3",
     "typescript": "^3.4.5"
   }

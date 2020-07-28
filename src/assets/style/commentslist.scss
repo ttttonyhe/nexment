@@ -252,8 +252,38 @@ $borderColor: #e8e8e8;
     margin: 0px;
     transform: translateY(2.5px);
     color: #8491a6;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
   div:nth-child(1) {
     flex: 1;
+  }
+}
+
+.nexment-empty {
+  text-align: center;
+  padding: 20px 0px;
+  p {
+    margin: 0px;
+    color: #8392a6;
+  }
+  .nexment-error {
+    margin-top: 30px;
+    border: 1px solid #dfe2e5;
+    p:nth-child(1) {
+      border-bottom: 1px solid #dfe2e5;
+      padding: 5px 0px;
+      font-weight: 500;
+      background: #f7f8f9;
+    }
+    p:nth-child(2) {
+      padding: 10px;
+      a {
+        color: #8392a6;
+        font-weight: 500;
+      }
+    }
   }
 }

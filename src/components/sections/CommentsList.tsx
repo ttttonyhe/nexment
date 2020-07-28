@@ -82,7 +82,22 @@ const CommentsList = (Props: {
       </div>
     );
   } else if (isError) {
-    return <div>Error.</div>;
+    return (
+      <div className="nexment-empty">
+        <div>{Icons().commentsError}</div>
+        <p>Nexment Service Error</p>
+        <div className="nexment-error">
+          <p>Problem Shooting</p>
+          <p>
+            Make sure you have created a Class named [nexment_comments] on
+            LeanCloud&nbsp;|&nbsp;
+            <a href="https://nexment.ouorz.com" target="_blank">
+              Documentation
+            </a>
+          </p>
+        </div>
+      </div>
+    );
   } else {
     return (
       <div>
@@ -103,7 +118,12 @@ const CommentsList = (Props: {
             <h1>{commentsData ? commentsData.length : 0} Comments</h1>
           </div>
           <div>
-            <p>Powered by Nexment</p>
+            <p>
+              Powered by{' '}
+              <a href="https://github.com/HelipengTony/nexment" target="_blank">
+                Nexment
+              </a>
+            </p>
           </div>
         </div>
         <ul className="nexment-comments-list">
@@ -264,9 +284,10 @@ const CommentsList = (Props: {
               </li>
             ))
           ) : (
-            <li>
-              <p>No Comments</p>
-            </li>
+            <div className="nexment-empty">
+              <div>{Icons().comments}</div>
+              <p>No Comments Yet</p>
+            </div>
           )}
         </ul>
       </div>

@@ -17,8 +17,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
         <p>Add a description tag to help others to know about you</p>
         <div className="nexment-popover-input">
           <input
-            value={Props.tag ? Props.tag : undefined}
-            placeholder="Description tag"
+            placeholder={Props.tag ? Props.tag : 'Description tag'}
             onChange={Props.handler}
           ></input>
           <button

@@ -88,7 +88,7 @@ const useSavingComment = async (
         // Save reply-to comment object
         await replyToObject.save().then(
           () => {
-            console.log('nb');
+            console.log('A comment has been saved by Nexment');
           },
           (error: any) => {
             console.log(error);
@@ -117,7 +117,7 @@ const useSavingComment = async (
       );
     } else {
       return {
-        status: 501,
+        status: 500,
       };
     }
   }
