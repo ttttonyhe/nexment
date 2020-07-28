@@ -27,7 +27,7 @@
   "name": "nexment",
   "author": "HelipengTony",
   "module": "dist/nexment.esm.js",
-  "devDependencies": {
+  "dependencies": {
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "github-markdown-css": "^4.0.0",
@@ -47,9 +47,7 @@
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7",
-    "unfetch": "^4.1.0"
-  },
-  "dependencies": {
+    "unfetch": "^4.1.0",
     "components": "^0.1.0",
     "leancloud-storage": "^4.6.1",
     "lib": "^4.3.0",
