@@ -21,7 +21,7 @@ Nexment is currently only available for React.js projects, Vue version is WIP.
 1. Register / Login [LeanCloud](https://leancloud.cn/dashboard/login.html#/signup)
 2. Create an App in [Dashboard](https://leancloud.cn/dashboard/applist.html#/apps)
 3. Go to Your App => **LeanStorage** tab => Objects
-4. Create a class named "nexment_comments" using default settings
+4. Create a class named "test" using default settings
 5. Go to Your App => **Settings** tab => App keys
 6. Copy AppID and AppKey
 7. Configure REST API Server URL. For configuration instructions, see [How to Specify API Server URL (Chinese)](https://leancloud.cn/docs/custom-api-domain-guide.html#hash810845114)
