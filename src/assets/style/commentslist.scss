@@ -122,7 +122,7 @@ $borderColor: #e8e8e8;
   @media screen and (min-width: 1000px) {
     padding-right: 0px !important;
   }
-  margin: 0px 0px 10px 0px;
+  margin: -2px 0px 5px 0px;
   border-bottom: 1px solid #eee;
   transition: ease-in-out 0.1s;
   cursor: pointer;
@@ -252,6 +252,7 @@ $borderColor: #e8e8e8;
     margin: 0px;
     transform: translateY(2.5px);
     color: #8491a6;
+    font-size: 10px;
     a {
       color: inherit;
       text-decoration: none;
