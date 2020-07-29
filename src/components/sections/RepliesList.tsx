@@ -11,6 +11,7 @@ const md5 = require('js-md5');
 import Icons from '../icons/index';
 import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
+import { markDownConfigs } from '../sections/CommentsArea';
 
 const RepliesList = (Props: {
   dataContent: commentsItemType[];
@@ -114,7 +115,7 @@ const RepliesList = (Props: {
                 <img
                   src={
                     'https://gravatar.loli.net/avatar/' +
-                    md5(Props.replyItem.email)
+                    md5(Props.replyItem.email) + '?d=mp'
                   }
                 />
                 {adminBadge(Props.replyItem.name, Props.replyItem.email)}
@@ -135,7 +136,7 @@ const RepliesList = (Props: {
                 >
                   <MarkdownView
                     markdown={Props.replyItem.content}
-                    options={{ tables: true, emoji: true }}
+                    options={markDownConfigs}
                   />
                 </div>
               </div>
@@ -200,7 +201,7 @@ const RepliesList = (Props: {
                             <img
                               src={
                                 'https://gravatar.loli.net/avatar/' +
-                                md5(item.email)
+                                md5(item.email) + '?d=mp'
                               }
                             />
                             {adminBadge(item.name, item.email)}
@@ -235,7 +236,7 @@ const RepliesList = (Props: {
                             >
                               <MarkdownView
                                 markdown={item.content}
-                                options={{ tables: true, emoji: true }}
+                                options={markDownConfigs}
                               />
                             </div>
                           </div>

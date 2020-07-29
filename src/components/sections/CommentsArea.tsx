@@ -15,6 +15,16 @@ import MarkdownView from 'react-showdown';
 import 'github-markdown-css';
 import Floater from 'react-floater';
 
+// Markdown options
+export const markDownConfigs = {
+  tables: true,
+  emoji: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  simpleLineBreaks: true,
+  openLinksInNewWindow: true,
+};
+
 const CommentsArea = (Props: {
   pageKey: string;
   replyTo: number | undefined;
@@ -190,6 +200,7 @@ const CommentsArea = (Props: {
     }
   };
 
+  // Reply className
   const getReplyDisplay = () => {
     if (resetStatus) {
       if (primaryReplyToName) {
@@ -229,7 +240,7 @@ const CommentsArea = (Props: {
           <div className="nexment-md-preview markdown-body">
             <MarkdownView
               markdown={commentContent ? commentContent : 'Nothing to preview'}
-              options={{ tables: true, emoji: true }}
+              options={markDownConfigs}
             />
           </div>
         ) : (
@@ -291,6 +302,22 @@ const CommentsArea = (Props: {
             eventDelay={0}
             placement="top"
             event="hover"
+            content="Avatar"
+          >
+            <button>
+              <a
+                href="https://cn.gravatar.com/support/what-is-gravatar"
+                target="_blank"
+              >
+                {Icons().avatar}
+              </a>
+            </button>
+          </Floater>
+          <Floater
+            offset={5}
+            eventDelay={0}
+            placement="top"
+            event="hover"
             content={previewStatus ? 'Close Preview' : 'Preview'}
           >
             <button
@@ -332,20 +359,6 @@ const CommentsArea = (Props: {
           </button>
         </div>
       </div>
-      {/*<div>
-        <h5>
-          {commentName}({commentEmail})
-        </h5>
-        <p>Content: {commentContent}</p>
-        <p>Replying to: {resetStatus ? primaryReplyTo : Props.replyTo}</p>
-        <p>
-          Replying to OID:
-          {resetStatus ? primaryReplyToOID : Props.replyToOID}
-        </p>
-        <p>Tag: {commentTag}</p>
-        <p>Ewr: {commentEwr ? 'true' : 'false'}</p>
-      </div>
-      */}
       {/* Modals */}
       {modalStatus ? (
         <VerificationModal

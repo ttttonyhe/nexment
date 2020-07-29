@@ -9,6 +9,7 @@ const md5 = require('js-md5');
 import Icons from '../icons/index';
 import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
+import { markDownConfigs } from '../sections/CommentsArea';
 
 const CommentsList = (Props: {
   type: string;
@@ -167,7 +168,7 @@ const CommentsList = (Props: {
                   <div className="nexment-comments-avatar">
                     <img
                       src={
-                        'https://gravatar.loli.net/avatar/' + md5(item.email)
+                        'https://gravatar.loli.net/avatar/' + md5(item.email) + '?d=mp'
                       }
                     />
                     {adminBadge(item.name, item.email)}
@@ -188,7 +189,7 @@ const CommentsList = (Props: {
                     >
                       <MarkdownView
                         markdown={item.content}
-                        options={{ tables: true, emoji: true }}
+                        options={markDownConfigs}
                       />
                     </div>
                   </div>
@@ -222,7 +223,7 @@ const CommentsList = (Props: {
                               <img
                                 src={
                                   'https://gravatar.loli.net/avatar/' +
-                                  md5(replyItem.email)
+                                  md5(replyItem.email) + '?d=mp'
                                 }
                               />
                               {adminBadge(replyItem.name, replyItem.email)}
@@ -251,7 +252,7 @@ const CommentsList = (Props: {
                               <div className="nexment-comments-content margin-top-reply">
                                 <MarkdownView
                                   markdown={replyItem.content}
-                                  options={{ tables: true, emoji: true }}
+                                  options={markDownConfigs}
                                 />
                               </div>
                             </div>
