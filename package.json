@@ -30,8 +30,11 @@
   "dependencies": {
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
+    "components": "^0.1.0",
     "github-markdown-css": "^4.0.0",
     "js-md5": "^0.7.3",
+    "leancloud-storage": "^4.6.1",
+    "lib": "^4.3.0",
     "markdown-it": "^11.0.0",
     "qs": "^6.9.4",
     "react": "^16.13.1",
@@ -43,15 +46,14 @@
     "react-tiny-popover": "^5.1.0",
     "reactjs-localstorage": "^1.0.1",
     "rodal": "^1.8.1",
+    "swr": "^0.2.3",
     "timeago.js": "^4.0.2",
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7",
-    "unfetch": "^4.1.0",
-    "components": "^0.1.0",
-    "leancloud-storage": "^4.6.1",
-    "lib": "^4.3.0",
-    "rollup-plugin-sass": "^1.2.2",
-    "swr": "^0.2.3"
+    "unfetch": "^4.1.0"
+  },
+  "devDependencies": {
+    "rollup-plugin-sass": "^1.2.2"
   }
 }
