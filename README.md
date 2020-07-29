@@ -1,7 +1,7 @@
 # Nexment
-> Another lovely comments library based on LeanCloud
+> Another lovely serverless comments library for React based on LeanCloud
 
-![nexment_1.png](https://i.loli.net/2020/07/29/ovJRpK7zEMjH63t.png)
+![nexment_banner](https://i.loli.net/2020/07/29/ODkqtseAU6KJGxB.png)
 
 <br/>
 
