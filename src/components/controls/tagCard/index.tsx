@@ -1,8 +1,12 @@
 import React from 'react';
 import Popover from 'react-tiny-popover';
 import Icons from '../../icons/index';
+import translate, { getBestLanguage } from '../../../lib/translation/index';
 
 const TagCard = (Props: { tag: string; handler: any }) => {
+  // Translation
+  const Translation = translate.use().text;
+
   // Popover state
   const [tagPopoverStatus, setTagPopoverStatus] = React.useState<boolean>(
     false
@@ -12,20 +16,21 @@ const TagCard = (Props: { tag: string; handler: any }) => {
     return (
       <div className="nexment-popover">
         <div className="nexment-popover-text">
-          <b>Description Tag</b>
+          <b>{Translation.desTag}</b>
         </div>
-        <p>Add a description tag to help others to know about you</p>
+        <p>{Translation.desTagDes}</p>
         <div className="nexment-popover-input">
           <input
-            placeholder={Props.tag ? Props.tag : 'Description tag'}
+            placeholder={Props.tag ? Props.tag : Translation.desTag}
             onChange={Props.handler}
           ></input>
           <button
+            className={getBestLanguage() === 'zh' ? 'nexment-tag-button' : ''}
             onClick={() => {
               setTagPopoverStatus(!tagPopoverStatus);
             }}
           >
-            Confirm
+            {Translation.confirm}
           </button>
         </div>
       </div>

@@ -14,6 +14,7 @@ import Icons from '../icons/index';
 import MarkdownView from 'react-showdown';
 import 'github-markdown-css';
 import Floater from 'react-floater';
+import translate from '../../lib/translation/index';
 
 // Markdown options
 export const markDownConfigs = {
@@ -37,6 +38,10 @@ const CommentsArea = (Props: {
   config: nexmentConfigType;
   reloadFunc?: Function;
 }) => {
+  // Translation
+  const Translation = translate.use().text;
+
+  // LeanCloud 初始化
   const AV = leanCloud(
     Props.config.leancloud.appId,
     Props.config.leancloud.appKey,
@@ -221,17 +226,17 @@ const CommentsArea = (Props: {
     <div className="nexment-comment-area" id="nexment-comment-area">
       <div className="nexment-comment-area-top">
         <input
-          placeholder={commentName ? commentName : 'Name'}
+          placeholder={commentName ? commentName : Translation.name}
           onChange={handleNameChange}
         ></input>
         <input
-          placeholder={commentEmail ? commentEmail : 'Email'}
+          placeholder={commentEmail ? commentEmail : Translation.email}
           onChange={handleEmailChange}
         ></input>
       </div>
       <div className="nexment-comment-area-middle">
         <TextareaAutosize
-          placeholder="Enter some text..."
+          placeholder={Translation.placeHolder + '...'}
           onChange={handleContentChange}
           value={tempCommentContent}
           className={previewStatus ? 'nexment-previewing' : ''}
@@ -239,7 +244,7 @@ const CommentsArea = (Props: {
         {previewStatus ? (
           <div className="nexment-md-preview markdown-body">
             <MarkdownView
-              markdown={commentContent ? commentContent : 'Nothing to preview'}
+              markdown={commentContent ? commentContent : Translation.nothing}
               options={markDownConfigs}
             />
           </div>
@@ -254,7 +259,7 @@ const CommentsArea = (Props: {
             eventDelay={0}
             placement="top"
             event="hover"
-            content="Reset Reply"
+            content={Translation.resetReply}
           >
             <button onClick={resetReplyTo} className={getReplyDisplay()}>
               {getReplyDisplay() === 'nexment-replying'
@@ -278,14 +283,14 @@ const CommentsArea = (Props: {
             eventDelay={0}
             placement="top"
             event="hover"
-            content="Description Tag"
+            content={Translation.desTag}
           >
             <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
           </Floater>
           <Floater
             placement="top"
             event="hover"
-            content={commentEwr ? 'Unsubscribe' : 'Subscribe'}
+            content={commentEwr ? Translation.unSub : Translation.sub}
             offset={5}
             eventDelay={0}
           >
@@ -302,7 +307,7 @@ const CommentsArea = (Props: {
             eventDelay={0}
             placement="top"
             event="hover"
-            content="Avatar"
+            content={Translation.avatar}
           >
             <button>
               <a
@@ -318,7 +323,9 @@ const CommentsArea = (Props: {
             eventDelay={0}
             placement="top"
             event="hover"
-            content={previewStatus ? 'Close Preview' : 'Preview'}
+            content={
+              previewStatus ? Translation.stopPreview : Translation.mdPreview
+            }
           >
             <button
               onClick={() => {
@@ -334,7 +341,7 @@ const CommentsArea = (Props: {
               eventDelay={0}
               placement="top"
               event="hover"
-              content="Admin Logout"
+              content={Translation.adminLogout}
             >
               <button
                 onClick={() => {
@@ -355,7 +362,7 @@ const CommentsArea = (Props: {
               sendComment();
             }}
           >
-            Submit
+            {Translation.submit}
           </button>
         </div>
       </div>

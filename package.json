@@ -41,6 +41,7 @@
     "react-content-loader": "^5.1.0",
     "react-dom": "^16.13.1",
     "react-floater": "^0.7.2",
+    "react-ridge-translations": "^1.0.0",
     "react-showdown": "^2.1.0",
     "react-textarea-autosize": "^8.2.0",
     "react-tiny-popover": "^5.1.0",

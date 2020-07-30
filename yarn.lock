@@ -5187,6 +5187,11 @@ react-proptype-conditional-require@^1.0.4:
   resolved "https://registry.npm.taobao.org/react-proptype-conditional-require/download/react-proptype-conditional-require-1.0.4.tgz#69c2d5741e6df5e08f230f36bbc2944ee1222555"
   integrity sha1-acLVdB5t9eCPIw82u8KUTuEiJVU=
 
+react-ridge-translations@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/react-ridge-translations/download/react-ridge-translations-1.0.0.tgz#50b49d8756f65eef03ac3c78b0eab958949984c1"
+  integrity sha1-ULSdh1b2Xu8DrDx4sOq5WJSZhME=
+
 react-showdown@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/react-showdown/download/react-showdown-2.1.0.tgz#cddf070a7ed53b425fc7adfb44abac6fd835cee9"

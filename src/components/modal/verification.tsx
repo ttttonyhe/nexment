@@ -4,11 +4,15 @@ import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
 import { nexmentConfigType } from 'components/container';
 import adminLogin from '../../lib/database/adminLoging';
+import translate from '../../lib/translation/index';
 
 const VerificationModal = (Props: {
   visibilityFunction?: Function;
   config: nexmentConfigType;
 }) => {
+  // Translation
+  const Translation = translate.use().text;
+
   // Modal state
   const [notificationModalStatus, setNotificationModalStatus] = React.useState<
     boolean
@@ -34,7 +38,6 @@ const VerificationModal = (Props: {
     setPassword(e.target.value);
   };
 
-  
   /**
    * Login event handler
    *
@@ -66,8 +69,8 @@ const VerificationModal = (Props: {
       animation="fade"
     >
       <div className="nexment-modal-text">
-        <h1>Verification</h1>
-        <p>Please verify your Nexment admin identity (first time login password will be set as admin password)</p>
+        <h1>{Translation.verification}</h1>
+        <p>{Translation.verifyDes}</p>
       </div>
       <input placeholder="Admin password" onChange={handlePwdChange}></input>
       <button

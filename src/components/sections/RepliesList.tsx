@@ -12,6 +12,7 @@ import Icons from '../icons/index';
 import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
 import { markDownConfigs } from '../sections/CommentsArea';
+import translate from '../../lib/translation/index';
 
 const RepliesList = (Props: {
   dataContent: commentsItemType[];
@@ -24,6 +25,9 @@ const RepliesList = (Props: {
   replyItem?: any;
   config: nexmentConfigType;
 }) => {
+  // Translation
+  const Translation = translate.use().text;
+
   // Modal states
   const [modalVisibility, setModalVisibility] = React.useState<{
     [propsName: string]: boolean;
@@ -80,7 +84,7 @@ const RepliesList = (Props: {
   return (
     <div>
       <div className="nexment-modal-text">
-        <h1>Replies</h1>
+        <h1>{Translation.replyList}</h1>
         <p>@{Props.replyToName}</p>
       </div>
       <div className="nexment-reply-container">
@@ -115,7 +119,8 @@ const RepliesList = (Props: {
                 <img
                   src={
                     'https://gravatar.loli.net/avatar/' +
-                    md5(Props.replyItem.email) + '?d=mp'
+                    md5(Props.replyItem.email) +
+                    '?d=mp'
                   }
                 />
                 {adminBadge(Props.replyItem.name, Props.replyItem.email)}
@@ -201,7 +206,8 @@ const RepliesList = (Props: {
                             <img
                               src={
                                 'https://gravatar.loli.net/avatar/' +
-                                md5(item.email) + '?d=mp'
+                                md5(item.email) +
+                                '?d=mp'
                               }
                             />
                             {adminBadge(item.name, item.email)}
@@ -274,9 +280,10 @@ const RepliesList = (Props: {
                     </div>
                   ))
                 ) : (
-                  <li>
-                    <p>No Comments</p>
-                  </li>
+                  <div className="nexment-empty">
+                    <div>{Icons().comments}</div>
+                    <p>{Translation.noComments}</p>
+                  </div>
                 )}
               </ul>
             </div>

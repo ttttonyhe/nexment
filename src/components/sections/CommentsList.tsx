@@ -10,12 +10,16 @@ import Icons from '../icons/index';
 import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
 import { markDownConfigs } from '../sections/CommentsArea';
+import translate from '../../lib/translation/index';
 
 const CommentsList = (Props: {
   type: string;
   pageKey: string;
   config: nexmentConfigType;
 }) => {
+  // Translation
+  const Translation = translate.use().text;
+
   // Reusable data list
   const { commentsData, isLoading, isError } = useComments(
     Props.pageKey,
@@ -86,14 +90,13 @@ const CommentsList = (Props: {
     return (
       <div className="nexment-empty">
         <div>{Icons().commentsError}</div>
-        <p>Nexment Service Error</p>
+        <p>{Translation.serviceError}</p>
         <div className="nexment-error">
-          <p>Problem Shooting</p>
+          <p>{Translation.problemShooting}</p>
           <p>
-            Make sure you have created a Class named [nexment_comments] on
-            LeanCloud&nbsp;|&nbsp;
+            {Translation.problemDes}&nbsp;|&nbsp;
             <a href="https://nexment.ouorz.com" target="_blank">
-              Documentation
+              {Translation.documentation}
             </a>
           </p>
         </div>
@@ -116,11 +119,13 @@ const CommentsList = (Props: {
         />
         <div className="nexment-header">
           <div>
-            <h1>{commentsData ? commentsData.length : 0} Comments</h1>
+            <h1>
+              {commentsData ? commentsData.length : 0} {Translation.comments}
+            </h1>
           </div>
           <div>
             <p>
-              Powered by{' '}
+              {Translation.poweredBy}{' '}
               <a href="https://github.com/HelipengTony/nexment" target="_blank">
                 Nexment
               </a>
@@ -168,7 +173,9 @@ const CommentsList = (Props: {
                   <div className="nexment-comments-avatar">
                     <img
                       src={
-                        'https://gravatar.loli.net/avatar/' + md5(item.email) + '?d=mp'
+                        'https://gravatar.loli.net/avatar/' +
+                        md5(item.email) +
+                        '?d=mp'
                       }
                     />
                     {adminBadge(item.name, item.email)}
@@ -223,7 +230,8 @@ const CommentsList = (Props: {
                               <img
                                 src={
                                   'https://gravatar.loli.net/avatar/' +
-                                  md5(replyItem.email) + '?d=mp'
+                                  md5(replyItem.email) +
+                                  '?d=mp'
                                 }
                               />
                               {adminBadge(replyItem.name, replyItem.email)}
@@ -238,8 +246,8 @@ const CommentsList = (Props: {
                                     <span> · </span>
                                     {replyItem.replyList.length}{' '}
                                     {replyItem.replyList.length > 1
-                                      ? 'replies'
-                                      : 'reply'}
+                                      ? Translation.replies
+                                      : Translation.reply}
                                     {Icons().down}
                                   </b>
                                 ) : (
@@ -287,7 +295,7 @@ const CommentsList = (Props: {
           ) : (
             <div className="nexment-empty">
               <div>{Icons().comments}</div>
-              <p>No Comments Yet</p>
+              <p>{Translation.noComments}</p>
             </div>
           )}
         </ul>
