@@ -68,9 +68,11 @@ Use the nexment component:
 <br/>
 
 ## Todo
-1.  管理模式
-    1. 评论精选
-    2. 评论 Label
+1. 管理模式
+    1. [ ] 评论精选
+    2. [ ] 评论 Label
+2. i18n
+   1. [x] 文本翻译
 
 <br/>
 
