@@ -28,6 +28,7 @@ const EmojiCard = (Props: { handler: any }) => {
                         key={'emoji' + item}
                         onClick={() => {
                           Props.handler(item);
+                          toggleEmojiCard();
                         }}
                       >
                         {item}

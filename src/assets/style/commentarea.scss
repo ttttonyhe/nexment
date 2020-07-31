@@ -7,11 +7,11 @@
 }
 
 .nexment-emoji-container {
-  max-height: 30vh;
+  max-height: 240px;
   overflow: hidden;
   display: flex;
   .nexment-emoji-section {
-    max-height: 30vh;
+    max-height: 240px;
     overflow: hidden;
     &:nth-child(1) {
       border-right: 1px solid #eee;
@@ -28,7 +28,7 @@
       }
     }
     .nexment-emoji-section-box {
-      max-height: calc(30vh - 35px);
+      max-height: 205px;
       overflow: hidden;
       overflow-y: auto;
       .nexment-emoji-section-container {

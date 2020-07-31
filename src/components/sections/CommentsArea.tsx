@@ -16,6 +16,7 @@ import 'github-markdown-css';
 import Floater from 'react-floater';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
+import insertTextAtCursor from 'insert-text-at-cursor';
 
 // Markdown options
 export const markDownConfigs = {
@@ -95,11 +96,6 @@ const CommentsArea = (Props: {
   );
   const [commentEwr, setCommentEwr] = React.useState<boolean>(false);
 
-  // Temporary comment state for content addons
-  const [tempCommentContent, setTempCommentContent] = React.useState<
-    string | undefined
-  >();
-
   // Resetting state
   const [resetStatus, setResetStatus] = React.useState<boolean>(false);
 
@@ -117,12 +113,6 @@ const CommentsArea = (Props: {
   React.useEffect(() => {
     setResetStatus(false);
   }, [Props.replyTo, Props.random]);
-
-  // Process data sending from content addons
-  const handleAddon = (content: string) => {
-    setTempCommentContent(commentContent + content);
-    setCommentContent(commentContent + content);
-  };
 
   // Input change handlers
   const handleNameChange = (e: {
@@ -149,7 +139,6 @@ const CommentsArea = (Props: {
   const handleContentChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
-    setTempCommentContent(undefined);
     setCommentContent(e.target.value);
   };
   const handleTagChange = (e: {
@@ -198,7 +187,6 @@ const CommentsArea = (Props: {
       });
       // Set content to empty
       setCommentContent('');
-      setTempCommentContent('');
       // Refetch data using swr mutate
       refetchData(Props.pageKey);
       // Jump to replied to item
@@ -237,6 +225,14 @@ const CommentsArea = (Props: {
     }
   };
 
+  // Create a ref for textarea
+  const nexmentTextarea:any = React.useRef();
+
+  // Process data sending from content addons, insert content at cursor
+  const handleAddon = (content: string) => {
+    insertTextAtCursor(nexmentTextarea.current, content);
+  };
+
   return (
     <div className="nexment-comment-area" id="nexment-comment-area">
       <div className="nexment-comment-area-top">
@@ -261,8 +257,8 @@ const CommentsArea = (Props: {
         <TextareaAutosize
           placeholder={Translation.placeHolder + '...'}
           onChange={handleContentChange}
-          value={tempCommentContent}
           className={previewStatus ? 'nexment-previewing' : ''}
+          ref={nexmentTextarea}
         />
         {previewStatus ? (
           <div className="nexment-md-preview markdown-body">
