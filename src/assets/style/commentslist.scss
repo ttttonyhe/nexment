@@ -182,6 +182,10 @@ $borderColor: #e8e8e8;
       span {
         color: $grey;
       }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
     }
     .nexment-comments-des {
       color: $grey;
