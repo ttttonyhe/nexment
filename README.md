@@ -49,6 +49,8 @@ import { NexmentContainer } from "nexment"
 Setup nexment configuration:
 ```js
 const config = {
+  pageKey: 'xxx' | undefined;
+  enableLinkInput: true | undefined,
   leancloud: {
     appId: 'xxx',
     appKey: 'xxx',
