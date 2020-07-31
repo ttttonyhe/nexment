@@ -5,11 +5,15 @@ import '../../assets/style/modal.scss';
 import { nexmentConfigType } from 'components/container';
 import adminLogin from '../../lib/database/adminLoging';
 import translate from '../../lib/translation/index';
+import Context from "../../lib/utils/configContext";
 
 const VerificationModal = (Props: {
   visibilityFunction?: Function;
   config: nexmentConfigType;
 }) => {
+  // Configs
+  const NexmentConfigs:nexmentConfigType = React.useContext(Context);
+
   // Translation
   const Translation = translate.use().text;
 
@@ -45,10 +49,10 @@ const VerificationModal = (Props: {
   const loginAction = async () => {
     setLoginText('Verifying...');
     const returnData = await adminLogin(
-      Props.config.admin.name,
-      Props.config.admin.email,
+      NexmentConfigs.admin.name,
+      NexmentConfigs.admin.email,
       password || '',
-      Props.config
+      NexmentConfigs
     );
     if (returnData.status !== 200) {
       alert(returnData.msg);

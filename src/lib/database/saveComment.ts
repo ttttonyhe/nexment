@@ -14,6 +14,7 @@ interface commentType {
   reply?: number | undefined;
   replyOID?: string;
   ewr?: boolean;
+  link?: string;
 }
 
 // Send email when receiving a reply
@@ -100,6 +101,9 @@ const useSavingComment = async (
       }
       if (info.ewr !== undefined) {
         commentsStorage.set('emailWhenReplied', info.ewr);
+      }
+      if (info.link !== undefined) {
+        commentsStorage.set('link', info.link.replace(/\s*/g, ''));
       }
       return await commentsStorage.save().then(
         (savedComment: any) => {

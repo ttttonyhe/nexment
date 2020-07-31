@@ -11,19 +11,19 @@ import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
 import { markDownConfigs } from '../sections/CommentsArea';
 import translate from '../../lib/translation/index';
+import Context from '../../lib/utils/configContext';
 
-const CommentsList = (Props: {
-  type: string;
-  pageKey: string;
-  config: nexmentConfigType;
-}) => {
+const CommentsList = (Props: { type: string; pageKey: string }) => {
+  // Configs
+  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
+
   // Translation
   const Translation = translate.use().text;
 
   // Reusable data list
   const { commentsData, isLoading, isError } = useComments(
     Props.pageKey,
-    Props.config
+    NexmentConfigs
   );
 
   // Loading state
@@ -56,8 +56,8 @@ const CommentsList = (Props: {
 
   const adminBadge = (name: string, email: string) => {
     if (
-      name === Props.config.admin.name &&
-      email === Props.config.admin.email
+      name === NexmentConfigs.admin.name &&
+      email === NexmentConfigs.admin.email
     ) {
       return <div className="nexment-admin-badge">{Icons().admin}</div>;
     } else {
@@ -114,7 +114,6 @@ const CommentsList = (Props: {
           primaryReplyToOID={undefined}
           primaryReplyToName={undefined}
           random={commentsAreaRandom}
-          config={Props.config}
           reloadFunc={setLoadingStatus}
         />
         <div className="nexment-header">
@@ -182,7 +181,7 @@ const CommentsList = (Props: {
                   </div>
                   <div className="nexment-comments-title">
                     <h5>
-                      {item.name}
+                      <a href={item.link} target="_blank">{item.name}</a>
                       <span> · </span>
                       <b>{format(item.date)}</b>
                       <em className="nexment-reply-icon">{Icons().reply}</em>
@@ -238,7 +237,7 @@ const CommentsList = (Props: {
                             </div>
                             <div className="nexment-comments-title">
                               <h5>
-                                {replyItem.name}
+                                <a href={replyItem.link} target="_blank">{replyItem.name}</a>
                                 <span> · </span>
                                 <b>{format(replyItem.date)}</b>
                                 {replyItem.hasReplies ? (
@@ -280,7 +279,6 @@ const CommentsList = (Props: {
                               pageKey={Props.pageKey}
                               visibilityFunction={toggleModal}
                               replyItem={replyItem}
-                              config={Props.config}
                             />
                           ) : (
                             ''

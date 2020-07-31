@@ -13,6 +13,7 @@ import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
 import { markDownConfigs } from '../sections/CommentsArea';
 import translate from '../../lib/translation/index';
+import Context from "../../lib/utils/configContext";
 
 const RepliesList = (Props: {
   dataContent: commentsItemType[];
@@ -23,8 +24,10 @@ const RepliesList = (Props: {
   replyToName?: string;
   visibilityFunction?: Function;
   replyItem?: any;
-  config: nexmentConfigType;
 }) => {
+  // Configs
+  const NexmentConfigs:nexmentConfigType = React.useContext(Context);
+
   // Translation
   const Translation = translate.use().text;
 
@@ -72,8 +75,8 @@ const RepliesList = (Props: {
 
   const adminBadge = (name: string, email: string) => {
     if (
-      name === Props.config.admin.name &&
-      email === Props.config.admin.email
+      name === NexmentConfigs.admin.name &&
+      email === NexmentConfigs.admin.email
     ) {
       return <div className="nexment-admin-badge">{Icons().admin}</div>;
     } else {
@@ -97,7 +100,6 @@ const RepliesList = (Props: {
           primaryReplyToOID={Props.replyToOID}
           primaryReplyToName={Props.replyToName}
           random={commentsAreaRandom}
-          config={Props.config}
           reloadFunc={setLoadingStatus}
         />
         <ul className="nexment-comments-list">
@@ -127,7 +129,7 @@ const RepliesList = (Props: {
               </div>
               <div className="nexment-comments-title">
                 <h5>
-                  {Props.replyItem.name}
+                  <a href={Props.replyItem.link} target="_blank">{Props.replyItem.name}</a>
                   <span> · </span>
                   <b>{format(Props.replyItem.date)}</b>
                   <em className="nexment-reply-icon">{Icons().reply}</em>
@@ -214,7 +216,7 @@ const RepliesList = (Props: {
                           </div>
                           <div className="nexment-comments-title">
                             <h5>
-                              {item.name}
+                            <a href={item.link} target="_blank">{item.name}</a>
                               <span> · </span>
                               <b>{format(item.date)}</b>
                               {item.hasReplies ? (
@@ -269,7 +271,6 @@ const RepliesList = (Props: {
                                 replyToOID={item.OID}
                                 replyToName={item.name}
                                 replyItem={item}
-                                config={Props.config}
                               />
                             </Rodal>
                           ) : (

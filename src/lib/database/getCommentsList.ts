@@ -13,6 +13,7 @@ export interface commentsItemType {
   tag: string;
   replyList: commentsItemType[];
   hasReplies: boolean;
+  link: string;
 }
 
 /**
@@ -91,6 +92,7 @@ const useComments = (
               date: item.createdAt,
               email: item.get('email'),
               tag: item.get('tag'),
+              link: item.get('link'),
               hasReplies: item.get('hasReplies'),
             });
           }
@@ -128,6 +130,7 @@ const useComments = (
               replyList: replyItemData,
               email: item.get('email'),
               tag: item.get('tag'),
+              link: item.get('link'),
               hasReplies: item.get('hasReplies'),
             };
             combineData.push(itemData);

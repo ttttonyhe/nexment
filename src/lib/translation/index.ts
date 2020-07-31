@@ -130,6 +130,10 @@ const translate = createTranslations<TranslationLanguages>()(
         zh: '无内容可预览',
         en: 'Nothing to preview',
       },
+      link:{
+        zh: '站点链接',
+        en: 'URL',
+      }
     },
   },
   {

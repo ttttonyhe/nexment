@@ -3,7 +3,6 @@ import RepliesList from '../sections/RepliesList';
 import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
-import { nexmentConfigType } from 'components/container';
 
 /**
  * Modal component
@@ -21,12 +20,12 @@ const Modal = (Props: {
   replyToName?: string;
   visibilityFunction?: Function;
   replyItem?: any;
-  config: nexmentConfigType;
 }) => {
   // Modal state
   const [repliesModalStatus, setRepliesModalStatus] = React.useState<boolean>(
     true
   );
+
   // Modal closing event handler
   const handleClose = () => {
     setRepliesModalStatus(!repliesModalStatus);
@@ -53,7 +52,6 @@ const Modal = (Props: {
         replyToOID={Props.replyToOID}
         replyToName={Props.replyToName}
         replyItem={Props.replyItem}
-        config={Props.config}
       />
     </Rodal>
   );

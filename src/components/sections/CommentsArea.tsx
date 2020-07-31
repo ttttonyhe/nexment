@@ -15,6 +15,7 @@ import MarkdownView from 'react-showdown';
 import 'github-markdown-css';
 import Floater from 'react-floater';
 import translate from '../../lib/translation/index';
+import Context from '../../lib/utils/configContext';
 
 // Markdown options
 export const markDownConfigs = {
@@ -35,17 +36,19 @@ const CommentsArea = (Props: {
   primaryReplyToOID: string | undefined;
   primaryReplyToName: string | undefined;
   random?: number;
-  config: nexmentConfigType;
   reloadFunc?: Function;
 }) => {
+  // Configs
+  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
+
   // Translation
   const Translation = translate.use().text;
 
   // LeanCloud 初始化
   const AV = leanCloud(
-    Props.config.leancloud.appId,
-    Props.config.leancloud.appKey,
-    Props.config.leancloud.serverURL
+    NexmentConfigs.leancloud.appId,
+    NexmentConfigs.leancloud.appKey,
+    NexmentConfigs.leancloud.serverURL
   );
 
   // Get initial replyto / replytoOID
@@ -66,6 +69,7 @@ const CommentsArea = (Props: {
     name: string;
     email: string;
     tag: string;
+    link?: string;
   }) => {
     reactLocalStorage.setObject('nexment-commenterInfo', info);
   };
@@ -81,6 +85,10 @@ const CommentsArea = (Props: {
       ? AV.User.current().attributes.email
       : getCommenterInfo('email')
   );
+  const [commentLink, setCommentLink] = React.useState<string>(
+    getCommenterInfo('link')
+  );
+
   const [commentContent, setCommentContent] = React.useState<string>('');
   const [commentTag, setCommentTag] = React.useState<string>(
     getCommenterInfo('tag')
@@ -121,7 +129,7 @@ const CommentsArea = (Props: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setCommentName(e.target.value);
-    if (e.target.value === Props.config.admin.name && !AV.User.current()) {
+    if (e.target.value === NexmentConfigs.admin.name && !AV.User.current()) {
       setModalStatus(true);
     }
   };
@@ -129,9 +137,14 @@ const CommentsArea = (Props: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setCommentEmail(e.target.value);
-    if (e.target.value === Props.config.admin.email && !AV.User.current()) {
+    if (e.target.value === NexmentConfigs.admin.email && !AV.User.current()) {
       setModalStatus(true);
     }
+  };
+  const handleLinkChange = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setCommentLink(e.target.value);
   };
   const handleContentChange = (e: {
     target: { value: React.SetStateAction<string> };
@@ -158,13 +171,14 @@ const CommentsArea = (Props: {
         identifier: Props.pageKey,
         name: commentName,
         email: commentEmail,
+        link: commentLink ? commentLink : undefined,
         content: commentContent,
         tag: commentTag,
         reply: replyingTo,
         replyOID: replyingToOID,
         ewr: commentEwr,
       },
-      Props.config
+      NexmentConfigs
     );
     if (Props.reloadFunc) {
       Props.reloadFunc(false);
@@ -180,6 +194,7 @@ const CommentsArea = (Props: {
         name: commentName,
         email: commentEmail,
         tag: commentTag,
+        link: commentLink,
       });
       // Set content to empty
       setCommentContent('');
@@ -233,6 +248,14 @@ const CommentsArea = (Props: {
           placeholder={commentEmail ? commentEmail : Translation.email}
           onChange={handleEmailChange}
         ></input>
+        {NexmentConfigs.enableLinkInput ? (
+          <input
+            placeholder={commentLink ? commentLink : Translation.link}
+            onChange={handleLinkChange}
+          ></input>
+        ) : (
+          ''
+        )}
       </div>
       <div className="nexment-comment-area-middle">
         <TextareaAutosize
@@ -369,7 +392,7 @@ const CommentsArea = (Props: {
       {/* Modals */}
       {modalStatus ? (
         <VerificationModal
-          config={Props.config}
+          config={NexmentConfigs}
           visibilityFunction={setModalStatus}
         />
       ) : (

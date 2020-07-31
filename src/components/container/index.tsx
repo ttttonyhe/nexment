@@ -2,9 +2,11 @@ import React from 'react';
 import '../../assets/style/container.scss';
 import getIdentifier from '../../lib/utils/getIdentifier';
 import CommentsList from '../../components/sections/CommentsList';
+import { Provider } from '../../lib/utils/configContext';
 
 export interface nexmentConfigType {
   pageKey?: string;
+  enableLinkInput?: boolean,
   leancloud: {
     appId: string;
     appKey: string;
@@ -31,8 +33,9 @@ const NexmentContainer = (Props: { config: nexmentConfigType }) => {
   // Render structure
   const nexmentContainer = (
     <div className="nexment-container">
-      {/* FIXME: (a ? a : b) code style improvement */}
-      <CommentsList type="primary" pageKey={pageKey} config={Props.config} />
+      <Provider value={Props.config}>
+        <CommentsList type="primary" pageKey={pageKey}/>
+      </Provider>
     </div>
   );
 
