@@ -28,9 +28,6 @@
   "author": "HelipengTony",
   "module": "dist/nexment.esm.js",
   "dependencies": {
-    "@types/insert-text-at-cursor": "^0.3.0",
-    "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8",
     "components": "^0.1.0",
     "github-markdown-css": "^4.0.0",
     "insert-text-at-cursor": "^0.3.0",
@@ -57,6 +54,9 @@
   },
   "devDependencies": {
     "rollup-plugin-sass": "^1.2.2",
-    "tsdx": "^0.13.2"
+    "tsdx": "^0.13.2",
+    "@types/insert-text-at-cursor": "^0.3.0",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8"
   }
 }
