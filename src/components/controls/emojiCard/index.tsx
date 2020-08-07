@@ -3,14 +3,26 @@ import Popover from 'react-tiny-popover';
 import emojis from './emoji';
 import Icons from '../../icons/index';
 
+/**
+ * Nexment Emoji Card
+ *
+ * @param {{ handler: any }} Props
+ * @returns
+ */
 const EmojiCard = (Props: { handler: any }) => {
   // Popover state
   const [emojiPopoverStatus, setEmojiPopoverStatus] = React.useState<boolean>(
     false
   );
+  // Event handler for clicking in Emoji card
   const toggleEmojiCard = () => {
     setEmojiPopoverStatus(!emojiPopoverStatus);
   };
+  /**
+   * Emoji Card Content
+   *
+   * @returns
+   */
   const emojiContent = () => {
     return (
       <div className="nexment-emoji-container">

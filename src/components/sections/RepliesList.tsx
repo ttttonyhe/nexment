@@ -13,8 +13,23 @@ import MarkdownView from 'react-showdown';
 import ContentLoader from 'react-content-loader';
 import { markDownConfigs } from '../sections/CommentsArea';
 import translate from '../../lib/translation/index';
-import Context from "../../lib/utils/configContext";
+import Context from '../../lib/utils/configContext';
 
+/**
+ * Nexment Reply list
+ *
+ * @param {{
+ *   dataContent: commentsItemType[];
+ *   replyTo?: string;
+ *   pageKey: string;
+ *   replyToID?: number;
+ *   replyToOID?: string;
+ *   replyToName?: string;
+ *   visibilityFunction?: Function;
+ *   replyItem?: any;
+ * }} Props
+ * @returns
+ */
 const RepliesList = (Props: {
   dataContent: commentsItemType[];
   replyTo?: string;
@@ -26,7 +41,7 @@ const RepliesList = (Props: {
   replyItem?: any;
 }) => {
   // Configs
-  const NexmentConfigs:nexmentConfigType = React.useContext(Context);
+  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
 
   // Translation
   const Translation = translate.use().text;
@@ -73,6 +88,13 @@ const RepliesList = (Props: {
     toggleModal(OID);
   };
 
+  /**
+   * Admin badge display
+   *
+   * @param {string} name
+   * @param {string} email
+   * @returns
+   */
   const adminBadge = (name: string, email: string) => {
     if (
       name === NexmentConfigs.admin.name &&
@@ -129,7 +151,9 @@ const RepliesList = (Props: {
               </div>
               <div className="nexment-comments-title">
                 <h5>
-                  <a href={Props.replyItem.link} target="_blank">{Props.replyItem.name}</a>
+                  <a href={Props.replyItem.link} target="_blank">
+                    {Props.replyItem.name}
+                  </a>
                   <span> · </span>
                   <b>{format(Props.replyItem.date)}</b>
                   <em className="nexment-reply-icon">{Icons().reply}</em>
@@ -216,7 +240,9 @@ const RepliesList = (Props: {
                           </div>
                           <div className="nexment-comments-title">
                             <h5>
-                            <a href={item.link} target="_blank">{item.name}</a>
+                              <a href={item.link} target="_blank">
+                                {item.name}
+                              </a>
                               <span> · </span>
                               <b>{format(item.date)}</b>
                               {item.hasReplies ? (

@@ -17,7 +17,13 @@ interface commentType {
   link?: string;
 }
 
-// Send email when receiving a reply
+/**
+ * Send email when receiving a reply
+ *
+ * @param {string} email
+ * @param {string} url
+ * @param {string} content
+ */
 const sendEmail = async (email: string, url: string, content: string) => {
   const opts = {
     method: 'POST', //请求方法
@@ -34,6 +40,13 @@ const sendEmail = async (email: string, url: string, content: string) => {
   await fetch('https://node.ouorz.com/send/mail?' + qeuryParams, opts);
 };
 
+/**
+ * Submit comment to LeanCloud
+ *
+ * @param {commentType} info
+ * @param {nexmentConfigType} config
+ * @returns {Promise<{ status: number; savedComment?: any }>}
+ */
 const useSavingComment = async (
   info: commentType,
   config: nexmentConfigType

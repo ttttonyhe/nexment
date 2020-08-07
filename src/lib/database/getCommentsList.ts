@@ -25,16 +25,18 @@ export const refetchData = (pageKey: string) => {
   mutate(pageKey);
 };
 
+
 /**
  * SWR component
  * using AsyncGet as the fetcher
  *
  * @param {string} pageKey
- * @returns {{
-    commentsData: commentsItemType[],
-    isLoading: boolean,
-    isError: string,
-  }};
+ * @param {nexmentConfigType} config
+ * @returns {({
+ *   commentsData: commentsItemType[] | undefined;
+ *   isLoading: boolean;
+ *   isError: string;
+ * })}
  */
 const useComments = (
   pageKey: string,

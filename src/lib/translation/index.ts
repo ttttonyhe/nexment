@@ -16,6 +16,8 @@ export function getBestLanguage():
     availableLanguages.find(al => deviceLanguage.startsWith(al)) || fallback
   );
 }
+
+// Nexment Translations
 const translate = createTranslations<TranslationLanguages>()(
   {
     text: {

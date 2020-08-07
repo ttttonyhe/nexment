@@ -4,6 +4,7 @@ import getIdentifier from '../../lib/utils/getIdentifier';
 import CommentsList from '../../components/sections/CommentsList';
 import { Provider } from '../../lib/utils/configContext';
 
+// Nexment Configuration Interface
 export interface nexmentConfigType {
   pageKey?: string;
   enableLinkInput?: boolean,
@@ -21,7 +22,8 @@ export interface nexmentConfigType {
 /**
  * Nexment Container
  * basic structure of a comment instance
- * @param {{ config: { pageKey?: string } }} Props
+ * 
+ * @param {{ config: nexmentConfigType }} Props
  * @returns
  */
 const NexmentContainer = (Props: { config: nexmentConfigType }) => {

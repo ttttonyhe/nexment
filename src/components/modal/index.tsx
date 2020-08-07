@@ -7,7 +7,18 @@ import '../../assets/style/modal.scss';
 /**
  * Modal component
  * comments higher than level 2 will be displayed in modals
- * @param {{ type: string; content: commentsItemType[]; replyTo?: string }} Props
+ *
+ * @param {{
+ *   type: string;
+ *   content?: any;
+ *   replyTo?: string;
+ *   pageKey?: string;
+ *   replyToID?: number;
+ *   replyToOID?: string;
+ *   replyToName?: string;
+ *   visibilityFunction?: Function;
+ *   replyItem?: any;
+ * }} Props
  * @returns
  */
 const Modal = (Props: {

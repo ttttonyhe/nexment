@@ -28,6 +28,22 @@ export const markDownConfigs = {
   openLinksInNewWindow: true,
 };
 
+/**
+ * Nexment Comment area
+ *
+ * @param {({
+ *   pageKey: string;
+ *   replyTo: number | undefined;
+ *   replyToOID: string | undefined;
+ *   replyToName: string | undefined;
+ *   primaryReplyTo: number | undefined;
+ *   primaryReplyToOID: string | undefined;
+ *   primaryReplyToName: string | undefined;
+ *   random?: number;
+ *   reloadFunc?: Function;
+ * })} Props
+ * @returns
+ */
 const CommentsArea = (Props: {
   pageKey: string;
   replyTo: number | undefined;
@@ -230,6 +246,7 @@ const CommentsArea = (Props: {
 
   // Process data sending from content addons, insert content at cursor
   const handleAddon = (content: string) => {
+    // Insert emoji at cursor
     insertTextAtCursor(nexmentTextarea.current, content);
   };
 

@@ -13,6 +13,12 @@ import { markDownConfigs } from '../sections/CommentsArea';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
 
+/**
+ * Nexment Comments List
+ *
+ * @param {{ type: string; pageKey: string }} Props
+ * @returns
+ */
 const CommentsList = (Props: { type: string; pageKey: string }) => {
   // Configs
   const NexmentConfigs: nexmentConfigType = React.useContext(Context);
@@ -54,6 +60,13 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
     });
   };
 
+  /**
+   * Admin badge display
+   *
+   * @param {string} name
+   * @param {string} email
+   * @returns
+   */
   const adminBadge = (name: string, email: string) => {
     if (
       name === NexmentConfigs.admin.name &&

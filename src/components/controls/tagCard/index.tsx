@@ -12,6 +12,11 @@ const TagCard = (Props: { tag: string; handler: any }) => {
     false
   );
 
+  /**
+   * Tag popover content
+   *
+   * @returns
+   */
   const tagContent = () => {
     return (
       <div className="nexment-popover">
