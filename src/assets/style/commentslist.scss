@@ -34,6 +34,8 @@ $greyerGrey: #949494;
   border-left: 2px solid #eee;
   .nexment-comments-div {
     transition: ease-in-out 0.1s;
+    padding: 15px 15px 7px 15px;
+    margin-bottom: 6px;
     &:hover {
       background: #f7f8f9;
     }
@@ -51,6 +53,7 @@ $greyerGrey: #949494;
   .nexment-comments-list-item {
     cursor: pointer;
     padding-right: 15px;
+    margin:-2px 0px 10px 0px;
     .nexment-reply-icon-reply {
       display: none;
     }
@@ -116,9 +119,6 @@ $borderColor: #e8e8e8;
 }
 
 .nexment-comments-list-item {
-  &:last-child {
-    margin: 0px;
-  }
   @media screen and (min-width: 1000px) {
     padding-right: 0px !important;
   }
