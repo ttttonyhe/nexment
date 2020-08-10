@@ -28,15 +28,14 @@
   "author": "HelipengTony",
   "module": "dist/nexment.esm.js",
   "dependencies": {
-    "components": "^0.1.0",
-    "github-markdown-css": "^4.0.0",
-    "insert-text-at-cursor": "^0.3.0",
-    "js-md5": "^0.7.3",
-    "leancloud-storage": "^4.6.1",
-    "lib": "^4.3.0",
-    "markdown-it": "^11.0.0",
-    "qs": "^6.9.4",
-    "react": "^16.13.1",
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "rollup-plugin-sass": "^1.2.2",
+    "tsdx": "^0.13.2",
+    "@types/insert-text-at-cursor": "^0.3.0",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
     "react-content-loader": "^5.1.0",
     "react-dom": "^16.13.1",
     "react-floater": "^0.7.2",
@@ -50,13 +49,14 @@
     "timeago.js": "^4.0.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7",
-    "unfetch": "^4.1.0"
-  },
-  "devDependencies": {
-    "rollup-plugin-sass": "^1.2.2",
-    "tsdx": "^0.13.2",
-    "@types/insert-text-at-cursor": "^0.3.0",
-    "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8"
+    "unfetch": "^4.1.0",
+    "components": "^0.1.0",
+    "github-markdown-css": "^4.0.0",
+    "insert-text-at-cursor": "^0.3.0",
+    "js-md5": "^0.7.3",
+    "leancloud-storage": "^4.6.1",
+    "lib": "^4.3.0",
+    "markdown-it": "^11.0.0",
+    "qs": "^6.9.4"
   }
 }
