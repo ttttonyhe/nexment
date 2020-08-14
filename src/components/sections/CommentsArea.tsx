@@ -170,9 +170,10 @@ const CommentsArea = (Props: {
     }
     let replyingTo = resetStatus ? primaryReplyTo : Props.replyTo;
     let replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID;
+    let thisID = generateCommentID().idData;
     const returnData = await usingSaveComment(
       {
-        ID: generateCommentID().idData,
+        ID: thisID,
         identifier: Props.pageKey,
         name: commentName,
         email: commentEmail,
@@ -205,8 +206,12 @@ const CommentsArea = (Props: {
       setCommentContent('');
       // Refetch data using swr mutate
       refetchData(Props.pageKey);
-      // Jump to replied to item
-      window.location.href = '#' + replyingTo;
+      // Jump to replied to/comment item
+      if (replyingTo) {
+        window.location.href = '#' + replyingTo;
+      } else {
+        window.location.href = '#' + thisID;
+      }
     }
   };
 
@@ -242,7 +247,7 @@ const CommentsArea = (Props: {
   };
 
   // Create a ref for textarea
-  const nexmentTextarea:any = React.useRef();
+  const nexmentTextarea: any = React.useRef();
 
   // Process data sending from content addons, insert content at cursor
   const handleAddon = (content: string) => {
@@ -272,6 +277,7 @@ const CommentsArea = (Props: {
       </div>
       <div className="nexment-comment-area-middle">
         <TextareaAutosize
+          value={commentContent}
           placeholder={Translation.placeHolder + '...'}
           onChange={handleContentChange}
           className={previewStatus ? 'nexment-previewing' : ''}
