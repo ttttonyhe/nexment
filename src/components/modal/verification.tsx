@@ -77,7 +77,10 @@ const VerificationModal = (Props: {
         <p>{Translation.verifyDes}</p>
       </div>
       <div className="nexment-modal-input-group">
-        <input placeholder="Admin password" onChange={handlePwdChange}></input>
+        <input
+          placeholder={Translation.verifyPwd}
+          onChange={handlePwdChange}
+        ></input>
         <button
           onClick={() => {
             loginAction();

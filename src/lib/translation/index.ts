@@ -72,8 +72,8 @@ const translate = createTranslations<TranslationLanguages>()(
         en: 'Email',
       },
       placeHolder: {
-        zh: '键入一些内容吧',
-        en: 'Enter some text',
+        zh: "键入一些内容吧",
+        en: "Say something",
       },
       resetReply: {
         zh: '重置回复',
@@ -119,6 +119,10 @@ const translate = createTranslations<TranslationLanguages>()(
         zh: '请验证管理员密码 (首次密码输入将自动注册为管理员密码)',
         en:
           'Please verify your Nexment admin identity (first time login password will be set as admin password)',
+      },
+      verifyPwd: {
+        zh: "管理员密码",
+        en: "Admin password",
       },
       desTagDes: {
         zh: '使用描述标签让观众了解你的专业、知识和身份背景',
