@@ -78,7 +78,11 @@ const CommentsArea = (Props: {
     if (reactLocalStorage.getObject('nexment-commenterInfo')) {
       return reactLocalStorage.getObject('nexment-commenterInfo')[type];
     } else {
-      return '';
+      if (type === 'ewr') {
+        return false;
+      } else {
+        return '';
+      }
     }
   };
   // Store commenter info in local storage
@@ -87,6 +91,7 @@ const CommentsArea = (Props: {
     email: string;
     tag: string;
     link?: string;
+    ewr?: boolean;
   }) => {
     reactLocalStorage.setObject('nexment-commenterInfo', info);
   };
@@ -110,7 +115,9 @@ const CommentsArea = (Props: {
   const [commentTag, setCommentTag] = React.useState<string>(
     getCommenterInfo('tag')
   );
-  const [commentEwr, setCommentEwr] = React.useState<boolean>(false);
+  const [commentEwr, setCommentEwr] = React.useState<boolean>(
+    getCommenterInfo('ewr')
+  );
 
   // Resetting state
   const [resetStatus, setResetStatus] = React.useState<boolean>(false);
@@ -201,6 +208,7 @@ const CommentsArea = (Props: {
         email: commentEmail,
         tag: commentTag,
         link: commentLink,
+        ewr: commentEwr,
       });
       // Set content to empty
       setCommentContent('');

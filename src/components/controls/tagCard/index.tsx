@@ -51,7 +51,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
       }}
     >
       <button onClick={() => setTagPopoverStatus(!tagPopoverStatus)}>
-        {Icons().tag}
+        {Props.tag ? Icons().tagFill : Icons().tag}
       </button>
     </Popover>
   );
