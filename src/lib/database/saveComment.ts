@@ -73,7 +73,7 @@ const useSavingComment = async (
       commentsStorage.set('name', info.name);
       commentsStorage.set('email', info.email);
       commentsStorage.set('content', info.content);
-      if (info.reply !== undefined) {
+      if (info.reply) {
         // Set reply ID for current comment
         commentsStorage.set('reply', info.reply);
 
@@ -109,13 +109,13 @@ const useSavingComment = async (
           }
         );
       }
-      if (info.tag !== undefined) {
+      if (info.tag) {
         commentsStorage.set('tag', info.tag);
       }
-      if (info.ewr !== undefined) {
+      if (info.ewr) {
         commentsStorage.set('emailWhenReplied', info.ewr);
       }
-      if (info.link !== undefined) {
+      if (info.link) {
         commentsStorage.set('link', info.link.replace(/\s*/g, ''));
       }
       return await commentsStorage.save().then(
