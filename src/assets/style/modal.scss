@@ -63,10 +63,8 @@
   }
   input {
     width: 50%;
-    height: 30px;
     border-radius: 3px 0px 0px 3px;
     padding: 0px 10px;
-    margin: 10px 0px;
     border: 1px solid #cfd1d2;
     font-size: 14px;
     color: #687a86;
@@ -86,4 +84,9 @@
     border-radius: 0px 3px 3px 0px;
     margin-left: -1px;
   }
+}
+
+.nexment-modal-input-group {
+  margin: 10px 0px;
+  display: flex;
 }

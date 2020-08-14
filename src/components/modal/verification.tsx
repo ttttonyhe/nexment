@@ -5,14 +5,14 @@ import '../../assets/style/modal.scss';
 import { nexmentConfigType } from 'components/container';
 import adminLogin from '../../lib/database/adminLoging';
 import translate from '../../lib/translation/index';
-import Context from "../../lib/utils/configContext";
+import Context from '../../lib/utils/configContext';
 
 const VerificationModal = (Props: {
   visibilityFunction?: Function;
   config: nexmentConfigType;
 }) => {
   // Configs
-  const NexmentConfigs:nexmentConfigType = React.useContext(Context);
+  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
 
   // Translation
   const Translation = translate.use().text;
@@ -76,14 +76,16 @@ const VerificationModal = (Props: {
         <h1>{Translation.verification}</h1>
         <p>{Translation.verifyDes}</p>
       </div>
-      <input placeholder="Admin password" onChange={handlePwdChange}></input>
-      <button
-        onClick={() => {
-          loginAction();
-        }}
-      >
-        {loginText}
-      </button>
+      <div className="nexment-modal-input-group">
+        <input placeholder="Admin password" onChange={handlePwdChange}></input>
+        <button
+          onClick={() => {
+            loginAction();
+          }}
+        >
+          {loginText}
+        </button>
+      </div>
     </Rodal>
   );
 };
