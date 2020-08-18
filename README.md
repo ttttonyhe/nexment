@@ -1,21 +1,19 @@
-# Nexment
-Another lovely serverless comments library for React based on LeanCloud
-
-<p>
+<img src="https://i.loli.net/2020/08/18/stpySWwOPg6AeuF.jpg" />
+<div align="center">
+  <h1>Nexment</h1>
+  <p>A feature-rich serverless comment library based on LeanCloud</p>
   <a href="https://github.com/HelipengTony/nexment/actions?query=workflow%3ACI">
     <img src="https://github.com/HelipengTony/nexment/workflows/CI/badge.svg" alt="github ci">
   </a>
-
   <a href="https://www.npmjs.com/package/nexment">
     <img src="https://img.shields.io/npm/dw/nexment" alt="npm downloads">
   </a>
-
   <a href="https://www.npmjs.com/package/nexment">
     <img src="https://img.shields.io/npm/l/nexment" alt="license">
   </a>
-</p>
+</div>
 
-![nexment_banner](https://i.loli.net/2020/07/29/ODkqtseAU6KJGxB.png)
+<br/>
 
 <br/>
 
