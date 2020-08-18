@@ -1,4 +1,4 @@
-<img src="https://i.loli.net/2020/08/18/NMEtf7V3Rb1xoYZ.jpg" />
+<img src="https://i.loli.net/2020/08/18/HSa25hE1bdZ9gCM.jpg" />
 <div align="center">
   <p>A feature-rich serverless comment library based on LeanCloud</p>
   <a href="https://github.com/HelipengTony/nexment/actions?query=workflow%3ACI">
