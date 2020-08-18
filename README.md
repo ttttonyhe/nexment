@@ -1,4 +1,4 @@
-<img src="https://i.loli.net/2020/08/18/stpySWwOPg6AeuF.jpg" />
+<img src="https://i.loli.net/2020/08/18/NMEtf7V3Rb1xoYZ.jpg" />
 <div align="center">
   <h1>Nexment</h1>
   <p>A feature-rich serverless comment library based on LeanCloud</p>
