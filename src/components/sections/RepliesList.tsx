@@ -250,8 +250,8 @@ const RepliesList = (Props: {
                                   <span> · </span>
                                   {item.replyList.length}{' '}
                                   {item.replyList.length > 1
-                                    ? 'replies'
-                                    : 'reply'}
+                                    ? Translation.replies
+                                    : Translation.reply}
                                   {Icons().down}
                                 </b>
                               ) : (
