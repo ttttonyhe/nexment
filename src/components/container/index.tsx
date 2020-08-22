@@ -8,6 +8,7 @@ import { Provider } from '../../lib/utils/configContext';
 export interface nexmentConfigType {
   pageKey?: string;
   enableLinkInput?: boolean,
+  enableReplyListModal?:boolean,
   leancloud: {
     appId: string;
     appKey: string;

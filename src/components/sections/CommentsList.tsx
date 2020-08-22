@@ -1,4 +1,6 @@
-import useComments from '../../lib/database/getCommentsList';
+import useComments, {
+  commentsItemType,
+} from '../../lib/database/getCommentsList';
 import React from 'react';
 import Modal from '../modal';
 import CommentsArea from '../../components/sections/CommentsArea';
@@ -116,6 +118,79 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
       </div>
     );
   } else {
+    /**
+     * Reply list direct display
+     *
+     * @param {commentsItemType} item
+     * @returns
+     */
+    const innerReplyList = (item: commentsItemType) => {
+      return (
+        <ul className="nexment-comments-reply-list nexment-inner-reply-list">
+          {/* Replies should be ascend-sorted */}
+          {item.replyList.map(replyItem => (
+            <div
+              className="nexment-comments-list-item-div nexment-comments-list-item-div-inner"
+              key={replyItem.ID}
+              id={replyItem.ID.toString()}
+            >
+              <li
+                className="nexment-comments-list-item"
+                onClick={() => {
+                  setReplyToID(replyItem.ID);
+                  setReplyToOID(replyItem.OID);
+                  setReplyToName(replyItem.name);
+                  setRandom(Math.random());
+                  window.location.href = '#nexment-comment-area';
+                }}
+              >
+                <div
+                  className={
+                    'nexment-comments-div ' +
+                    (replyItem.hasReplies
+                      ? 'nexment-comments-div-with-replies'
+                      : '')
+                  }
+                >
+                  <div className="nexment-comments-avatar">
+                    <img
+                      src={
+                        'https://gravatar.loli.net/avatar/' +
+                        md5(replyItem.email) +
+                        '?d=mp'
+                      }
+                    />
+                    {adminBadge(replyItem.name, replyItem.email)}
+                  </div>
+                  <div className="nexment-comments-title">
+                    <h5>
+                      <a href={replyItem.link} target="_blank">
+                        {replyItem.name}
+                      </a>
+                      <span> · </span>
+                      <b>{format(replyItem.date)}</b>
+                      <em className="nexment-reply-icon-reply">
+                        {Icons().reply}
+                      </em>
+                    </h5>
+                    <div className="nexment-comments-content margin-top-reply">
+                      <MarkdownView
+                        markdown={replyItem.content}
+                        options={markDownConfigs}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  {replyItem.hasReplies ? innerReplyList(replyItem) : ''}
+                </div>
+              </li>
+            </div>
+          ))}
+        </ul>
+      );
+    };
+
     return (
       <div>
         <CommentsArea
@@ -194,7 +269,9 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                   </div>
                   <div className="nexment-comments-title">
                     <h5>
-                      <a href={item.link} target="_blank">{item.name}</a>
+                      <a href={item.link} target="_blank">
+                        {item.name}
+                      </a>
                       <span> · </span>
                       <b>{format(item.date)}</b>
                       <em className="nexment-reply-icon">{Icons().reply}</em>
@@ -226,7 +303,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                         <li
                           className="nexment-comments-list-item"
                           onClick={() => {
-                            if (replyItem.hasReplies) {
+                            if (replyItem.hasReplies && NexmentConfigs.enableReplyListModal) {
                               toggleModal(replyItem.OID);
                             } else {
                               setReplyToID(replyItem.ID);
@@ -237,7 +314,14 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                             }
                           }}
                         >
-                          <div className="nexment-comments-div">
+                          <div
+                            className={
+                              'nexment-comments-div ' +
+                              (replyItem.hasReplies
+                                ? 'nexment-comments-div-with-replies'
+                                : '')
+                            }
+                          >
                             <div className="nexment-comments-avatar">
                               <img
                                 src={
@@ -250,10 +334,12 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                             </div>
                             <div className="nexment-comments-title">
                               <h5>
-                                <a href={replyItem.link} target="_blank">{replyItem.name}</a>
+                                <a href={replyItem.link} target="_blank">
+                                  {replyItem.name}
+                                </a>
                                 <span> · </span>
                                 <b>{format(replyItem.date)}</b>
-                                {replyItem.hasReplies ? (
+                                {replyItem.hasReplies && NexmentConfigs.enableReplyListModal ? (
                                   <b className="nexment-comments-replyto">
                                     <span> · </span>
                                     {replyItem.replyList.length}{' '}
@@ -277,26 +363,39 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                               </div>
                             </div>
                           </div>
-                        </li>
-                        <div>
-                          {replyItem.hasReplies &&
-                          modalVisibility[replyItem.OID] ? (
-                            <Modal
-                              key={replyItem.OID}
-                              type="repliesList"
-                              content={replyItem.replyList}
-                              replyTo={replyItem.name}
-                              replyToID={replyItem.ID}
-                              replyToOID={replyItem.OID}
-                              replyToName={replyItem.name}
-                              pageKey={Props.pageKey}
-                              visibilityFunction={toggleModal}
-                              replyItem={replyItem}
-                            />
+                          {!NexmentConfigs.enableReplyListModal ? (
+                            <div>
+                              {replyItem.hasReplies
+                                ? innerReplyList(replyItem)
+                                : ''}
+                            </div>
                           ) : (
                             ''
                           )}
-                        </div>
+                        </li>
+                        {NexmentConfigs.enableReplyListModal ? (
+                          <div>
+                            {replyItem.hasReplies &&
+                            modalVisibility[replyItem.OID] ? (
+                              <Modal
+                                key={replyItem.OID}
+                                type="repliesList"
+                                content={replyItem.replyList}
+                                replyTo={replyItem.name}
+                                replyToID={replyItem.ID}
+                                replyToOID={replyItem.OID}
+                                replyToName={replyItem.name}
+                                pageKey={Props.pageKey}
+                                visibilityFunction={toggleModal}
+                                replyItem={replyItem}
+                              />
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                        ) : (
+                          ''
+                        )}
                       </div>
                     ))}
                   </ul>
