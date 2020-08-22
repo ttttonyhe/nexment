@@ -134,16 +134,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
               key={replyItem.ID}
               id={replyItem.ID.toString()}
             >
-              <li
-                className="nexment-comments-list-item"
-                onClick={() => {
-                  setReplyToID(replyItem.ID);
-                  setReplyToOID(replyItem.OID);
-                  setReplyToName(replyItem.name);
-                  setRandom(Math.random());
-                  window.location.href = '#nexment-comment-area';
-                }}
-              >
+              <li className="nexment-comments-list-item">
                 <div
                   className={
                     'nexment-comments-div ' +
@@ -151,6 +142,13 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                       ? 'nexment-comments-div-with-replies'
                       : '')
                   }
+                  onClick={() => {
+                    setReplyToID(replyItem.ID);
+                    setReplyToOID(replyItem.OID);
+                    setReplyToName(replyItem.name);
+                    setRandom(Math.random());
+                    window.location.href = '#nexment-comment-area';
+                  }}
                 >
                   <div className="nexment-comments-avatar">
                     <img
@@ -300,20 +298,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                         key={replyItem.ID}
                         id={replyItem.ID.toString()}
                       >
-                        <li
-                          className="nexment-comments-list-item"
-                          onClick={() => {
-                            if (replyItem.hasReplies && NexmentConfigs.enableReplyListModal) {
-                              toggleModal(replyItem.OID);
-                            } else {
-                              setReplyToID(replyItem.ID);
-                              setReplyToOID(replyItem.OID);
-                              setReplyToName(replyItem.name);
-                              setRandom(Math.random());
-                              window.location.href = '#nexment-comment-area';
-                            }
-                          }}
-                        >
+                        <li className="nexment-comments-list-item">
                           <div
                             className={
                               'nexment-comments-div ' +
@@ -321,6 +306,20 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                                 ? 'nexment-comments-div-with-replies'
                                 : '')
                             }
+                            onClick={() => {
+                              if (
+                                replyItem.hasReplies &&
+                                NexmentConfigs.enableReplyListModal
+                              ) {
+                                toggleModal(replyItem.OID);
+                              } else {
+                                setReplyToID(replyItem.ID);
+                                setReplyToOID(replyItem.OID);
+                                setReplyToName(replyItem.name);
+                                setRandom(Math.random());
+                                window.location.href = '#nexment-comment-area';
+                              }
+                            }}
                           >
                             <div className="nexment-comments-avatar">
                               <img
@@ -339,7 +338,8 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                                 </a>
                                 <span> · </span>
                                 <b>{format(replyItem.date)}</b>
-                                {replyItem.hasReplies && NexmentConfigs.enableReplyListModal ? (
+                                {replyItem.hasReplies &&
+                                NexmentConfigs.enableReplyListModal ? (
                                   <b className="nexment-comments-replyto">
                                     <span> · </span>
                                     {replyItem.replyList.length}{' '}
