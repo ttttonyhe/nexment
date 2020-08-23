@@ -181,6 +181,7 @@ $borderColor: #e8e8e8;
     div:nth-child(1) {
       flex: 2;
       padding-left: 10px;
+      white-space: nowrap;
       b {
         display: none;
       }
