@@ -17,7 +17,7 @@
 <br/>
 
 ## See also
-+ Nexment for Vue.js [https://github.com/HelipengTony/nexment-vue](https://github.com/HelipengTony/nexment-vue)
++ Nexment for Vue.js / Web Component [https://github.com/HelipengTony/nexment-vue](https://github.com/HelipengTony/nexment-vue)
 + Nexment for React.js [https://github.com/HelipengTony/nexment](https://github.com/HelipengTony/nexment)
 
 <br/>
@@ -67,7 +67,8 @@ Setup nexment configuration:
 ```js
 const config = {
   pageKey: 'xxx' | undefined;
-  enableLinkInput: true | undefined,
+  enableLinkInput: true | false | undefined,
+  enableReplyListModal: true | false | undefined,
   leancloud: {
     appId: 'xxx',
     appKey: 'xxx',
@@ -83,6 +84,11 @@ Use the nexment component:
 ```jsx
 <NexmentContainer config={config} />
 ```
+
+<br/>
+
+## TypeScript Support
+Nexment for React has full support for TypeScript type-checking
 
 <br/>
 
