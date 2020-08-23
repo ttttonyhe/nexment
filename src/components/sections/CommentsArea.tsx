@@ -12,7 +12,6 @@ import TagCard from '../controls/tagCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import Icons from '../icons/index';
 import MarkdownView from 'react-showdown';
-import 'github-markdown-css';
 import Floater from 'react-floater';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
