@@ -3,7 +3,6 @@ import '../../assets/style/reply.scss';
 import { commentsItemType } from 'lib/database/getCommentsList';
 import CommentsArea from '../../components/sections/CommentsArea';
 import Rodal from 'rodal';
-import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
 import { nexmentConfigType } from '../container/index';
 import { format } from 'timeago.js';

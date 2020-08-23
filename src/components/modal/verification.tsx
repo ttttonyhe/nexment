@@ -1,6 +1,5 @@
 import React from 'react';
 import Rodal from 'rodal';
-import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
 import { nexmentConfigType } from 'components/container';
 import adminLogin from '../../lib/database/adminLoging';

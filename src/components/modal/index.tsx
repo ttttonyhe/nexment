@@ -1,7 +1,6 @@
 import React from 'react';
 import RepliesList from '../sections/RepliesList';
 import Rodal from 'rodal';
-import 'rodal/lib/rodal.css';
 import '../../assets/style/modal.scss';
 
 /**
