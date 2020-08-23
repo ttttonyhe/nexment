@@ -87,6 +87,53 @@ Use the nexment component:
 
 <br/>
 
+## Use Nexment in Next.js
+Create a Nexment component(Nexment.tsx):
+```tsx
+import React from "react";
+import { NexmentContainer } from "nexment";
+
+const Nexment = () => {
+  const config = {
+    pageKey: "xxx",
+    enableLinkInput: true,
+    enableReplyListModal: false,
+    leancloud: {
+      appId: "xxx",
+      appKey: "xxx",
+      serverURL: "xxx",
+    },
+    admin: {
+      name: "xxx",
+      email: "xxx",
+    },
+  };
+  return <NexmentContainer config={config} />;
+};
+
+export default Nexment;
+```
+
+import this Nexment component anywhere in your project using "next/dynamic":
+```tsx
+import dynamic from "next/dynamic";
+const NexmentDiv = dynamic(() => import("./Nexment"), {
+  ssr: false,
+});
+
+const Index = () =>{
+  return (
+    <div>
+      <NexmentDiv />
+    </div>
+  )
+}
+
+export default Index;
+```
+
+<br/>
+
 ## TypeScript Support
 Nexment for React has full support for TypeScript type-checking
 
