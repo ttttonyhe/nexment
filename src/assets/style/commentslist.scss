@@ -34,7 +34,7 @@ $greyerGrey: #949494;
   border-left: 2px solid #eee;
   .nexment-comments-div {
     transition: ease-in-out 0.1s;
-    padding: 15px 15px 5px 15px;
+    padding: 8px 15px 8px 15px;
     margin-bottom: 8px;
     &:hover {
       background: #f7f8f9;
@@ -44,9 +44,6 @@ $greyerGrey: #949494;
     &:last-child {
       .nexment-comments-list-item {
         border: none;
-      }
-      .nexment-comments-div {
-        padding: 15px;
       }
     }
   }
@@ -58,14 +55,9 @@ $greyerGrey: #949494;
   .nexment-comments-list-item {
     cursor: pointer;
     padding-right: 15px;
-    margin: -2px 0px 10px 0px;
+    margin: -2px 0px 9px 0px;
     .nexment-reply-icon-reply {
       display: none;
-    }
-    &:nth-child(1) {
-      .nexment-comments-div {
-        padding-top: 10px;
-      }
     }
   }
 }
@@ -296,4 +288,10 @@ $borderColor: #e8e8e8;
 .nexment-comments-div-with-replies {
   margin-bottom: 1px !important;
   padding-bottom: 10px !important;
+}
+
+@media screen and (max-width: 1000px) {
+  .nexment-comments-reply-list {
+    margin-left: 10px !important;
+  }
 }
