@@ -143,6 +143,9 @@ Nexment for React has full support for TypeScript type-checking
 1. 管理模式
     1. [ ] 评论精选
     2. [ ] 评论 Label
+    3. [ ] 评论过滤
+    4. [ ] 评论折叠
+    5. [ ] 更完善的静态类型
 2. i18n
    1. [x] 文本翻译
 
