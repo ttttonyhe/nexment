@@ -1,5 +1,5 @@
 {
-  "version": "0.0.657",
+  "version": "0.0.662",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "lint": "tsdx lint"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=17"
   },
   "prettier": {
     "printWidth": 80,
@@ -32,31 +32,32 @@
     "github-markdown-css": "^4.0.0",
     "insert-text-at-cursor": "^0.3.0",
     "js-md5": "^0.7.3",
-    "leancloud-storage": "^4.6.1",
-    "lib": "^4.3.0",
-    "markdown-it": "^11.0.0",
-    "qs": "^6.9.4",
-    "react-content-loader": "^5.1.0",
+    "leancloud-storage": "^4.10.0",
+    "lib": "^4.3.2",
+    "markdown-it": "^12.0.4",
+    "qs": "^6.9.6",
+    "react-content-loader": "^6.0.1",
     "react-floater": "^0.7.2",
-    "react-ridge-translations": "^1.0.0",
-    "react-showdown": "^2.1.0",
-    "react-textarea-autosize": "^8.2.0",
-    "react-tiny-popover": "^5.1.0",
+    "react-ridge-translations": "^1.0.4",
+    "react-textarea-autosize": "^8.3.1",
+    "react-tiny-popover": "^6.0.4",
     "reactjs-localstorage": "^1.0.1",
     "rodal": "^1.8.1",
-    "swr": "^0.2.3",
+    "showdown": "^1.9.1",
+    "swr": "^0.4.2",
     "timeago.js": "^4.0.2",
-    "tslib": "^2.0.0",
-    "unfetch": "^4.1.0"
+    "tslib": "^2.1.0",
+    "unfetch": "^4.2.0"
   },
   "devDependencies": {
     "@types/insert-text-at-cursor": "^0.3.0",
-    "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "@types/showdown": "^1.9.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "rollup-plugin-sass": "^1.2.2",
-    "tsdx": "^0.13.2",
-    "typescript": "^3.9.7"
+    "tsdx": "^0.14.1",
+    "typescript": "^4.2.2"
   }
 }

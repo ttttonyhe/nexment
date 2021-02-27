@@ -9,11 +9,19 @@ import '../../assets/style/commentslist.scss';
 import { format } from 'timeago.js';
 const md5 = require('js-md5');
 import Icons from '../icons/index';
-import MarkdownView from 'react-showdown';
+import showdown from 'showdown';
 import ContentLoader from 'react-content-loader';
-import { markDownConfigs } from '../sections/CommentsArea';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
+
+const converter = new showdown.Converter();
+
+converter.setOption('tables', true);
+converter.setOption('emojis', true);
+converter.setOption('strikethrough', true);
+converter.setOption('simpleLineBreaks', true);
+converter.setOption('openLinksInNewWindow', true);
+converter.setOption('simplifiedAutoLink', true);
 
 /**
  * Nexment Comments List
@@ -171,12 +179,12 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                         {Icons().reply}
                       </em>
                     </h5>
-                    <div className="nexment-comments-content margin-top-reply">
-                      <MarkdownView
-                        markdown={replyItem.content}
-                        options={markDownConfigs}
-                      />
-                    </div>
+                    <div
+                      className="nexment-comments-content margin-top-reply"
+                      dangerouslySetInnerHTML={{
+                        __html: converter.makeHtml(replyItem.content),
+                      }}
+                    ></div>
                   </div>
                 </div>
                 <div>
@@ -280,12 +288,10 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                         'nexment-comments-content ' +
                         (item.tag ? '' : 'margin-top')
                       }
-                    >
-                      <MarkdownView
-                        markdown={item.content}
-                        options={markDownConfigs}
-                      />
-                    </div>
+                      dangerouslySetInnerHTML={{
+                        __html: converter.makeHtml(item.content),
+                      }}
+                    ></div>
                   </div>
                 </div>
 
@@ -355,12 +361,12 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                                   {Icons().reply}
                                 </em>
                               </h5>
-                              <div className="nexment-comments-content margin-top-reply">
-                                <MarkdownView
-                                  markdown={replyItem.content}
-                                  options={markDownConfigs}
-                                />
-                              </div>
+                              <div
+                                className="nexment-comments-content margin-top-reply"
+                                dangerouslySetInnerHTML={{
+                                  __html: converter.makeHtml(replyItem.content),
+                                }}
+                              ></div>
                             </div>
                           </div>
                           {!NexmentConfigs.enableReplyListModal ? (

@@ -11,11 +11,20 @@ import { reactLocalStorage } from 'reactjs-localstorage';
 import TagCard from '../controls/tagCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import Icons from '../icons/index';
-import MarkdownView from 'react-showdown';
+import showdown from 'showdown';
 import Floater from 'react-floater';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
 import insertTextAtCursor from 'insert-text-at-cursor';
+
+const converter = new showdown.Converter();
+
+converter.setOption('tables', true);
+converter.setOption('emojis', true);
+converter.setOption('strikethrough', true);
+converter.setOption('simpleLineBreaks', true);
+converter.setOption('openLinksInNewWindow', true);
+converter.setOption('simplifiedAutoLink', true);
 
 // Markdown options
 export const markDownConfigs = {
@@ -291,12 +300,14 @@ const CommentsArea = (Props: {
           ref={nexmentTextarea}
         />
         {previewStatus ? (
-          <div className="nexment-md-preview markdown-body">
-            <MarkdownView
-              markdown={commentContent ? commentContent : Translation.nothing}
-              options={markDownConfigs}
-            />
-          </div>
+          <div
+            className="nexment-md-preview markdown-body"
+            dangerouslySetInnerHTML={{
+              __html: converter.makeHtml(
+                commentContent ? commentContent : Translation.nothing
+              ),
+            }}
+          ></div>
         ) : (
           ''
         )}

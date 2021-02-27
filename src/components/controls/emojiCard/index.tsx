@@ -1,5 +1,5 @@
 import React from 'react';
-import Popover from 'react-tiny-popover';
+import { Popover } from 'react-tiny-popover';
 import emojis from './emoji';
 import Icons from '../../icons/index';
 
@@ -58,7 +58,7 @@ const EmojiCard = (Props: { handler: any }) => {
   return (
     <Popover
       isOpen={emojiPopoverStatus}
-      position={'right'}
+      positions={['right', 'bottom', 'left', 'top']}
       content={emojiContent}
       onClickOutside={() => {
         toggleEmojiCard();

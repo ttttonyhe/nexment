@@ -1,5 +1,5 @@
 import React from 'react';
-import Popover from 'react-tiny-popover';
+import { Popover } from 'react-tiny-popover';
 import Icons from '../../icons/index';
 import translate, { getBestLanguage } from '../../../lib/translation/index';
 
@@ -44,7 +44,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
   return (
     <Popover
       isOpen={tagPopoverStatus}
-      position={'top'}
+      positions={['top', 'bottom', 'left', 'right']}
       content={tagContent}
       onClickOutside={() => {
         setTagPopoverStatus(!tagPopoverStatus);
