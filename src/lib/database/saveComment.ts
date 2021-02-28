@@ -3,6 +3,7 @@ import { nexmentConfigType } from 'components/container';
 const md = require('markdown-it')();
 import fetch from 'unfetch';
 const Qs = require('qs');
+import * as EmailValidator from 'email-validator';
 
 interface commentType {
   identifier: string;
@@ -65,7 +66,14 @@ const useSavingComment = async (
       status: 501,
     };
   } else {
-    if (info.identifier && info.ID && info.name && info.email && info.content) {
+    if (
+      info.identifier &&
+      info.ID &&
+      info.name &&
+      info.email &&
+      EmailValidator.validate(info.email) &&
+      info.content
+    ) {
       const commentsStorageClass = AV.Object.extend('nexment_comments');
       const commentsStorage = new commentsStorageClass();
       commentsStorage.set('identifier', info.identifier);
@@ -102,7 +110,7 @@ const useSavingComment = async (
         // Save reply-to comment object
         await replyToObject.save().then(
           () => {
-            console.log('A comment has been saved by Nexment');
+            console.log('Nexment: Comment sent successfully');
           },
           (error: any) => {
             console.log(error);

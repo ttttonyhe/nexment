@@ -28,7 +28,7 @@
   "author": "HelipengTony",
   "module": "dist/nexment.esm.js",
   "dependencies": {
-    "components": "^0.1.0",
+    "email-validator": "^2.0.4",
     "github-markdown-css": "^4.0.0",
     "insert-text-at-cursor": "^0.3.0",
     "js-md5": "^0.7.3",

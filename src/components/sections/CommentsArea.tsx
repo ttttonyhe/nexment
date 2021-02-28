@@ -26,16 +26,6 @@ converter.setOption('simpleLineBreaks', true);
 converter.setOption('openLinksInNewWindow', true);
 converter.setOption('simplifiedAutoLink', true);
 
-// Markdown options
-export const markDownConfigs = {
-  tables: true,
-  emoji: true,
-  simplifiedAutoLink: true,
-  strikethrough: true,
-  simpleLineBreaks: true,
-  openLinksInNewWindow: true,
-};
-
 /**
  * Nexment Comment area
  *
@@ -205,7 +195,9 @@ const CommentsArea = (Props: {
       Props.reloadFunc(false);
     }
     if (returnData.status === 500) {
-      alert('Comment sending error');
+      alert(
+        'Nexment: An error has occurred while sending your comment.\n\nPlease check if you have entered incorrect information.'
+      );
     } else if (returnData.status === 501) {
       setModalStatus(true);
     } else {
@@ -338,15 +330,17 @@ const CommentsArea = (Props: {
           >
             <EmojiCard handler={handleAddon} />
           </Floater>
-          <Floater
-            offset={5}
-            eventDelay={0}
-            placement="top"
-            event="hover"
-            content={Translation.desTag}
-          >
-            <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
-          </Floater>
+          {NexmentConfigs.descriptionTag && (
+            <Floater
+              offset={5}
+              eventDelay={0}
+              placement="top"
+              event="hover"
+              content={Translation.desTag}
+            >
+              <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
+            </Floater>
+          )}
           <Floater
             placement="top"
             event="hover"

@@ -9,6 +9,7 @@ export interface nexmentConfigType {
   pageKey?: string;
   enableLinkInput?: boolean,
   enableReplyListModal?:boolean,
+  descriptionTag?:boolean,
   leancloud: {
     appId: string;
     appKey: string;
