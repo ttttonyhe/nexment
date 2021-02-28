@@ -69,6 +69,7 @@ const config = {
   pageKey: 'xxx' | undefined;
   enableLinkInput: true | false | undefined,
   enableReplyListModal: true | false | undefined,
+  descriptionTag: true | false | undefined,
   leancloud: {
     appId: 'xxx',
     appKey: 'xxx',
@@ -98,6 +99,7 @@ const Nexment = () => {
     pageKey: "xxx",
     enableLinkInput: true,
     enableReplyListModal: false,
+    descriptionTag: false,
     leancloud: {
       appId: "xxx",
       appKey: "xxx",
@@ -151,8 +153,8 @@ Nexment for React has full support for TypeScript type-checking
 
 <br/>
 
-## Donation
-Your name will be on the list [Donation](https://www.ouorz.com/donation)
+## Sponsor
+Your name will be on the list [Sponsors](https://www.ouorz.com/sponsor)
 <br/>
 
 ![Donate](https://i.loli.net/2019/02/18/5c6a80afd1e26.png)
