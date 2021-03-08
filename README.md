@@ -47,8 +47,8 @@ Nexment is currently only available for React.js projects, Vue version is WIP.
 <br/>
 
 ### Part II - Nexment
-Add Nexment to your project
-dependencies using Yarn:
+Add Nexment to your project dependencies
+using Yarn:
 ```shell
 yarn add nexment
 ```
@@ -141,26 +141,15 @@ Nexment for React has full support for TypeScript type-checking
 
 <br/>
 
-## Todo
-1. 管理模式
-    1. [ ] 评论精选
-    2. [ ] 评论 Label
-    3. [ ] 评论过滤
-    4. [ ] 评论折叠
-    5. [ ] 更完善的静态类型
-2. i18n
-   1. [x] 文本翻译
+## Roadmap
+See Github [projects→](https://github.com/HelipengTony/nexment/projects)
 
 <br/>
 
 ## Sponsor
 Your name will be on the list [Sponsors](https://www.ouorz.com/sponsor)
-<br/>
-
-![Donate](https://i.loli.net/2019/02/18/5c6a80afd1e26.png)
 
 <br/>
 
-File an issue if you encountered any problem
-<br/>
-I will reply you as soon as possible
+## Contribution
+File an issue whenever you encountered a problem, pull requests are always welcomed
