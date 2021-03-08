@@ -3,6 +3,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "repository": "git@github.com:HelipengTony/nexment.git",
   "files": [
     "dist",
     "src"
@@ -36,10 +37,10 @@
     "lib": "^4.3.2",
     "markdown-it": "^12.0.4",
     "qs": "^6.9.6",
-    "react-content-loader": "^6.0.1",
+    "react-content-loader": "^6.0.2",
     "react-floater": "^0.7.2",
     "react-ridge-translations": "^1.0.4",
-    "react-textarea-autosize": "^8.3.1",
+    "react-textarea-autosize": "^8.3.2",
     "react-tiny-popover": "^6.0.4",
     "reactjs-localstorage": "^1.0.1",
     "rodal": "^1.8.1",
@@ -51,13 +52,13 @@
   },
   "devDependencies": {
     "@types/insert-text-at-cursor": "^0.3.0",
-    "@types/react": "^17.0.2",
+    "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.1",
     "@types/showdown": "^1.9.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "rollup-plugin-sass": "^1.2.2",
     "tsdx": "^0.14.1",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }

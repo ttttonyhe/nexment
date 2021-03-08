@@ -1310,12 +1310,21 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.2":
+"@types/react@*":
   version "17.0.2"
   resolved "https://registry.npm.taobao.org/@types/react/download/@types/react-17.0.2.tgz#3de24c4efef902dd9795a49c75f760cbe4f7a5a8"
   integrity sha1-PeJMTv75At2XlaScdfdgy+T3pag=
   dependencies:
     "@types/prop-types" "*"
+    csstype "^3.0.2"
+
+"@types/react@^17.0.3":
+  version "17.0.3"
+  resolved "https://registry.npm.taobao.org/@types/react/download/@types/react-17.0.3.tgz?cache=0&sync_timestamp=1615114060788&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Freact%2Fdownload%2F%40types%2Freact-17.0.3.tgz#ba6e215368501ac3826951eef2904574c262cc79"
+  integrity sha1-um4hU2hQGsOCaVHu8pBFdMJizHk=
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
     csstype "^3.0.2"
 
 "@types/resolve@1.17.1":
@@ -1324,6 +1333,11 @@
   integrity sha1-Ov1q2JZ8d+Q3bFmKgt3Vj0bsRdY=
   dependencies:
     "@types/node" "*"
+
+"@types/scheduler@*":
+  version "0.16.1"
+  resolved "https://registry.npm.taobao.org/@types/scheduler/download/@types/scheduler-0.16.1.tgz?cache=0&sync_timestamp=1613384878076&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fscheduler%2Fdownload%2F%40types%2Fscheduler-0.16.1.tgz#18845205e86ff0038517aab7a18a62a6b9f71275"
+  integrity sha1-GIRSBehv8AOFF6q3oYpiprn3EnU=
 
 "@types/showdown@^1.9.3":
   version "1.9.3"
@@ -5353,10 +5367,10 @@ randombytes@^2.1.0:
   dependencies:
     safe-buffer "^5.1.0"
 
-react-content-loader@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.npm.taobao.org/react-content-loader/download/react-content-loader-6.0.1.tgz#1c5ce4a6256d974fcd3ac85460eca24b33226920"
-  integrity sha1-HFzkpiVtl0/NOshUYOyiSzMiaSA=
+react-content-loader@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.npm.taobao.org/react-content-loader/download/react-content-loader-6.0.2.tgz#7c72e5b133136c31c2f27036d1d7b39dab804026"
+  integrity sha1-fHLlsTMTbDHC8nA20deznauAQCY=
 
 react-dom@^17.0.1:
   version "17.0.1"
@@ -5394,10 +5408,10 @@ react-ridge-translations@^1.0.4:
   resolved "https://registry.npm.taobao.org/react-ridge-translations/download/react-ridge-translations-1.0.4.tgz#08bedcafef715ebac2170659a2e55afa6d619d80"
   integrity sha1-CL7cr+9xXrrCFwZZouVa+m1hnYA=
 
-react-textarea-autosize@^8.3.1:
-  version "8.3.1"
-  resolved "https://registry.npm.taobao.org/react-textarea-autosize/download/react-textarea-autosize-8.3.1.tgz#b942a934cc660ecfc645717d1fb84344b69dcb15"
-  integrity sha1-uUKpNMxmDs/GRXF9H7hDRLadyxU=
+react-textarea-autosize@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.npm.taobao.org/react-textarea-autosize/download/react-textarea-autosize-8.3.2.tgz#4f9374d357b0a6f6469956726722549124a1b2db"
+  integrity sha1-T5N001ewpvZGmVZyZyJUkSShsts=
   dependencies:
     "@babel/runtime" "^7.10.2"
     use-composed-ref "^1.0.0"
@@ -6663,10 +6677,10 @@ typescript@^3.7.3:
   resolved "https://registry.npm.taobao.org/typescript/download/typescript-3.9.9.tgz#e69905c54bc0681d0518bd4d587cc6f2d0b1a674"
   integrity sha1-5pkFxUvAaB0FGL1NWHzG8tCxpnQ=
 
-typescript@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.npm.taobao.org/typescript/download/typescript-4.2.2.tgz?cache=0&sync_timestamp=1614410621834&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftypescript%2Fdownload%2Ftypescript-4.2.2.tgz#1450f020618f872db0ea17317d16d8da8ddb8c4c"
-  integrity sha1-FFDwIGGPhy2w6hcxfRbY2o3bjEw=
+typescript@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.npm.taobao.org/typescript/download/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
+  integrity sha1-OQYtgBmRLUNyYpjwlJPVmASMHOM=
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
