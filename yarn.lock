@@ -1303,10 +1303,10 @@
   resolved "https://registry.npm.taobao.org/@types/prop-types/download/@types/prop-types-15.7.3.tgz?cache=0&sync_timestamp=1613379633472&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fprop-types%2Fdownload%2F%40types%2Fprop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha1-KrDV2i5YFflLC51LldHl8kOrLKc=
 
-"@types/react-dom@^17.0.1":
-  version "17.0.1"
-  resolved "https://registry.npm.taobao.org/@types/react-dom/download/@types/react-dom-17.0.1.tgz#d92d77d020bfb083e07cc8e0ac9f933599a4d56a"
-  integrity sha1-2S130CC/sIPgfMjgrJ+TNZmk1Wo=
+"@types/react-dom@^17.0.2":
+  version "17.0.2"
+  resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-17.0.2.tgz#35654cf6c49ae162d5bc90843d5437dc38008d43"
+  integrity sha512-Icd9KEgdnFfJs39KyRyr0jQ7EKhq8U6CcHRMGAS45fp5qgUvxL3ujUCfWFttUK2UErqZNj97t9gsVPNAqcwoCg==
   dependencies:
     "@types/react" "*"
 
@@ -2451,11 +2451,6 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/delayed-stream/download/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
-
-dequal@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npm.taobao.org/dequal/download/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
-  integrity sha1-hcoiAl46h+Ze91p6Q3s1KEp+MZ0=
 
 detect-newline@^3.0.0:
   version "3.1.0"
@@ -5417,10 +5412,10 @@ react-textarea-autosize@^8.3.2:
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
 
-react-tiny-popover@^6.0.4:
-  version "6.0.4"
-  resolved "https://registry.npm.taobao.org/react-tiny-popover/download/react-tiny-popover-6.0.4.tgz#6b9d910a347ee84ddefe5f2a5b236d30e6b48c2a"
-  integrity sha1-a52RCjR+6E3e/l8qWyNtMOa0jCo=
+react-tiny-popover@^6.0.5:
+  version "6.0.5"
+  resolved "https://registry.npmjs.org/react-tiny-popover/-/react-tiny-popover-6.0.5.tgz#2d5eb21d8a2758396ffa5bf5b761baac87dd6297"
+  integrity sha512-na6ZghMy5kqTPFSATb1pdSHO+/MikZvUxNk+zjXlz+gMXgiaOVuik5AiC5Oyj4yHpPf0nxoOmVQOmOmuDob6+A==
 
 react@^17.0.1:
   version "17.0.1"
@@ -6354,12 +6349,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-swr@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.npm.taobao.org/swr/download/swr-0.4.2.tgz#4a9ed5e9948088af145c79d716d294cb99712a29"
-  integrity sha1-Sp7V6ZSAiK8UXHnXFtKUy5lxKik=
-  dependencies:
-    dequal "2.0.2"
+swr@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.npmjs.org/swr/-/swr-0.5.3.tgz#7290a9a61329d930583ef365317e636b8dbaa8bb"
+  integrity sha512-RUE3RWn3jt9e4qLPat2A9vbHG/5N6konsc27xKjE65jFSiGv0P7HLD8IGvwAv6DRKktL7Od2UcayX0plKb2awg==
 
 symbol-tree@^3.2.2:
   version "3.2.4"
