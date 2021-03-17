@@ -23,7 +23,7 @@ converter.setOption('openLinksInNewWindow', true);
 converter.setOption('simplifiedAutoLink', true);
 
 const formatLink = (link: string) => {
-  return (link.indexOf('http') == -1 ? '//' : '') + link;
+  return (link && link.indexOf('http') == -1 ? '//' : '') + link;
 };
 
 /**
