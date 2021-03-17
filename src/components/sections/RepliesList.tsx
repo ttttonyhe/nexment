@@ -22,6 +22,10 @@ converter.setOption('simpleLineBreaks', true);
 converter.setOption('openLinksInNewWindow', true);
 converter.setOption('simplifiedAutoLink', true);
 
+const formatLink = (link: string) => {
+  return (link.indexOf('http') == -1 ? '//' : '') + link;
+};
+
 /**
  * Nexment Reply list
  *
@@ -158,7 +162,7 @@ const RepliesList = (Props: {
               </div>
               <div className="nexment-comments-title">
                 <h5>
-                  <a href={Props.replyItem.link} target="_blank">
+                  <a href={formatLink(Props.replyItem.link)} target="_blank">
                     {Props.replyItem.name}
                   </a>
                   <span> · </span>
@@ -245,7 +249,7 @@ const RepliesList = (Props: {
                           </div>
                           <div className="nexment-comments-title">
                             <h5>
-                              <a href={item.link} target="_blank">
+                              <a href={formatLink(item.link)} target="_blank">
                                 {item.name}
                               </a>
                               <span> · </span>

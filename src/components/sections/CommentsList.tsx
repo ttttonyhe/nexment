@@ -23,6 +23,10 @@ converter.setOption('simpleLineBreaks', true);
 converter.setOption('openLinksInNewWindow', true);
 converter.setOption('simplifiedAutoLink', true);
 
+const formatLink = (link: string) => {
+  return (link.indexOf('http') == -1 ? '//' : '') + link;
+};
+
 /**
  * Nexment Comments List
  *
@@ -170,7 +174,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                   </div>
                   <div className="nexment-comments-title">
                     <h5>
-                      <a href={replyItem.link} target="_blank">
+                      <a href={formatLink(replyItem.link)} target="_blank">
                         {replyItem.name}
                       </a>
                       <span> · </span>
@@ -275,7 +279,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                   </div>
                   <div className="nexment-comments-title">
                     <h5>
-                      <a href={item.link} target="_blank">
+                      <a href={formatLink(item.link)} target="_blank">
                         {item.name}
                       </a>
                       <span> · </span>
@@ -339,7 +343,10 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                             </div>
                             <div className="nexment-comments-title">
                               <h5>
-                                <a href={replyItem.link} target="_blank">
+                                <a
+                                  href={formatLink(replyItem.link)}
+                                  target="_blank"
+                                >
                                   {replyItem.name}
                                 </a>
                                 <span> · </span>
