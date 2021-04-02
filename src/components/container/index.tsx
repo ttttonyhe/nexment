@@ -7,9 +7,9 @@ import { Provider } from '../../lib/utils/configContext';
 // Nexment Configuration Interface
 export interface nexmentConfigType {
   pageKey?: string;
-  enableLinkInput?: boolean,
-  enableReplyListModal?:boolean,
-  descriptionTag?:boolean,
+  enableLinkInput?: boolean;
+  enableReplyListModal?: boolean;
+  descriptionTag?: boolean;
   leancloud: {
     appId: string;
     appKey: string;
@@ -19,12 +19,18 @@ export interface nexmentConfigType {
     name: string;
     email: string;
   };
+  blackList?: {
+    name?: string;
+    email?: string;
+    link?: string;
+    keyword?: string;
+  }[];
 }
 
 /**
  * Nexment Container
- * basic structure of a comment instance
- * 
+ * basic structure of a nexment instance
+ *
  * @param {{ config: nexmentConfigType }} Props
  * @returns
  */
@@ -38,7 +44,7 @@ const NexmentContainer = (Props: { config: nexmentConfigType }) => {
   const nexmentContainer = (
     <div className="nexment-container">
       <Provider value={Props.config}>
-        <CommentsList type="primary" pageKey={pageKey}/>
+        <CommentsList type="primary" pageKey={pageKey} />
       </Provider>
     </div>
   );

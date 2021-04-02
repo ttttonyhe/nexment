@@ -11,20 +11,11 @@ import { reactLocalStorage } from 'reactjs-localstorage';
 import TagCard from '../controls/tagCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import Icons from '../icons/index';
-import showdown from 'showdown';
 import Floater from 'react-floater';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
 import insertTextAtCursor from 'insert-text-at-cursor';
-
-const converter = new showdown.Converter();
-
-converter.setOption('tables', true);
-converter.setOption('emojis', true);
-converter.setOption('strikethrough', true);
-converter.setOption('simpleLineBreaks', true);
-converter.setOption('openLinksInNewWindow', true);
-converter.setOption('simplifiedAutoLink', true);
+import converter from '../../lib/utils/showDown';
 
 /**
  * Nexment Comment area
@@ -59,7 +50,7 @@ const CommentsArea = (Props: {
   // Translation
   const Translation = translate.use().text;
 
-  // LeanCloud 初始化
+  // Initialize leancloud storage
   const AV = leanCloud(
     NexmentConfigs.leancloud.appId,
     NexmentConfigs.leancloud.appKey,
@@ -200,6 +191,8 @@ const CommentsArea = (Props: {
       );
     } else if (returnData.status === 501) {
       setModalStatus(true);
+    } else if (returnData.status === 401) {
+      alert('Your comment has been identified as a spam');
     } else {
       // Comment success
       // Store commenter info

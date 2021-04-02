@@ -79,6 +79,15 @@ const config = {
     name: 'xxx',
     email: 'xxx@xxx.xxx',
   },
+  blackList:[{
+    name: "xxx",
+    email: "xxx",
+    keyword: "xxx",
+    link: "xxx"
+  },
+  {
+    keyword: "xxx"
+  }]
 };
 ```
 Use the nexment component:
@@ -109,6 +118,17 @@ const Nexment = () => {
       name: "xxx",
       email: "xxx",
     },
+    blackList:[
+      {
+        name: "xxx",
+        email: "xxx",
+        keyword: "xxx",
+        link: "xxx"
+      },
+      {
+        keyword: "xxx"
+      }
+    ]
   };
   return <NexmentContainer config={config} />;
 };

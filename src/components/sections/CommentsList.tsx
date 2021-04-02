@@ -9,23 +9,11 @@ import '../../assets/style/commentslist.scss';
 import { format } from 'timeago.js';
 const md5 = require('js-md5');
 import Icons from '../icons/index';
-import showdown from 'showdown';
+import converter from '../../lib/utils/showDown';
 import ContentLoader from 'react-content-loader';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
-
-const converter = new showdown.Converter();
-
-converter.setOption('tables', true);
-converter.setOption('emojis', true);
-converter.setOption('strikethrough', true);
-converter.setOption('simpleLineBreaks', true);
-converter.setOption('openLinksInNewWindow', true);
-converter.setOption('simplifiedAutoLink', true);
-
-const formatLink = (link: string) => {
-  return (link && link.indexOf('http') == -1 ? '//' : '') + link;
-};
+import formatLink from '../../lib/utils/linkFormatter';
 
 /**
  * Nexment Comments List

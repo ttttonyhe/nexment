@@ -1,9 +1,10 @@
 import leanCloud from './initiation';
 import { nexmentConfigType } from 'components/container';
-const md = require('markdown-it')();
+import converter from '../utils/showDown';
 import fetch from 'unfetch';
-const Qs = require('qs');
+import Qs from 'qs';
 import * as EmailValidator from 'email-validator';
+import similarity from 'string-similarity';
 
 interface commentType {
   identifier: string;
@@ -52,12 +53,14 @@ const useSavingComment = async (
   info: commentType,
   config: nexmentConfigType
 ): Promise<{ status: number; savedComment?: any }> => {
+  // initialize leancloud storage
   const AV = leanCloud(
     config.leancloud.appId,
     config.leancloud.appKey,
     config.leancloud.serverURL
   );
-  // Determine whether the sender is admin
+
+  // Admin must be logged in
   if (
     (info.email === config.admin.email || info.name === config.admin.name) &&
     !AV.User.current()
@@ -65,86 +68,125 @@ const useSavingComment = async (
     return {
       status: 501,
     };
-  } else {
-    if (
-      info.identifier &&
-      info.ID &&
-      info.name &&
-      info.email &&
-      EmailValidator.validate(info.email) &&
-      info.content
-    ) {
-      const commentsStorageClass = AV.Object.extend('nexment_comments');
-      const commentsStorage = new commentsStorageClass();
-      commentsStorage.set('identifier', info.identifier);
-      commentsStorage.set('ID', info.ID);
-      commentsStorage.set('name', info.name);
-      commentsStorage.set('email', info.email);
-      commentsStorage.set('content', info.content);
-      if (info.reply) {
-        // Set reply ID for current comment
-        commentsStorage.set('reply', info.reply);
+  }
 
-        // Get reply-to comment object
-        const replyToObject = await AV.Object.createWithoutData(
-          'nexment_comments',
-          info.replyOID
+  // check if all info has been provided
+  if (
+    info.identifier &&
+    info.ID &&
+    info.name &&
+    info.email &&
+    EmailValidator.validate(info.email) &&
+    info.content
+  ) {
+    // loop through blacklist
+    let i = 0;
+    while (config.blackList && config.blackList[i]) {
+      const rule = config.blackList[i];
+      if (rule.email && info.email == rule.email) {
+        return {
+          status: 401,
+        };
+      }
+      if (
+        rule.name &&
+        similarity.compareTwoStrings(info.name, rule.name) > 0.6
+      ) {
+        return {
+          status: 401,
+        };
+      }
+      if (rule.keyword && info.content.indexOf(rule.keyword) !== -1) {
+        return {
+          status: 401,
+        };
+      }
+      if (
+        rule.link &&
+        info.link &&
+        similarity.compareTwoStrings(info.link, rule.link) > 0.8
+      ) {
+        return {
+          status: 401,
+        };
+      }
+      ++i;
+    }
+
+    const commentsStorageClass = AV.Object.extend('nexment_comments');
+    const commentsStorage = new commentsStorageClass();
+    commentsStorage.set('identifier', info.identifier);
+    commentsStorage.set('ID', info.ID);
+    commentsStorage.set('name', info.name);
+    commentsStorage.set('email', info.email);
+    commentsStorage.set('content', info.content);
+
+    // Current comment is a reply
+    if (info.reply) {
+      // Set reply ID for current comment
+      commentsStorage.set('reply', info.reply);
+
+      // Get reply-to comment object
+      const replyToObject = await AV.Object.createWithoutData(
+        'nexment_comments',
+        info.replyOID
+      );
+      replyToObject.set('hasReplies', true);
+
+      // Email when replied
+      const query = new AV.Query('nexment_comments');
+      const replyToEmailStatus = await query
+        .get(info.replyOID)
+        .then((item: { get: (arg0: string) => any }) => {
+          return [item.get('emailWhenReplied'), item.get('email')];
+        });
+      if (replyToEmailStatus[0]) {
+        sendEmail(
+          replyToEmailStatus[1],
+          window.location.href,
+          converter.makeHtml('From ' + info.name + ' : ' + info.content)
         );
-        replyToObject.set('hasReplies', true);
+      }
 
-        // Email when replied
-        const query = new AV.Query('nexment_comments');
-        const replyToEmailStatus = await query
-          .get(info.replyOID)
-          .then((item: { get: (arg0: string) => any }) => {
-            return [item.get('emailWhenReplied'), item.get('email')];
-          });
-        if (replyToEmailStatus[0]) {
-          sendEmail(
-            replyToEmailStatus[1],
-            window.location.href,
-            md.render('From ' + info.name + ' : ' + info.content)
-          );
-        }
-
-        // Save reply-to comment object
-        await replyToObject.save().then(
-          () => {
-            console.log('Nexment: Comment sent successfully');
-          },
-          (error: any) => {
-            console.log(error);
-          }
-        );
-      }
-      if (info.tag) {
-        commentsStorage.set('tag', info.tag);
-      }
-      if (info.ewr) {
-        commentsStorage.set('emailWhenReplied', info.ewr);
-      }
-      if (info.link) {
-        commentsStorage.set('link', info.link.replace(/\s*/g, ''));
-      }
-      return await commentsStorage.save().then(
-        (savedComment: any) => {
-          return {
-            status: 201,
-            savedComment: savedComment,
-          };
-        },
+      // Update the comment currently replying to
+      await replyToObject.save().then(
         () => {
-          // 异常处理
-          return {
-            status: 500,
-          };
+          console.log('Nexment: Comment sent successfully');
+        },
+        (error: any) => {
+          console.log(error);
         }
       );
-    } else {
-      return {
-        status: 500,
-      };
     }
+
+    if (info.tag) {
+      commentsStorage.set('tag', info.tag);
+    }
+    if (info.ewr) {
+      commentsStorage.set('emailWhenReplied', info.ewr);
+    }
+    if (info.link) {
+      commentsStorage.set('link', info.link.replace(/\s*/g, ''));
+    }
+
+    return await commentsStorage.save().then(
+      (savedComment: any) => {
+        return {
+          status: 201,
+          savedComment: savedComment,
+        };
+      },
+      () => {
+        // 异常处理
+        return {
+          status: 500,
+        };
+      }
+    );
+  } else {
+    return {
+      status: 500,
+    };
   }
 };
 
