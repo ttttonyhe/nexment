@@ -1,5 +1,5 @@
 {
-  "version": "0.0.668",
+  "version": "0.0.669",
   "private": false,
   "license": "MIT",
   "main": "dist/index.js",
@@ -49,7 +49,8 @@
     "swr": "^0.5.5",
     "timeago.js": "^4.0.2",
     "tslib": "^2.1.0",
-    "unfetch": "^4.2.0"
+    "unfetch": "^4.2.0",
+    "string-similarity": "^4.0.4"
   },
   "devDependencies": {
     "@types/insert-text-at-cursor": "^0.3.0",
@@ -76,13 +77,12 @@
     "reactjs-localstorage": "^1.0.1",
     "rodal": "^1.8.1",
     "rollup-plugin-sass": "^1.2.2",
-    "showdown": "^1.9.1",
-    "string-similarity": "^4.0.4",
     "swr": "^0.5.5",
     "timeago.js": "^4.0.2",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^4.2.3",
-    "unfetch": "^4.2.0"
+    "unfetch": "^4.2.0",
+    "showdown": "^1.9.1"
   }
 }
