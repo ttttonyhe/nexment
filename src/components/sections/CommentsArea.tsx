@@ -187,12 +187,12 @@ const CommentsArea = (Props: {
     }
     if (returnData.status === 500) {
       alert(
-        'Nexment: An error has occurred while sending your comment.\n\nPlease check if you have entered incorrect information.'
+        'Nexment: An error has occurred while sending your comment.\nPlease check if you have entered incorrect information.'
       );
     } else if (returnData.status === 501) {
       setModalStatus(true);
     } else if (returnData.status === 401) {
-      alert('Your comment has been identified as a spam');
+      alert('Nexment: An error has occurred while sending your comment.\nYour comment has been identified as a spam');
     } else {
       // Comment success
       // Store commenter info
