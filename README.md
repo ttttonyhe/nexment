@@ -16,6 +16,13 @@
 
 <br/>
 
+## Foreword
+
+> **Note**
+> This project is undergoing a major refactoring, stay tune for exciting updates to come.
+
+<br/>
+
 ## See also
 + Nexment for Vue.js / Web Component [https://github.com/HelipengTony/nexment-vue](https://github.com/HelipengTony/nexment-vue)
 + Nexment for React.js [https://github.com/HelipengTony/nexment](https://github.com/HelipengTony/nexment)
