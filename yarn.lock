@@ -6951,7 +6951,7 @@ __metadata:
     typescript: ^4.9.3
     unfetch: ^4.2.0
   peerDependencies:
-    react: ">=17"
+    react: ">=18"
   languageName: unknown
   linkType: soft
 
