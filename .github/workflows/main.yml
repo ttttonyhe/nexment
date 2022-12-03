@@ -15,7 +15,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
         env:
           CI: true
 
