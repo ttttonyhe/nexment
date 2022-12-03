@@ -6951,7 +6951,7 @@ __metadata:
     typescript: ^4.9.3
     unfetch: ^4.2.0
   peerDependencies:
-    react: ">=17"
+    react: ">=18"
   languageName: unknown
   linkType: soft
 
@@ -9578,7 +9578,7 @@ __metadata:
 
 "typescript@patch:typescript@^3.7.3#~builtin<compat/typescript>":
   version: 3.9.9
-  resolution: "typescript@patch:typescript@npm%3A3.9.9#~builtin<compat/typescript>::version=3.9.9&hash=701156"
+  resolution: "typescript@patch:typescript@npm%3A3.9.9#~builtin<compat/typescript>::version=3.9.9&hash=a1c5e5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -9588,7 +9588,7 @@ __metadata:
 
 "typescript@patch:typescript@^4.9.3#~builtin<compat/typescript>":
   version: 4.9.3
-  resolution: "typescript@patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=701156"
+  resolution: "typescript@patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=a1c5e5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -10015,11 +10015,11 @@ __metadata:
   linkType: hard
 
 "ws@npm:^5.2.2":
-  version: 5.2.2
-  resolution: "ws@npm:5.2.2"
+  version: 5.2.3
+  resolution: "ws@npm:5.2.3"
   dependencies:
     async-limiter: ~1.0.0
-  checksum: 3da93525921e6098aa9b6a370745ef3de9bb3f00427ecbb4755b671fce4810eb21cc1c80847fb639635ac72f0bb08d49b83a4a74896daf2f79e864d8cead1e13
+  checksum: bdb2223a40c2c68cf91b25a6c9b8c67d5275378ec6187f343314d3df7530e55b77cb9fe79fb1c6a9758389ac5aefc569d24236924b5c65c5dbbaff409ef739fc
   languageName: node
   linkType: hard
 
