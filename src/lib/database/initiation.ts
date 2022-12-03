@@ -1,5 +1,5 @@
 // LeanCloud storage initiation
-const AV = require('leancloud-storage');
+import AV from 'leancloud-storage';
 
 // To avoid reinitialization
 var initCount = 0;

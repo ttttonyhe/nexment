@@ -1,19 +1,20 @@
+import React from 'react';
+import { format } from 'timeago.js';
+import md5 from 'js-md5';
 import useComments, {
   commentsItemType,
 } from '../../lib/database/getCommentsList';
-import React from 'react';
 import Modal from '../modal';
 import CommentsArea from '../../components/sections/CommentsArea';
 import { nexmentConfigType } from '../container/index';
-import '../../assets/style/commentslist.scss';
-import { format } from 'timeago.js';
-const md5 = require('js-md5');
 import Icons from '../icons/index';
 import converter from '../../lib/utils/showDown';
 import ContentLoader from 'react-content-loader';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
 import formatLink from '../../lib/utils/linkFormatter';
+
+import '../../assets/style/commentslist.scss';
 
 /**
  * Nexment Comments List
@@ -84,12 +85,14 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
     return (
       <div className="nexment-loading">
         <ContentLoader
+          uniqueKey="nexment-loading-skeleton"
           speed={2}
           width={100}
           style={{ width: '100%' }}
           height={124}
           backgroundColor="#f3f3f3"
           foregroundColor="#ecebeb"
+          title=""
         >
           <rect x="52" y="8" rx="3" ry="3" width="100%" height="10" />
           <rect x="52" y="30" rx="3" ry="3" width="80%" height="10" />

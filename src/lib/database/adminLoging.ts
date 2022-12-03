@@ -21,6 +21,7 @@ const adminLogin = async (
     config.leancloud.appKey,
     config.leancloud.serverURL
   );
+
   const returnJson = await AV.User.loginWithEmail(email, pwd).then(
     () => {
       return {
@@ -38,7 +39,7 @@ const adminLogin = async (
           () => {
             return {
               status: 200,
-              msg: 'Admin registry success',
+              msg: 'Admin successfully registered',
             };
           },
           () => {
@@ -56,6 +57,7 @@ const adminLogin = async (
       }
     }
   );
+
   return returnJson;
 };
 

@@ -5,7 +5,7 @@ type TranslationLanguages = {
   en: string;
 };
 
-const deviceLanguage = navigator.language;
+const deviceLanguage = navigator ? navigator.language : 'en';
 const availableLanguages: (keyof TranslationLanguages)[] = ['en', 'zh'];
 const fallback = 'en';
 
@@ -72,8 +72,8 @@ const translate = createTranslations<TranslationLanguages>()(
         en: 'Email',
       },
       placeHolder: {
-        zh: "键入一些内容吧",
-        en: "Say something",
+        zh: '键入一些内容吧',
+        en: 'Say something',
       },
       resetReply: {
         zh: '重置回复',
@@ -121,8 +121,8 @@ const translate = createTranslations<TranslationLanguages>()(
           'Please verify your Nexment admin identity (first time login password will be set as admin password)',
       },
       verifyPwd: {
-        zh: "管理员密码",
-        en: "Admin password",
+        zh: '管理员密码',
+        en: 'Admin password',
       },
       desTagDes: {
         zh: '使用描述标签让观众了解你的专业、知识和身份背景',
@@ -136,10 +136,10 @@ const translate = createTranslations<TranslationLanguages>()(
         zh: '无内容可预览',
         en: 'Nothing to preview',
       },
-      link:{
+      link: {
         zh: '站点链接',
         en: 'URL',
-      }
+      },
     },
   },
   {

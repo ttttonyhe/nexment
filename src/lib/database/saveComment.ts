@@ -1,10 +1,10 @@
-import leanCloud from './initiation';
-import { nexmentConfigType } from 'components/container';
-import converter from '../utils/showDown';
 import fetch from 'unfetch';
 import Qs from 'qs';
 import * as EmailValidator from 'email-validator';
 import similarity from 'string-similarity';
+import leanCloud from './initiation';
+import converter from '../utils/showDown';
+import { nexmentConfigType } from '../../components/container';
 
 interface commentType {
   identifier: string;
@@ -60,7 +60,7 @@ const useSavingComment = async (
     config.leancloud.serverURL
   );
 
-  // Admin must be logged in
+  // If commenting as admin, then user must be logged in
   if (
     (info.email === config.admin.email || info.name === config.admin.name) &&
     !AV.User.current()
@@ -79,7 +79,7 @@ const useSavingComment = async (
     EmailValidator.validate(info.email) &&
     info.content
   ) {
-    // loop through blacklist
+    // go through the blacklist to check if the comment is spam
     let i = 0;
     while (config.blackList && config.blackList[i]) {
       const rule = config.blackList[i];
@@ -113,6 +113,7 @@ const useSavingComment = async (
       ++i;
     }
 
+    // Initialize the comment object
     const commentsStorageClass = AV.Object.extend('nexment_comments');
     const commentsStorage = new commentsStorageClass();
     commentsStorage.set('identifier', info.identifier);
@@ -121,8 +122,8 @@ const useSavingComment = async (
     commentsStorage.set('email', info.email);
     commentsStorage.set('content', info.content);
 
-    // Current comment is a reply
-    if (info.reply) {
+    // If current comment is a reply
+    if (info.reply && info.replyOID) {
       // Set reply ID for current comment
       commentsStorage.set('reply', info.reply);
 
@@ -162,13 +163,16 @@ const useSavingComment = async (
     if (info.tag) {
       commentsStorage.set('tag', info.tag);
     }
+
     if (info.ewr) {
       commentsStorage.set('emailWhenReplied', info.ewr);
     }
+
     if (info.link) {
       commentsStorage.set('link', info.link.replace(/\s*/g, ''));
     }
 
+    // Save the comment
     return await commentsStorage.save().then(
       (savedComment: any) => {
         return {
@@ -177,7 +181,6 @@ const useSavingComment = async (
         };
       },
       () => {
-        // 异常处理
         return {
           status: 500,
         };

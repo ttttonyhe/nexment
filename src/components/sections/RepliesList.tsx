@@ -6,7 +6,7 @@ import Rodal from 'rodal';
 import '../../assets/style/modal.scss';
 import { nexmentConfigType } from '../container/index';
 import { format } from 'timeago.js';
-const md5 = require('js-md5');
+import md5 from 'js-md5';
 import Icons from '../icons/index';
 import ContentLoader from 'react-content-loader';
 import translate from '../../lib/translation/index';

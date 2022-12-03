@@ -1,8 +1,8 @@
 import React from 'react';
+import Floater from 'react-floater';
 import usingSaveComment from '../../lib/database/saveComment';
 import generateCommentID from '../../lib/utils/generateCommentID';
 import { refetchData } from '../../lib/database/getCommentsList';
-import '../../assets/style/commentarea.scss';
 import EmojiCard from '../controls/emojiCard/index';
 import { nexmentConfigType } from 'components/container';
 import VerificationModal from '../modal/verification';
@@ -11,11 +11,12 @@ import { reactLocalStorage } from 'reactjs-localstorage';
 import TagCard from '../controls/tagCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import Icons from '../icons/index';
-import Floater from 'react-floater';
 import translate from '../../lib/translation/index';
 import Context from '../../lib/utils/configContext';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import converter from '../../lib/utils/showDown';
+
+import '../../assets/style/commentarea.scss';
 
 /**
  * Nexment Comment area
@@ -192,7 +193,9 @@ const CommentsArea = (Props: {
     } else if (returnData.status === 501) {
       setModalStatus(true);
     } else if (returnData.status === 401) {
-      alert('Nexment: An error has occurred while sending your comment.\nYour comment has been identified as a spam');
+      alert(
+        'Nexment: An error has occurred while sending your comment.\nYour comment has been identified as a spam'
+      );
     } else {
       // Comment success
       // Store commenter info

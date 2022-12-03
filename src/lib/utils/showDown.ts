@@ -1,4 +1,4 @@
-import showdown from "showdown";
+import showdown from 'showdown';
 
 const converter = new showdown.Converter();
 
