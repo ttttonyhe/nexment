@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { NexmentContainer } from '../src/index';
+import Nexment from '../src/index';
 
 const App = () => {
   const config = {
@@ -58,7 +58,7 @@ const App = () => {
         </div>
       </div>
       <div className="nexment-div">
-        <NexmentContainer config={config} />
+        <Nexment config={config} />
       </div>
       <style>
         {`

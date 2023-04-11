@@ -1,5 +1,5 @@
+import { NexmentConfig } from 'lib/utils/configContext';
 import leanCloud from './initiation';
-import { nexmentConfigType } from '../../components/container';
 
 /**
  * Nexment Admin Login
@@ -7,14 +7,14 @@ import { nexmentConfigType } from '../../components/container';
  * @param {string} name
  * @param {string} email
  * @param {string} pwd
- * @param {nexmentConfigType} config
+ * @param {NexmentConfig} config
  * @returns
  */
 const adminLogin = async (
   name: string,
   email: string,
   pwd: string,
-  config: nexmentConfigType
+  config: NexmentConfig
 ) => {
   const AV = leanCloud(
     config.leancloud.appId,

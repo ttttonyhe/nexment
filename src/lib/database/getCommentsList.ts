@@ -1,7 +1,7 @@
 import leanCloud from './initiation';
 import { Queriable } from 'leancloud-storage';
+import { NexmentConfig } from 'lib/utils/configContext';
 import useSWR, { mutate } from 'swr';
-import { nexmentConfigType } from '../../components/container';
 
 export interface commentsItemType {
   OID: string;
@@ -22,8 +22,9 @@ export interface commentsItemType {
  *
  * @param {string} pageKey
  */
-export const refetchData = (pageKey: string) => {
-  mutate(pageKey);
+export const refetchData = async (pageKey: string, callback?: () => void) => {
+  await mutate(pageKey);
+  callback && callback();
 };
 
 /**
@@ -31,7 +32,7 @@ export const refetchData = (pageKey: string) => {
  * using AsyncGet as the fetcher
  *
  * @param {string} pageKey
- * @param {nexmentConfigType} config
+ * @param {NexmentConfig} config
  * @returns {({
  *   commentsData: commentsItemType[] | undefined;
  *   isLoading: boolean;
@@ -40,7 +41,7 @@ export const refetchData = (pageKey: string) => {
  */
 const useComments = (
   pageKey: string,
-  config: nexmentConfigType
+  config: NexmentConfig
 ): {
   commentsData: commentsItemType[] | undefined;
   isLoading: boolean;
@@ -98,14 +99,15 @@ const useComments = (
         ) {
           // Get reply list recursively
           const repliesRecursion = (replyItemData: any[]) => {
-            (replyItemData || []).map(item => {
+            const data = (replyItemData || []);
+            data.map(item => {
               if (item.hasReplies) {
                 item['replyList'] = repliesRecursion(
                   repliesData[item.ID.toString()]
                 );
               }
             });
-            return replyItemData.reverse();
+            return data.reverse();
           };
           // Get all corresponding replies of current comment
           let replyItemData: any[] = [];

@@ -1,12 +1,41 @@
 import React from 'react';
-/**
- * Nexment configs context
- */
 
-// Create Context
-const Context: any = React.createContext({});
+// Nexment Configuration Interface
+export interface NexmentConfig {
+  pageKey?: string;
+  enableLinkInput?: boolean;
+  enableReplyListModal?: boolean;
+  enableReplyEmail?: boolean;
+  descriptionTag?: boolean;
+  leancloud: {
+    appId: string;
+    appKey: string;
+    serverURL: string;
+  };
+  admin: {
+    name: string;
+    email: string;
+  };
+  blackList?: {
+    name?: string;
+    email?: string;
+    link?: string;
+    keyword?: string;
+  }[];
+}
 
-// Context Provider
+const Context = React.createContext<NexmentConfig>({
+  leancloud: {
+    appId: '',
+    appKey: '',
+    serverURL: '',
+  },
+  admin: {
+    name: '',
+    email: '',
+  },
+});
+
 export const Provider = Context.Provider;
 
 export default Context;

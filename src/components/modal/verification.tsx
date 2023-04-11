@@ -1,17 +1,16 @@
 import React from 'react';
 import Rodal from 'rodal';
 import '../../assets/style/modal.scss';
-import { nexmentConfigType } from 'components/container';
 import adminLogin from '../../lib/database/adminLoging';
 import translate from '../../lib/translation/index';
-import Context from '../../lib/utils/configContext';
+import Context, { NexmentConfig } from '../../lib/utils/configContext';
 
 const VerificationModal = (Props: {
   visibilityFunction?: Function;
-  config: nexmentConfigType;
+  config: NexmentConfig;
 }) => {
   // Configs
-  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
+  const NexmentConfigs: NexmentConfig = React.useContext(Context);
 
   // Translation
   const Translation = translate.use().text;

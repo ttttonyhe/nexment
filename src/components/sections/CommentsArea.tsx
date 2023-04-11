@@ -4,7 +4,6 @@ import usingSaveComment from '../../lib/database/saveComment';
 import generateCommentID from '../../lib/utils/generateCommentID';
 import { refetchData } from '../../lib/database/getCommentsList';
 import EmojiCard from '../controls/emojiCard/index';
-import { nexmentConfigType } from 'components/container';
 import VerificationModal from '../modal/verification';
 import leanCloud from '../../lib/database/initiation';
 import { reactLocalStorage } from 'reactjs-localstorage';
@@ -12,7 +11,7 @@ import TagCard from '../controls/tagCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import Icons from '../icons/index';
 import translate from '../../lib/translation/index';
-import Context from '../../lib/utils/configContext';
+import Context, { NexmentConfig } from '../../lib/utils/configContext';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import converter from '../../lib/utils/showDown';
 
@@ -46,7 +45,7 @@ const CommentsArea = (Props: {
   reloadFunc?: Function;
 }) => {
   // Configs
-  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
+  const NexmentConfigs: NexmentConfig = React.useContext(Context);
 
   // Translation
   const Translation = translate.use().text;
@@ -183,18 +182,15 @@ const CommentsArea = (Props: {
       },
       NexmentConfigs
     );
-    if (Props.reloadFunc) {
-      Props.reloadFunc(false);
-    }
     if (returnData.status === 500) {
       alert(
-        'Nexment: An error has occurred while sending your comment.\nPlease check if you have entered incorrect information.'
+        'Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information.'
       );
     } else if (returnData.status === 501) {
       setModalStatus(true);
     } else if (returnData.status === 401) {
       alert(
-        'Nexment: An error has occurred while sending your comment.\nYour comment has been identified as a spam'
+        'Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam.'
       );
     } else {
       // Comment success
@@ -209,13 +205,18 @@ const CommentsArea = (Props: {
       // Set content to empty
       setCommentContent('');
       // Refetch data using swr mutate
-      refetchData(Props.pageKey);
-      // Jump to replied to/comment item
-      if (replyingTo) {
-        window.location.href = '#' + replyingTo;
-      } else {
-        window.location.href = '#' + thisID;
-      }
+      await refetchData(Props.pageKey, () => {
+        if (Props.reloadFunc) {
+          Props.reloadFunc(false);
+        }
+        // Jump to replied to/comment item
+        if (replyingTo) {
+          window.location.href = '#' + replyingTo;
+        } else {
+          window.location.href = '#' + thisID;
+        }
+        resetReplyTo();
+      });
     }
   };
 
@@ -337,21 +338,23 @@ const CommentsArea = (Props: {
               <TagCard tag={commentTag} handler={handleTagChange}></TagCard>
             </Floater>
           )}
-          <Floater
-            placement="top"
-            event="hover"
-            content={commentEwr ? Translation.unSub : Translation.sub}
-            offset={5}
-            eventDelay={0}
-          >
-            <button
-              onClick={() => {
-                setCommentEwr(!commentEwr);
-              }}
+          {NexmentConfigs.enableReplyEmail && (
+            <Floater
+              placement="top"
+              event="hover"
+              content={commentEwr ? Translation.unSub : Translation.sub}
+              offset={5}
+              eventDelay={0}
             >
-              {commentEwr ? Icons().email : Icons().emailFill}
-            </button>
-          </Floater>
+              <button
+                onClick={() => {
+                  setCommentEwr(!commentEwr);
+                }}
+              >
+                {commentEwr ? Icons().email : Icons().emailFill}
+              </button>
+            </Floater>
+          )}
           <Floater
             offset={5}
             eventDelay={0}

@@ -4,13 +4,12 @@ import { commentsItemType } from 'lib/database/getCommentsList';
 import CommentsArea from '../../components/sections/CommentsArea';
 import Rodal from 'rodal';
 import '../../assets/style/modal.scss';
-import { nexmentConfigType } from '../container/index';
 import { format } from 'timeago.js';
 import md5 from 'js-md5';
 import Icons from '../icons/index';
 import ContentLoader from 'react-content-loader';
 import translate from '../../lib/translation/index';
-import Context from '../../lib/utils/configContext';
+import Context, { NexmentConfig } from '../../lib/utils/configContext';
 import converter from '../../lib/utils/showDown';
 import formatLink from '../../lib/utils/linkFormatter';
 
@@ -40,7 +39,7 @@ const RepliesList = (Props: {
   replyItem?: any;
 }) => {
   // Configs
-  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
+  const NexmentConfigs: NexmentConfig = React.useContext(Context);
 
   // Translation
   const Translation = translate.use().text;

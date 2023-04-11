@@ -6,12 +6,11 @@ import useComments, {
 } from '../../lib/database/getCommentsList';
 import Modal from '../modal';
 import CommentsArea from '../../components/sections/CommentsArea';
-import { nexmentConfigType } from '../container/index';
 import Icons from '../icons/index';
 import converter from '../../lib/utils/showDown';
 import ContentLoader from 'react-content-loader';
 import translate from '../../lib/translation/index';
-import Context from '../../lib/utils/configContext';
+import Context, { NexmentConfig } from '../../lib/utils/configContext';
 import formatLink from '../../lib/utils/linkFormatter';
 
 import '../../assets/style/commentslist.scss';
@@ -24,7 +23,7 @@ import '../../assets/style/commentslist.scss';
  */
 const CommentsList = (Props: { type: string; pageKey: string }) => {
   // Configs
-  const NexmentConfigs: nexmentConfigType = React.useContext(Context);
+  const NexmentConfigs: NexmentConfig = React.useContext(Context);
 
   // Translation
   const Translation = translate.use().text;
@@ -165,9 +164,13 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                   </div>
                   <div className="nexment-comments-title">
                     <h5>
-                      <a href={formatLink(replyItem.link)} target="_blank">
-                        {replyItem.name}
-                      </a>
+                      {replyItem.link ? (
+                        <a href={formatLink(replyItem.link)} target="_blank">
+                          {replyItem.name}
+                        </a>
+                      ) : (
+                        replyItem.name
+                      )}
                       <span> · </span>
                       <b>{format(replyItem.date)}</b>
                       <em className="nexment-reply-icon-reply">
@@ -270,9 +273,13 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
                   </div>
                   <div className="nexment-comments-title">
                     <h5>
-                      <a href={formatLink(item.link)} target="_blank">
-                        {item.name}
-                      </a>
+                      {item.link ? (
+                        <a href={formatLink(item.link)} target="_blank">
+                          {item.name}
+                        </a>
+                      ) : (
+                        item.name
+                      )}
                       <span> · </span>
                       <b>{format(item.date)}</b>
                       <em className="nexment-reply-icon">{Icons().reply}</em>

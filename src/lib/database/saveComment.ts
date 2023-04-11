@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator';
 import similarity from 'string-similarity';
 import leanCloud from './initiation';
 import converter from '../utils/showDown';
-import { nexmentConfigType } from '../../components/container';
+import { NexmentConfig } from 'lib/utils/configContext';
 
 interface commentType {
   identifier: string;
@@ -46,12 +46,12 @@ const sendEmail = async (email: string, url: string, content: string) => {
  * Submit comment to LeanCloud
  *
  * @param {commentType} info
- * @param {nexmentConfigType} config
+ * @param {NexmentConfig} config
  * @returns {Promise<{ status: number; savedComment?: any }>}
  */
 const useSavingComment = async (
   info: commentType,
-  config: nexmentConfigType
+  config: NexmentConfig
 ): Promise<{ status: number; savedComment?: any }> => {
   // initialize leancloud storage
   const AV = leanCloud(
