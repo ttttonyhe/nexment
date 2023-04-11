@@ -1,5 +1,5 @@
 {
-  "version": "0.0.671",
+  "version": "0.0.672",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -37,7 +37,7 @@
     "markdown-it": "^13.0.1",
     "qs": "^6.11.1",
     "react-content-loader": "^6.2.1",
-    "react-floater": "^0.8.2",
+    "react-floater": "^0.7.6",
     "react-ridge-translations": "^1.0.4",
     "react-textarea-autosize": "^8.4.1",
     "react-tiny-popover": "^7.2.4",
@@ -69,7 +69,6 @@
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",
-    "react-floater": "^0.8.2",
     "react-ridge-translations": "^1.0.4",
     "react-textarea-autosize": "^8.4.1",
     "react-tiny-popover": "^7.2.4",

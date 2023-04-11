@@ -1695,13 +1695,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.5":
-  version: 2.11.6
-  resolution: "@popperjs/core@npm:2.11.6"
-  checksum: 47fb328cec1924559d759b48235c78574f2d71a8a6c4c03edb6de5d7074078371633b91e39bbf3f901b32aa8af9b9d8f82834856d2f5737a23475036b16817f0
-  languageName: node
-  linkType: hard
-
 "@rollup/plugin-babel@npm:^5.1.0":
   version: 5.3.1
   resolution: "@rollup/plugin-babel@npm:5.3.1"
@@ -3578,13 +3571,6 @@ __metadata:
   version: 0.1.3
   resolution: "deep-is@npm:0.1.3"
   checksum: c15b04c3848a89880c94e25b077c19b47d9a30dd99048e70e5f95d943e7b246bee1da0c1376b56b01bc045be2cae7d9b1c856e68e47e9805634327de7c6cb6d5
-  languageName: node
-  linkType: hard
-
-"deepmerge-ts@npm:^4.2.1":
-  version: 4.2.2
-  resolution: "deepmerge-ts@npm:4.2.2"
-  checksum: 137c3650519d9b1a220db7e23a3f56304cd02e7f97b2b8392e2767251055a29318425bacdb2ab2ff175a4645f7179643acf0e038d5dafbfdbc11bdf322f79697
   languageName: node
   linkType: hard
 
@@ -6978,7 +6964,7 @@ __metadata:
     react: ^18.2.0
     react-content-loader: ^6.2.1
     react-dom: ^18.2.0
-    react-floater: ^0.8.2
+    react-floater: ^0.7.6
     react-ridge-translations: ^1.0.4
     react-textarea-autosize: ^8.4.1
     react-tiny-popover: ^7.2.4
@@ -7598,6 +7584,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"popper.js@npm:^1.16.0":
+  version: 1.16.1
+  resolution: "popper.js@npm:1.16.1"
+  checksum: c56ae5001ec50a77ee297a8061a0221d99d25c7348d2e6bcd3e45a0d0f32a1fd81bca29d46cb0d4bdf13efb77685bd6a0ce93f9eb3c608311a461f945fffedbe
+  languageName: node
+  linkType: hard
+
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -7695,7 +7688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0":
+"prop-types@npm:^15.6.0, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -7808,19 +7801,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-floater@npm:^0.8.2":
-  version: 0.8.2
-  resolution: "react-floater@npm:0.8.2"
+"react-floater@npm:^0.7.6":
+  version: 0.7.6
+  resolution: "react-floater@npm:0.7.6"
   dependencies:
-    "@popperjs/core": ^2.11.5
-    deepmerge-ts: ^4.2.1
+    deepmerge: ^4.2.2
     exenv: ^1.2.2
     is-lite: ^0.8.2
-    tree-changes-hook: ^0.9.1
+    popper.js: ^1.16.0
+    prop-types: ^15.8.1
+    react-proptype-conditional-require: ^1.0.4
+    tree-changes: ^0.9.1
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: dd23a73fb4bbf41033f44c7e76adaed41663562d3ccbaa0f6b1db39caa4e10eced8d2091f6cdb3608934dda529bff4503f0973a06033cd6b51d7a069ce0c6d07
+    react: 15 - 18
+    react-dom: 15 - 18
+  checksum: 8268e14fbdf9393b39300f3c90ea2de382782f1d959176579e30841095a73f9240ec05fce3ec89e8b4e58cbc46c9b043b2ad0b338f5c5d3b91168b16a4282ac1
   languageName: node
   linkType: hard
 
@@ -7828,6 +7823,13 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
+  languageName: node
+  linkType: hard
+
+"react-proptype-conditional-require@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "react-proptype-conditional-require@npm:1.0.4"
+  checksum: 78f82d15b2c77c14fd8fbcbbed279850df3a856984aacd519ee6c2162e034b114b8ac47c00157b84ef7c98c0711d933a0177d9d54555629cf381f54341bb0e8f
   languageName: node
   linkType: hard
 
@@ -9377,19 +9379,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tree-changes-hook@npm:^0.9.1":
-  version: 0.9.3
-  resolution: "tree-changes-hook@npm:0.9.3"
-  dependencies:
-    "@gilbarbara/deep-equal": ^0.1.1
-    tree-changes: ^0.9.3
-  peerDependencies:
-    react: 16 - 18
-  checksum: 5552fd23cde689fa8c3baae5e520aa664e33697251aecb67abb5c2ff389b705f328f7c81c68363906eb50b0980d7ad8bb83b6883d1202aef2efb7e3ed0a748c4
-  languageName: node
-  linkType: hard
-
-"tree-changes@npm:^0.9.3":
+"tree-changes@npm:^0.9.1":
   version: 0.9.3
   resolution: "tree-changes@npm:0.9.3"
   dependencies:
