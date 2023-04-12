@@ -67,7 +67,7 @@ Use Nexment in your project:
 
 Import nexment library:
 ```js
-import { NexmentContainer } from "nexment"
+import Nexment from "nexment"
 ```
 Setup nexment configuration:
 ```js
@@ -98,7 +98,7 @@ const config = {
 ```
 Use the nexment component:
 ```jsx
-<NexmentContainer config={config} />
+<Nexment config={config} />
 ```
 
 <br/>
@@ -107,7 +107,7 @@ Use the nexment component:
 Create a Nexment component(Nexment.tsx):
 ```tsx
 import React from "react";
-import { NexmentContainer } from "nexment";
+import Nexment from "nexment";
 
 const Nexment = () => {
   const config = {
@@ -136,7 +136,7 @@ const Nexment = () => {
       }
     ]
   };
-  return <NexmentContainer config={config} />;
+  return <Nexment config={config} />;
 };
 
 export default Nexment;
