@@ -22,9 +22,8 @@ export interface commentsItemType {
  *
  * @param {string} pageKey
  */
-export const refetchData = async (pageKey: string, callback?: () => void) => {
+export const refetchData = async (pageKey: string) => {
   await mutate(pageKey);
-  callback && callback();
 };
 
 /**
@@ -99,7 +98,7 @@ const useComments = (
         ) {
           // Get reply list recursively
           const repliesRecursion = (replyItemData: any[]) => {
-            const data = (replyItemData || []);
+            const data = replyItemData || [];
             data.map(item => {
               if (item.hasReplies) {
                 item['replyList'] = repliesRecursion(

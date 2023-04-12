@@ -164,6 +164,7 @@ const CommentsArea = (Props: {
     if (Props.reloadFunc) {
       Props.reloadFunc(true);
     }
+
     let replyingTo = resetStatus ? primaryReplyTo : Props.replyTo;
     let replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID;
     let thisID = generateCommentID().idData;
@@ -182,6 +183,7 @@ const CommentsArea = (Props: {
       },
       NexmentConfigs
     );
+
     if (returnData.status === 500) {
       alert(
         'Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information.'
@@ -205,18 +207,18 @@ const CommentsArea = (Props: {
       // Set content to empty
       setCommentContent('');
       // Refetch data using swr mutate
-      await refetchData(Props.pageKey, () => {
-        if (Props.reloadFunc) {
-          Props.reloadFunc(false);
-        }
-        // Jump to replied to/comment item
-        if (replyingTo) {
-          window.location.href = '#' + replyingTo;
-        } else {
-          window.location.href = '#' + thisID;
-        }
-        resetReplyTo();
-      });
+      await refetchData(Props.pageKey);
+      // Jump to replied to/comment item
+      if (replyingTo) {
+        window.location.href = '#' + replyingTo;
+      } else {
+        window.location.href = '#' + thisID;
+      }
+      resetReplyTo();
+    }
+
+    if (Props.reloadFunc) {
+      Props.reloadFunc(false);
     }
   };
 
