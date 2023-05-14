@@ -217,7 +217,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
           <div>
             <p>
               {Translation.poweredBy}{' '}
-              <a href="https://github.com/HelipengTony/nexment" target="_blank">
+              <a href="https://github.com/ttttonyhe/nexment" target="_blank">
                 Nexment
               </a>
             </p>

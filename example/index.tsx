@@ -40,7 +40,7 @@ const App = () => {
               />
             </svg>
           </a>
-          <a href="https://github.com/HelipengTony/nexment" target="_blank">
+          <a href="https://github.com/ttttonyhe/nexment" target="_blank">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

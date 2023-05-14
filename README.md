@@ -1,8 +1,8 @@
 <img src="https://i.loli.net/2020/08/18/HSa25hE1bdZ9gCM.jpg" />
 <div align="center">
   <p>A feature-rich serverless comment library based on LeanCloud</p>
-  <a href="https://github.com/HelipengTony/nexment/actions?query=workflow%3ACI">
-    <img src="https://github.com/HelipengTony/nexment/workflows/CI/badge.svg" alt="github ci">
+  <a href="https://github.com/ttttonyhe/nexment/actions?query=workflow%3ACI">
+    <img src="https://github.com/ttttonyhe/nexment/workflows/CI/badge.svg" alt="github ci">
   </a>
   <a href="https://www.npmjs.com/package/nexment">
     <img src="https://img.shields.io/npm/dw/nexment" alt="npm downloads">
@@ -24,8 +24,8 @@
 <br/>
 
 ## See also
-+ Nexment for Vue.js / Web Component [https://github.com/HelipengTony/nexment-vue](https://github.com/HelipengTony/nexment-vue)
-+ Nexment for React.js [https://github.com/HelipengTony/nexment](https://github.com/HelipengTony/nexment)
++ Nexment for Vue.js / Web Component [https://github.com/ttttonyhe/nexment-vue](https://github.com/ttttonyhe/nexment-vue)
++ Nexment for React.js [https://github.com/ttttonyhe/nexment](https://github.com/ttttonyhe/nexment)
 
 <br/>
 
@@ -168,7 +168,7 @@ Nexment for React has full support for TypeScript type-checking
 <br/>
 
 ## Roadmap
-See Github [projects→](https://github.com/HelipengTony/nexment/projects)
+See Github [projects→](https://github.com/ttttonyhe/nexment/projects)
 
 <br/>
 
