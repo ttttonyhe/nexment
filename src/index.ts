@@ -1,4 +1,3 @@
-// Nexment Main Export
-import Nexment from './components/container';
+import Nexment from "./components/container"
 
-export default Nexment;
+export default Nexment

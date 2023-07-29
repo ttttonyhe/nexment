@@ -1,1 +1,1 @@
-declare module 'rodal';
+declare module "rodal"

@@ -1,8 +1,8 @@
 // LeanCloud storage initiation
-import AV from 'leancloud-storage';
+import AV from "leancloud-storage"
 
 // To avoid reinitialization
-var initCount = 0;
+var initCount = 0
 /**
  * LeanCloud Database Initiation
  *
@@ -12,15 +12,15 @@ var initCount = 0;
  * @returns
  */
 const leanCloud = (appId: string, appKey: string, serverURL: string) => {
-  if (initCount === 0) {
-    AV.init({
-      appId: appId,
-      appKey: appKey,
-      serverURL: serverURL,
-    });
-    initCount++;
-  }
-  return AV;
-};
+	if (initCount === 0) {
+		AV.init({
+			appId: appId,
+			appKey: appKey,
+			serverURL: serverURL,
+		})
+		initCount++
+	}
+	return AV
+}
 
-export default leanCloud;
+export default leanCloud

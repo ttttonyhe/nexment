@@ -1,67 +1,65 @@
 {
-  "version": "0.0.673",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "repository": "git@github.com:HelipengTony/nexment.git",
-  "files": [
-    "dist"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
-  "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "lint": "tsdx lint"
-  },
-  "peerDependencies": {
-    "react": ">=17"
-  },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "name": "nexment",
-  "author": "HelipengTony",
-  "module": "dist/nexment.esm.js",
+  "author": "ttttonyhe",
+  "version": "0.0.673",
+  "description": "A feature-rich serverless comment library for React",
+  "repository": "git@github.com:ttttonyhe/nexment.git",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "tsx ./scripts/dev.ts",
+    "build": "tsx ./scripts/build.ts",
+    "lint": "eslint --fix --ext .ts,.tsx src && prettier src --write --log-level silent"
+  },
   "dependencies": {
     "email-validator": "^2.0.4",
     "github-markdown-css": "^5.2.0",
     "insert-text-at-cursor": "^0.3.0",
     "js-md5": "^0.7.3",
-    "leancloud-storage": "^4.14.0",
-    "lib": "^5.0.1",
-    "markdown-it": "^13.0.1",
-    "qs": "^6.11.1",
+    "leancloud-storage": "^4.15.0",
+    "qs": "^6.11.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-content-loader": "^6.2.1",
     "react-floater": "^0.7.6",
     "react-ridge-translations": "^1.0.4",
-    "react-textarea-autosize": "^8.4.1",
+    "react-textarea-autosize": "^8.5.2",
     "react-tiny-popover": "^7.2.4",
     "reactjs-localstorage": "^1.0.1",
-    "rodal": "^2.0.1",
+    "rodal": "^2.1.0",
     "showdown": "^2.1.0",
     "string-similarity": "^4.0.4",
-    "swr": "^2.1.3",
+    "swr": "^2.2.0",
     "timeago.js": "^4.0.2",
     "unfetch": "^5.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@types/insert-text-at-cursor": "^0.3.0",
     "@types/js-md5": "^0.7.0",
     "@types/qs": "^6.9.7",
-    "@types/react": "^18.0.34",
-    "@types/react-dom": "^18.0.11",
-    "@types/showdown": "^2.0.0",
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "@types/showdown": "^2.0.1",
     "@types/string-similarity": "^4.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rollup-plugin-sass": "^1.12.19",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.5.0",
-    "typescript": "^5.0.4"
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "esbuild": "^0.18.17",
+    "esbuild-plugin-d.ts": "^1.1.0",
+    "esbuild-sass-plugin": "^2.10.0",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-react": "^7.33.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
   }
 }

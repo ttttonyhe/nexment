@@ -1,1 +1,1 @@
-declare module 'reactjs-localstorage';
+declare module "reactjs-localstorage"
