@@ -124,6 +124,9 @@ devDependencies:
   prettier:
     specifier: ^3.0.0
     version: 3.0.0
+  tslib:
+    specifier: ^2.6.1
+    version: 2.6.1
   tsx:
     specifier: ^3.12.7
     version: 3.12.7
@@ -4201,6 +4204,10 @@ packages:
       typescript: 5.1.6
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: true
+
+  /tslib@2.6.1:
+    resolution: {integrity: sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==}
     dev: true
 
   /tsup@5.12.9(ts-node@10.9.1)(typescript@5.1.6):
