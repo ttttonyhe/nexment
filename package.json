@@ -1,7 +1,7 @@
 {
   "name": "nexment",
   "author": "ttttonyhe",
-  "version": "0.0.674",
+  "version": "0.0.675",
   "description": "A feature-rich serverless comment library for React",
   "repository": "git@github.com:ttttonyhe/nexment.git",
   "license": "MIT",

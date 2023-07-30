@@ -13,7 +13,7 @@ $greyerGrey: #949494;
 	align-items: center;
 	justify-content: center;
 	display: flex;
-	right: 9px;
+	right: -1px;
 	top: 24px;
 	padding: 0.5px 0;
 	position: absolute;
@@ -114,6 +114,7 @@ $borderColor: #e8e8e8;
 
 .nexment-comments-div {
 	display: flex;
+	column-gap: 10px;
 	padding: 10px 15px 10px 10px;
 	margin-bottom: 10px;
 	border-radius: 4px;
@@ -186,11 +187,11 @@ $borderColor: #e8e8e8;
 		display: flex;
 		align-items: flex-start;
 		position: relative;
+		flex-shrink: 0;
 
 		img {
 			width: 36px;
 			height: 36px;
-			margin-right: 10px;
 			border-radius: 50%;
 			box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 			border: 1px solid #e5e5e5;
@@ -266,6 +267,7 @@ $borderColor: #e8e8e8;
 			border: 1px solid #e5e5e5;
 			border-radius: 5px;
 			padding: 10px;
+			word-break: break-all;
 
 			p {
 				margin: 0px;
