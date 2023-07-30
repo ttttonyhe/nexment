@@ -1,5 +1,5 @@
 import React from "react"
-import "../../assets/style/container.scss"
+import "../../styles/container.scss"
 import getIdentifier from "../../lib/utils/getIdentifier"
 import CommentsList from "../../components/sections/CommentsList"
 import { NexmentConfig, Provider } from "../../lib/utils/configContext"

@@ -1,9 +1,9 @@
 import React from "react"
-import "../../assets/style/reply.scss"
-import { commentsItemType } from "lib/database/getCommentsList"
+import "../../styles/reply.scss"
+import { commentsItemType } from "../../lib/database/getCommentsList"
 import CommentsArea from "../../components/sections/CommentsArea"
 import Rodal from "rodal"
-import "../../assets/style/modal.scss"
+import "../../styles/modal.scss"
 import { format } from "timeago.js"
 import md5 from "js-md5"
 import Icons from "../icons/index"
@@ -252,11 +252,13 @@ const RepliesList = (Props: {
 															{item.hasReplies ? (
 																<b className="nexment-comments-replyto">
 																	<span> · </span>
-																	{item.replyList.length}{" "}
-																	{item.replyList.length > 1
-																		? Translation.replies
-																		: Translation.reply}
-																	{Icons().down}
+																	<button>
+																		{item.replyList.length}{" "}
+																		{item.replyList.length > 1
+																			? Translation.replies
+																			: Translation.reply}
+																		{Icons().down}
+																	</button>
 																</b>
 															) : (
 																""

@@ -1,6 +1,6 @@
 import React from "react"
 import Rodal from "rodal"
-import "../../assets/style/modal.scss"
+import "../../styles/modal.scss"
 import adminLogin from "../../lib/database/adminLoging"
 import translate from "../../lib/translation/index"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"

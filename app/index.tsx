@@ -1,12 +1,12 @@
 import * as React from "react"
 import { createRoot } from "react-dom/client"
-import Nexment from "nexment"
+import Nexment from "../src/index"
 
 const App = () => {
 	const config = {
 		pageKey: "demoPage",
 		enableLinkInput: true,
-		enableReplyListModal: false,
+		enableReplyListModal: true,
 		leancloud: {
 			appId: "6Kcb9HB1iOR87HUbAvnMyUER-gzGzoHsz",
 			appKey: "zf3gAf9CGIHLL8Crctb0sJLV",
@@ -17,6 +17,7 @@ const App = () => {
 			email: "he@holptech.com",
 		},
 	}
+  
 	return (
 		<div className="example-container">
 			<div className="title-div">

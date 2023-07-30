@@ -1,7 +1,7 @@
 import React from "react"
 import RepliesList from "../sections/RepliesList"
 import Rodal from "rodal"
-import "../../assets/style/modal.scss"
+import "../../styles/modal.scss"
 
 /**
  * Modal component

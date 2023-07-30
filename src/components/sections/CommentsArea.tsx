@@ -15,7 +15,7 @@ import Context, { NexmentConfig } from "../../lib/utils/configContext"
 import insertTextAtCursor from "insert-text-at-cursor"
 import converter from "../../lib/utils/showDown"
 
-import "../../assets/style/commentarea.scss"
+import "../../styles/commentarea.scss"
 
 /**
  * Nexment Comment area

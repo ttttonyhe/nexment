@@ -13,7 +13,7 @@ import translate from "../../lib/translation/index"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
 import formatLink from "../../lib/utils/linkFormatter"
 
-import "../../assets/style/commentslist.scss"
+import "../../styles/commentslist.scss"
 
 /**
  * Nexment Comments List
@@ -148,13 +148,6 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 											? "nexment-comments-div-with-replies"
 											: "")
 									}
-									onClick={() => {
-										setReplyToID(replyItem.ID)
-										setReplyToOID(replyItem.OID)
-										setReplyToName(replyItem.name)
-										setRandom(Math.random())
-										window.location.href = "#nexment-comment-area"
-									}}
 								>
 									<div className="nexment-comments-avatar">
 										<img
@@ -168,22 +161,33 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 									</div>
 									<div className="nexment-comments-title">
 										<h5>
+											{replyItem.name}
 											{replyItem.link ? (
-												<a
-													href={formatLink(replyItem.link)}
-													target="_blank"
-													rel="noreferrer"
-												>
-													{replyItem.name}
-												</a>
-											) : (
-												replyItem.name
-											)}
+												<>
+													<span> · </span>
+													<a
+														href={formatLink(replyItem.link)}
+														target="_blank"
+														rel="noreferrer"
+													>
+														{Icons().link}
+													</a>
+												</>
+											) : null}
 											<span> · </span>
 											<b>{format(replyItem.date)}</b>
-											<em className="nexment-reply-icon-reply">
-												{Icons().reply}
-											</em>
+											<button
+												className="nexment-reply-icon-reply"
+												onClick={() => {
+													setReplyToID(replyItem.ID)
+													setReplyToOID(replyItem.OID)
+													setReplyToName(replyItem.name)
+													setRandom(Math.random())
+													window.location.href = "#nexment-comment-area"
+												}}
+											>
+												{Icons().reply} Reply
+											</button>
 										</h5>
 										<div
 											className="nexment-comments-content margin-top-reply"
@@ -263,16 +267,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 								key={item.ID}
 								id={item.ID.toString()}
 							>
-								<div
-									className="nexment-comments-div"
-									onClick={() => {
-										setReplyToID(item.ID)
-										setReplyToOID(item.OID)
-										setReplyToName(item.name)
-										setRandom(Math.random())
-										window.location.href = "#nexment-comment-area"
-									}}
-								>
+								<div className="nexment-comments-div">
 									<div className="nexment-comments-avatar">
 										<img
 											src={
@@ -285,20 +280,33 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 									</div>
 									<div className="nexment-comments-title">
 										<h5>
+											{item.name}
 											{item.link ? (
-												<a
-													href={formatLink(item.link)}
-													target="_blank"
-													rel="noreferrer"
-												>
-													{item.name}
-												</a>
-											) : (
-												item.name
-											)}
+												<>
+													<span> · </span>
+													<a
+														href={formatLink(item.link)}
+														target="_blank"
+														rel="noreferrer"
+													>
+														{Icons().link}
+													</a>
+												</>
+											) : null}
 											<span> · </span>
 											<b>{format(item.date)}</b>
-											<em className="nexment-reply-icon">{Icons().reply}</em>
+											<button
+												className="nexment-reply-icon"
+												onClick={() => {
+													setReplyToID(item.ID)
+													setReplyToOID(item.OID)
+													setReplyToName(item.name)
+													setRandom(Math.random())
+													window.location.href = "#nexment-comment-area"
+												}}
+											>
+												{Icons().reply} Reply
+											</button>
 										</h5>
 										<p className="nexment-comments-des">{item.tag}</p>
 										<div
@@ -330,20 +338,6 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 																? "nexment-comments-div-with-replies"
 																: "")
 														}
-														onClick={() => {
-															if (
-																replyItem.hasReplies &&
-																NexmentConfigs.enableReplyListModal
-															) {
-																toggleModal(replyItem.OID)
-															} else {
-																setReplyToID(replyItem.ID)
-																setReplyToOID(replyItem.OID)
-																setReplyToName(replyItem.name)
-																setRandom(Math.random())
-																window.location.href = "#nexment-comment-area"
-															}
-														}}
 													>
 														<div className="nexment-comments-avatar">
 															<img
@@ -357,31 +351,58 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 														</div>
 														<div className="nexment-comments-title">
 															<h5>
-																<a
-																	href={formatLink(replyItem.link)}
-																	target="_blank"
-																	rel="noreferrer"
-																>
-																	{replyItem.name}
-																</a>
+																{replyItem.name}
+																{replyItem.link ? (
+																	<>
+																		<span> · </span>
+																		<a
+																			href={formatLink(replyItem.link)}
+																			target="_blank"
+																			rel="noreferrer"
+																		>
+																			{Icons().link}
+																		</a>
+																	</>
+																) : null}
 																<span> · </span>
 																<b>{format(replyItem.date)}</b>
 																{replyItem.hasReplies &&
 																NexmentConfigs.enableReplyListModal ? (
 																	<b className="nexment-comments-replyto">
 																		<span> · </span>
-																		{replyItem.replyList.length}{" "}
-																		{replyItem.replyList.length > 1
-																			? Translation.replies
-																			: Translation.reply}
-																		{Icons().down}
+																		<button
+																			onClick={() => toggleModal(replyItem.OID)}
+																		>
+																			{replyItem.replyList.length}{" "}
+																			{replyItem.replyList.length > 1
+																				? Translation.replies
+																				: Translation.reply}
+																			{Icons().down}
+																		</button>
 																	</b>
 																) : (
 																	""
 																)}
-																<em className="nexment-reply-icon-reply">
-																	{Icons().reply}
-																</em>
+																<button
+																	className="nexment-reply-icon-reply"
+																	onClick={() => {
+																		if (
+																			replyItem.hasReplies &&
+																			NexmentConfigs.enableReplyListModal
+																		) {
+																			toggleModal(replyItem.OID)
+																		} else {
+																			setReplyToID(replyItem.ID)
+																			setReplyToOID(replyItem.OID)
+																			setReplyToName(replyItem.name)
+																			setRandom(Math.random())
+																			window.location.href =
+																				"#nexment-comment-area"
+																		}
+																	}}
+																>
+																	{Icons().reply} Reply
+																</button>
 															</h5>
 															<div
 																className="nexment-comments-content margin-top-reply"

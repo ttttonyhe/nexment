@@ -5,19 +5,19 @@ $grey: #636466;
 $greyerGrey: #949494;
 
 .nexment-admin-badge {
-	display: inline-block;
+	text-align: center;
 	background: #d6e2ff;
 	border-radius: 50%;
-	position: absolute;
-	height: 12px;
 	width: 13px;
-	text-align: center;
-	padding: 0px 0px 1px 0px;
-	transform: translateX(-22px) translateY(23.5px);
+	height: 12px;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	right: 9px;
+	top: 24px;
+	padding: 0.5px 0;
+	position: absolute;
 	box-shadow: -1px -1px 3px 1px #fff;
-	svg {
-		transform: translateX(-0.5px) translateY(-3.8px);
-	}
 }
 
 .nexment-comments-list {
@@ -33,11 +33,14 @@ $greyerGrey: #949494;
 	margin-bottom: 15px;
 	border-left: 2px solid #eee;
 	.nexment-comments-div {
-		transition: ease-in-out 0.1s;
-		padding: 8px 15px 8px 15px;
+		padding: 8px 10px;
 		margin-bottom: 8px;
+		margin-right: 15px;
+		border-bottom: 1px solid transparent;
+		border-radius: 0;
+
 		&:hover {
-			background: #f7f8f9;
+			border-color: #e5e5e5;
 		}
 	}
 	.nexment-comments-list-item-div {
@@ -53,7 +56,6 @@ $greyerGrey: #949494;
 		}
 	}
 	.nexment-comments-list-item {
-		cursor: pointer;
 		padding-right: 15px;
 		margin: -2px 0px 9px 0px;
 		.nexment-reply-icon-reply {
@@ -72,6 +74,11 @@ $borderColor: #e8e8e8;
 	}
 	.nexment-comments-div {
 		transition: ease-in-out 0.1s;
+		cursor: pointer;
+		.nexment-comments-content {
+			border: none !important;
+			padding: 0 !important;
+		}
 		&:hover {
 			background: #f7f8f9;
 		}
@@ -98,9 +105,8 @@ $borderColor: #e8e8e8;
 		padding-right: 0px !important;
 	}
 	margin: -2px 0px 5px 0px;
-	border-bottom: 1px solid #eee;
 	transition: ease-in-out 0.1s;
-	cursor: pointer;
+
 	.nexment-reply-icon {
 		display: none;
 	}
@@ -108,66 +114,130 @@ $borderColor: #e8e8e8;
 
 .nexment-comments-div {
 	display: flex;
-	padding: 15px 15px 10px 15px;
+	padding: 10px 15px 10px 10px;
 	margin-bottom: 10px;
 	border-radius: 4px;
 	overflow: hidden;
 	transition: ease-in-out 0.1s;
+
 	&:hover {
 		.nexment-reply-icon-reply {
-			display: inline-block !important;
-			transform: translateY(2.5px);
-			margin-left: 5px;
+			cursor: pointer;
+			position: absolute;
+			border: none;
+			background: none;
+			color: $greyerGrey;
+			display: flex !important;
+			top: 2px;
+			right: 4px;
+			align-items: center;
+			column-gap: 4px;
+			padding: 0;
+			transition: color 0.1s ease-in-out;
+
+			&:hover {
+				color: $grey;
+			}
 		}
 		.nexment-reply-icon {
-			display: inline-block !important;
-			transform: translateY(2.5px);
-			margin-left: 5px;
+			cursor: pointer;
+			position: absolute;
+			border: none;
+			background: none;
+			color: $greyerGrey;
+			display: flex !important;
+			top: 2px;
+			right: 4px;
+			align-items: center;
+			column-gap: 4px;
+			padding: 0;
+			transition: color 0.1s ease-in-out;
+
+			&:hover {
+				color: $grey;
+			}
 		}
 	}
+
 	.nexment-comments-replyto {
 		span {
 			color: #949494 !important;
 		}
-		color: #0080ff !important;
-		svg {
-			display: inline-block;
-			transform: translateY(4px);
+
+		button {
+			padding: 0;
+			border: none;
+			background: none;
+			color: #0080ff !important;
+			cursor: pointer;
+
+			&:hover {
+				color: #0066cc !important;
+			}
+
+			svg {
+				display: inline-block;
+				transform: translateY(4px);
+			}
 		}
 	}
+
 	.nexment-comments-avatar {
+		display: flex;
+		align-items: flex-start;
+		position: relative;
+
 		img {
 			width: 36px;
 			height: 36px;
 			margin-right: 10px;
 			border-radius: 50%;
-			box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 0.5px;
+			box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+			border: 1px solid #e5e5e5;
 		}
 	}
+
 	.nexment-comments-title {
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		row-gap: 2px;
+
 		h5 {
-			margin: -1px 0px -1px 0px;
+			margin: -1px 0px 2px 0px;
 			font-size: 15px;
+			letter-spacing: 1;
 			color: $titleColor;
 			font-family: sans-serif;
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
-			max-width: 80%;
+			position: relative;
+
 			b {
+				letter-spacing: 0.5px;
 				color: $greyerGrey;
 				font-weight: 400;
 				font-size: 13px;
 			}
+
 			span {
-				color: $grey;
+				color: $greyerGrey;
 			}
+
 			a {
 				text-decoration: none;
-				color: inherit;
+				display: inline-block;
+				color: $grey;
+
+				svg {
+					transform: translateY(1.5px);
+					width: 13px;
+					height: 13px;
+				}
 			}
 		}
+
 		.nexment-comments-des {
 			color: $grey;
 			margin: 0px 0px 0px 0px;
@@ -177,29 +247,41 @@ $borderColor: #e8e8e8;
 			text-overflow: ellipsis;
 			overflow: hidden;
 		}
+
 		.margin-top {
 			margin-top: 0px !important;
 		}
+
 		.margin-top-reply {
-			margin-top: 2px !important;
+			margin-top: -1px !important;
+			border: none !important;
+			padding: 0 !important;
 		}
+
 		.nexment-comments-content {
 			margin: 8px 0px 0px 0px;
 			color: $black;
 			letter-spacing: 0.2px;
 			font-size: 14px;
+			border: 1px solid #e5e5e5;
+			border-radius: 5px;
+			padding: 10px;
+
 			p {
 				margin: 0px;
 				color: #333;
 			}
+
 			a {
 				color: #0180ff;
 			}
+
 			img {
 				max-width: 50%;
 				border-radius: 4px;
 				margin: 5px 0px;
 			}
+
 			pre {
 				border: 1px solid #eee;
 				background: #f5f8fa;
@@ -217,8 +299,8 @@ $borderColor: #e8e8e8;
 }
 
 .nexment-loading-index {
-	margin: 25px 0px -5px 0px;
-	padding: 0px 12px;
+	margin: 25px 0 0 0;
+	padding: 0 15px 0 10px;
 }
 
 .nexment-header {
