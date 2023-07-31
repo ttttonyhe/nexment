@@ -6,7 +6,6 @@ import { refetchData } from "../../lib/database/getCommentsList"
 import EmojiCard from "../controls/emojiCard/index"
 import VerificationModal from "../modal/verification"
 import leanCloud from "../../lib/database/initiation"
-import { reactLocalStorage } from "reactjs-localstorage"
 import TagCard from "../controls/tagCard"
 import TextareaAutosize from "react-textarea-autosize"
 import Icons from "../icons/index"
@@ -16,6 +15,33 @@ import insertTextAtCursor from "insert-text-at-cursor"
 import converter from "../../lib/utils/showDown"
 
 import "../../styles/commentarea.scss"
+
+// Get commenter info from local storage
+const getCommenterInfo = (type: string) => {
+	const commenterInfo = JSON.parse(
+		localStorage.getItem("nexment-commenterInfo") || "{}"
+	)
+	if (commenterInfo) {
+		return commenterInfo[type]
+	} else {
+		if (type === "ewr") {
+			return false
+		} else {
+			return ""
+		}
+	}
+}
+
+// Store commenter info in local storage
+const setCommenterInfo = (info: {
+	name: string
+	email: string
+	tag: string
+	link?: string
+	ewr?: boolean
+}) => {
+	localStorage.setItem("nexment-commenterInfo", JSON.stringify(info))
+}
 
 /**
  * Nexment Comment area
@@ -62,51 +88,17 @@ const CommentsArea = (Props: {
 	const primaryReplyToOID = Props.primaryReplyToOID
 	const primaryReplyToName = Props.primaryReplyToName
 
-	// Get commenter info from local storage
-	const getCommenterInfo = (type: string) => {
-		if (reactLocalStorage.getObject("nexment-commenterInfo")) {
-			return reactLocalStorage.getObject("nexment-commenterInfo")[type]
-		} else {
-			if (type === "ewr") {
-				return false
-			} else {
-				return ""
-			}
-		}
-	}
-	// Store commenter info in local storage
-	const setCommenterInfo = (info: {
-		name: string
-		email: string
-		tag: string
-		link?: string
-		ewr?: boolean
-	}) => {
-		reactLocalStorage.setObject("nexment-commenterInfo", info)
-	}
-
 	// Current comment states
 	const [commentName, setCommentName] = React.useState<string>(
-		AV.User.current()
-			? AV.User.current().attributes.username
-			: getCommenterInfo("name")
+		AV.User.current() ? AV.User.current().attributes.username : ""
 	)
 	const [commentEmail, setCommentEmail] = React.useState<string>(
-		AV.User.current()
-			? AV.User.current().attributes.email
-			: getCommenterInfo("email")
+		AV.User.current() ? AV.User.current().attributes.email : ""
 	)
-	const [commentLink, setCommentLink] = React.useState<string>(
-		getCommenterInfo("link")
-	)
-
+	const [commentLink, setCommentLink] = React.useState<string>("")
 	const [commentContent, setCommentContent] = React.useState<string>("")
-	const [commentTag, setCommentTag] = React.useState<string>(
-		getCommenterInfo("tag")
-	)
-	const [commentEwr, setCommentEwr] = React.useState<boolean>(
-		getCommenterInfo("ewr")
-	)
+	const [commentTag, setCommentTag] = React.useState<string>("")
+	const [commentEwr, setCommentEwr] = React.useState<boolean>(false)
 
 	// Resetting state
 	const [resetStatus, setResetStatus] = React.useState<boolean>(false)
@@ -116,6 +108,30 @@ const CommentsArea = (Props: {
 
 	// Markdown preview state
 	const [previewStatus, setPreviewStatus] = React.useState<boolean>(false)
+
+	React.useEffect(() => {
+		const commenterName = getCommenterInfo("name")
+		const commenterEmail = getCommenterInfo("email")
+		const commenterLink = getCommenterInfo("link")
+		const commenterTag = getCommenterInfo("tag")
+		const commenterEwr = getCommenterInfo("ewr")
+
+		if (commenterName) {
+			setCommentName(commenterName)
+		}
+		if (commenterEmail) {
+			setCommentEmail(commenterEmail)
+		}
+		if (commenterLink) {
+			setCommentLink(commenterLink)
+		}
+		if (commenterTag) {
+			setCommentTag(commenterTag)
+		}
+		if (commenterEwr) {
+			setCommentEwr(commenterEwr)
+		}
+	}, [])
 
 	/**
 	 * Listen to replyTo / random change
@@ -135,6 +151,7 @@ const CommentsArea = (Props: {
 			setModalStatus(true)
 		}
 	}
+
 	const handleEmailChange = (e: {
 		target: { value: React.SetStateAction<string> }
 	}) => {
@@ -143,16 +160,19 @@ const CommentsArea = (Props: {
 			setModalStatus(true)
 		}
 	}
+
 	const handleLinkChange = (e: {
 		target: { value: React.SetStateAction<string> }
 	}) => {
 		setCommentLink(e.target.value)
 	}
+
 	const handleContentChange = (e: {
 		target: { value: React.SetStateAction<string> }
 	}) => {
 		setCommentContent(e.target.value)
 	}
+
 	const handleTagChange = (e: {
 		target: { value: React.SetStateAction<string> }
 	}) => {

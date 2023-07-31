@@ -1,20 +1,20 @@
 {
 	"compilerOptions": {
-		"module": "esnext",
-		"lib": ["dom", "esnext"],
+		"module": "ESNext",
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
 		"importHelpers": true,
 		"declaration": true,
 		"sourceMap": true,
+		"resolveJsonModule": true,
+		"moduleResolution": "node",
+		"baseUrl": "./",
+		"jsx": "react-jsx",
+		"esModuleInterop": true,
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
-		"noFallthroughCasesInSwitch": true,
-		"resolveJsonModule": true,
-		"moduleResolution": "node",
-		"baseUrl": "./",
-		"jsx": "react",
-		"esModuleInterop": true
+		"noFallthroughCasesInSwitch": true
 	},
 	"include": ["**/*.tsx", "**/*.ts"],
 	"exclude": ["node_modules"]

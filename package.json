@@ -13,11 +13,12 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./scripts/dev.ts",
+    "dev": "vite --port 6006",
     "build": "tsx ./scripts/build.ts",
     "lint": "eslint --fix --ext .ts,.tsx src && prettier src --write --log-level silent"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.2",
     "email-validator": "^2.0.4",
     "github-markdown-css": "^5.2.0",
     "insert-text-at-cursor": "^0.3.0",
@@ -27,17 +28,15 @@
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",
-    "react-floater": "^0.7.6",
+    "react-floater": "^0.8.2",
     "react-ridge-translations": "^1.0.4",
     "react-textarea-autosize": "^8.5.2",
     "react-tiny-popover": "^7.2.4",
-    "reactjs-localstorage": "^1.0.1",
     "rodal": "^2.1.0",
     "showdown": "^2.1.0",
     "string-similarity": "^4.0.4",
     "swr": "^2.2.0",
-    "timeago.js": "^4.0.2",
-    "unfetch": "^5.0.0"
+    "timeago.js": "^4.0.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
@@ -45,22 +44,24 @@
     "@types/insert-text-at-cursor": "^0.3.0",
     "@types/js-md5": "^0.7.0",
     "@types/qs": "^6.9.7",
-    "@types/react": "^18.2.17",
+    "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "@types/showdown": "^2.0.1",
     "@types/string-similarity": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
-    "@typescript-eslint/parser": "^6.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "@vitejs/plugin-react-swc": "^3.3.2",
     "esbuild": "^0.18.17",
     "esbuild-plugin-d.ts": "^1.1.0",
     "esbuild-sass-plugin": "^2.10.0",
     "eslint": "^8.46.0",
     "eslint-config-prettier": "^8.9.0",
-    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react": "^7.33.1",
     "husky": "^8.0.3",
     "prettier": "^3.0.0",
     "tslib": "^2.6.1",
     "tsx": "^3.12.7",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7"
   }
 }

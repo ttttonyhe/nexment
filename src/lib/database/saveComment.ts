@@ -1,4 +1,3 @@
-import fetch from "unfetch"
 import Qs from "qs"
 import * as EmailValidator from "email-validator"
 import similarity from "string-similarity"
