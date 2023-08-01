@@ -6,10 +6,10 @@ import insertTextAtCursor from "insert-text-at-cursor"
 import usingSaveComment from "../../lib/database/saveComment"
 import generateCommentID from "../../lib/utils/generateCommentID"
 import { refetchData } from "../../lib/database/getCommentsList"
-import EmojiCard from "../controls/emojiCard"
+import EmojiPopover from "../controls/emoji-popover"
+import TagPopover from "../controls/tag-popover"
 import VerificationModal from "../modal/verification"
 import leanCloud from "../../lib/database/initiation"
-import TagCard from "../controls/tagCard"
 import Icon from "../icon"
 import translate from "../../lib/translation"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
@@ -47,25 +47,13 @@ const setCommenterInfo = (info: {
 
 /**
  * Nexment Comment area
- *
- * @param {({
- *   pageKey: string;
- *   replyTo: number | undefined;
- *   replyToOID: string | undefined;
- *   replyToName: string | undefined;
- *   primaryReplyTo: number | undefined;
- *   primaryReplyToOID: string | undefined;
- *   primaryReplyToName: string | undefined;
- *   random?: number;
- *   reloadFunc?: Function;
- * })} Props
- * @returns
  */
 const CommentsArea = (Props: {
 	pageKey: string
 	replyTo: number | undefined
 	replyToOID: string | undefined
 	replyToName: string | undefined
+	replyToContent: string | undefined
 	primaryReplyTo: number | undefined
 	primaryReplyToOID: string | undefined
 	primaryReplyToName: string | undefined
@@ -301,177 +289,192 @@ const CommentsArea = (Props: {
 	}
 
 	return (
-		<form
-			className="nexment-comment-area"
-			id="nexment-comment-area"
-			onSubmit={(e) => {
-				e.preventDefault()
-				sendComment()
-			}}
-		>
-			<div className="nexment-comment-area-top">
-				<div className="nexment-comment-area-name">
-					{commentEmail &&
-					commentEmail.match(
-						/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
-					) ? (
-						<div className="nexment-comment-area-name-avatar">
-							<img
-								src={`https://gravatar.loli.net/avatar/${md5(
-									commentEmail
-								)}?d=mp`}
-							/>
+		<div className="nexment-comment-area-container">
+			{Props.replyToContent &&
+			getReplyDisplay() === "nexment-replying" &&
+			!resetStatus ? (
+				<div className="nexment-comment-area-replying-to">
+					<div className="nexment-comment-area-replying-to-info">
+						<div className="nexment-comment-area-replying-to-header">
+							<Icon name="resetFill" />
+							<span>Replying to @{getReplyTo()}:</span>
 						</div>
-					) : null}
-					<div className="nexment-comment-area-name-input">
-						<input
-							placeholder={commentName ? commentName : Translation.name}
-							onChange={handleNameChange}
-							value={commentName}
-							type="text"
-							required
+						<div
+							className="nexment-comment-area-replying-to-content"
+							dangerouslySetInnerHTML={{
+								__html: converter.makeHtml(Props.replyToContent),
+							}}
 						/>
 					</div>
-				</div>
-				<input
-					placeholder={commentEmail ? commentEmail : Translation.email}
-					onChange={handleEmailChange}
-					value={commentEmail}
-					type="email"
-					required
-				/>
-				{NexmentConfigs.enableLinkInput ? (
-					<input
-						placeholder={commentLink ? commentLink : Translation.link}
-						onChange={handleLinkChange}
-						value={commentLink}
-						type="url"
-					/>
-				) : null}
-			</div>
-			<div className="nexment-comment-area-middle">
-				<TextareaAutosize
-					value={commentContent}
-					placeholder={Translation.placeHolder + "..."}
-					onChange={handleContentChange}
-					className={previewStatus ? "nexment-previewing" : ""}
-					ref={nexmentTextarea}
-				/>
-				{previewStatus ? (
 					<div
-						className="nexment-md-preview markdown-body"
-						dangerouslySetInnerHTML={{
-							__html: converter.makeHtml(
-								commentContent ? commentContent : Translation.nothing
-							),
-						}}
+						className="nexment-comment-area-replying-to-cta"
+						data-tooltip-id="nexment-tooltip"
+						data-tooltip-content={Translation.cancelReply}
+						onClick={resetReplyTo}
+					>
+						<button>
+							<Icon name="cancel" />
+						</button>
+					</div>
+				</div>
+			) : null}
+			<form
+				className="nexment-comment-area"
+				id="nexment-comment-area"
+				onSubmit={(e) => {
+					e.preventDefault()
+					sendComment()
+				}}
+			>
+				<div className="nexment-comment-area-top">
+					<div className="nexment-comment-area-name">
+						{commentEmail &&
+						commentEmail.match(
+							/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+						) ? (
+							<div className="nexment-comment-area-name-avatar">
+								<img
+									src={`https://gravatar.loli.net/avatar/${md5(
+										commentEmail
+									)}?d=mp`}
+								/>
+							</div>
+						) : null}
+						<div className="nexment-comment-area-name-input">
+							<input
+								placeholder={commentName ? commentName : Translation.name}
+								onChange={handleNameChange}
+								value={commentName}
+								type="text"
+								required
+							/>
+						</div>
+					</div>
+					<input
+						placeholder={commentEmail ? commentEmail : Translation.email}
+						onChange={handleEmailChange}
+						value={commentEmail}
+						type="email"
+						required
 					/>
-				) : (
-					""
-				)}
-			</div>
-			<div className="nexment-comment-area-bottom">
-				<div className="nexment-comment-area-toolbar">
-					{getReplyDisplay() === "nexment-replying" && (
+					{NexmentConfigs.features?.linkInput ? (
+						<input
+							placeholder={commentLink ? commentLink : Translation.link}
+							onChange={handleLinkChange}
+							value={commentLink}
+							type="url"
+						/>
+					) : null}
+				</div>
+				<div className="nexment-comment-area-middle">
+					<TextareaAutosize
+						value={commentContent}
+						placeholder={Translation.placeHolder + "..."}
+						onChange={handleContentChange}
+						className={previewStatus ? "nexment-previewing" : ""}
+						ref={nexmentTextarea}
+					/>
+					{previewStatus ? (
+						<div
+							className="nexment-md-preview markdown-body"
+							dangerouslySetInnerHTML={{
+								__html: converter.makeHtml(
+									commentContent ? commentContent : Translation.nothing
+								),
+							}}
+						/>
+					) : (
+						""
+					)}
+				</div>
+				<div className="nexment-comment-area-bottom">
+					<div className="nexment-comment-area-toolbar">
 						<button
 							type="button"
 							data-tooltip-id="nexment-tooltip"
-							data-tooltip-content={`${Translation.replyingTo} ${getReplyTo()}`}
-							onClick={resetReplyTo}
-							className={getReplyDisplay()}
+							data-tooltip-content={Translation.avatar}
 						>
-							<Icon name="resetFill" />
-							<em>{getReplyTo()}</em>
-							<b>
-								<Icon name="cancel" />
-							</b>
+							<a
+								href="https://cn.gravatar.com/support/what-is-gravatar"
+								target="_blank"
+								rel="noreferrer"
+							>
+								<Icon name="avatar" />
+							</a>
 						</button>
-					)}
-					<button
-						type="button"
-						data-tooltip-id="nexment-tooltip"
-						data-tooltip-content={Translation.avatar}
-					>
-						<a
-							href="https://cn.gravatar.com/support/what-is-gravatar"
-							target="_blank"
-							rel="noreferrer"
-						>
-							<Icon name="avatar" />
-						</a>
-					</button>
-					<EmojiCard handler={handleAddon} />
-					{NexmentConfigs.descriptionTag && (
-						<TagCard tag={commentTag} handler={handleTagChange} />
-					)}
-					{NexmentConfigs.enableReplyEmail && (
+						<EmojiPopover handler={handleAddon} />
+						{NexmentConfigs.features?.descriptionTag && (
+							<TagPopover tag={commentTag} handler={handleTagChange} />
+						)}
+						{NexmentConfigs.features?.replyEmailNotifications && (
+							<button
+								type="button"
+								data-tooltip-id="nexment-tooltip"
+								data-tooltip-content={
+									commentEwr ? Translation.unSub : Translation.sub
+								}
+								onClick={() => {
+									setCommentEwr(!commentEwr)
+								}}
+							>
+								{commentEwr ? <Icon name="email" /> : <Icon name="emailFill" />}
+							</button>
+						)}
 						<button
 							type="button"
 							data-tooltip-id="nexment-tooltip"
 							data-tooltip-content={
-								commentEwr ? Translation.unSub : Translation.sub
+								previewStatus ? Translation.stopPreview : Translation.mdPreview
 							}
 							onClick={() => {
-								setCommentEwr(!commentEwr)
+								setPreviewStatus(!previewStatus)
 							}}
 						>
-							{commentEwr ? <Icon name="email" /> : <Icon name="emailFill" />}
+							{previewStatus ? (
+								<Icon name="markdownFill" />
+							) : (
+								<Icon name="markdown" />
+							)}
 						</button>
-					)}
-					<button
-						type="button"
-						data-tooltip-id="nexment-tooltip"
-						data-tooltip-content={
-							previewStatus ? Translation.stopPreview : Translation.mdPreview
-						}
-						onClick={() => {
-							setPreviewStatus(!previewStatus)
-						}}
-					>
-						{previewStatus ? (
-							<Icon name="markdownFill" />
-						) : (
-							<Icon name="markdown" />
-						)}
-					</button>
-					{AV.User.current() ? (
-						<button
-							type="button"
-							data-tooltip-id="nexment-tooltip"
-							data-tooltip-content={Translation.adminLogout}
-							onClick={() => {
-								AV.User.logOut()
-								window.location.reload()
-							}}
-						>
-							<Icon name="logout" />
+						{AV.User.current() ? (
+							<button
+								type="button"
+								data-tooltip-id="nexment-tooltip"
+								data-tooltip-content={Translation.adminLogout}
+								onClick={() => {
+									AV.User.logOut()
+									window.location.reload()
+								}}
+							>
+								<Icon name="logout" />
+							</button>
+						) : null}
+					</div>
+					<div className="nexment-comment-area-submit">
+						<button type="submit" disabled={sendingComment}>
+							<span>{Translation.submit}</span>
+							{sendingComment ? (
+								<span className="spinner">
+									<Icon name="loader" />
+								</span>
+							) : (
+								<Icon name="arrowRight" />
+							)}
 						</button>
-					) : null}
+					</div>
 				</div>
-				<div className="nexment-comment-area-submit">
-					<button type="submit" disabled={sendingComment}>
-						<span>{Translation.submit}</span>
-						{sendingComment ? (
-							<span className="spinner">
-								<Icon name="loader" />
-							</span>
-						) : (
-							<Icon name="arrowRight" />
-						)}
-					</button>
-				</div>
-			</div>
-			{/* Modals */}
-			{modalStatus ? (
-				<VerificationModal
-					config={NexmentConfigs}
-					visibilityFunction={setModalStatus}
-				/>
-			) : (
-				""
-			)}
-			<Tooltip className="nexment-tooltip" id="nexment-tooltip" />
-		</form>
+				{/* Modals */}
+				{modalStatus ? (
+					<VerificationModal
+						config={NexmentConfigs}
+						visibilityFunction={setModalStatus}
+					/>
+				) : (
+					""
+				)}
+				<Tooltip className="nexment-tooltip" id="nexment-tooltip" />
+			</form>
+		</div>
 	)
 }
 

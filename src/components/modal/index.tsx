@@ -1,5 +1,5 @@
 import React from "react"
-import RepliesList from "../sections/RepliesList"
+import ReplyList from "../sections/ReplyList"
 import Rodal from "rodal"
 import "../../styles/modal.scss"
 
@@ -53,7 +53,7 @@ const Modal = (Props: {
 			duration={200}
 			className="nexment-modal-replies"
 		>
-			<RepliesList
+			<ReplyList
 				dataContent={Props.content}
 				replyTo={Props.replyTo}
 				pageKey={Props.pageKey ? Props.pageKey : ""}

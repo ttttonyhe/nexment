@@ -4,7 +4,7 @@ import smoothScroll from "smoothscroll-polyfill"
 import { useState, useContext, useEffect } from "react"
 import useComments, { CommentItem } from "../../lib/database/getCommentsList"
 import Modal from "../modal"
-import CommentsArea from "../../components/sections/CommentsArea"
+import CommentsArea from "./CommentArea"
 import Icon from "../icon"
 import converter from "../../lib/utils/showDown"
 import ContentLoader from "react-content-loader"
@@ -46,6 +46,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 	const [replyToID, setReplyToID] = useState<number>()
 	const [replyToOID, setReplyToOID] = useState<string>()
 	const [replyToName, setReplyToName] = useState<string>()
+	const [replyToContent, setReplyToContent] = useState<string>()
 	const [commentsAreaRandom, setRandom] = useState<number>(Math.random())
 
 	/**
@@ -194,6 +195,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 												setReplyToID(replyItem.ID)
 												setReplyToOID(replyItem.OID)
 												setReplyToName(replyItem.name)
+												setReplyToContent(replyItem.content)
 												setRandom(Math.random())
 												scrollToElementById("nexment-comment-area")
 											}}
@@ -224,6 +226,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 				replyTo={replyToID}
 				replyToOID={replyToOID}
 				replyToName={replyToName}
+				replyToContent={replyToContent}
 				primaryReplyTo={undefined}
 				primaryReplyToOID={undefined}
 				primaryReplyToName={undefined}
@@ -311,6 +314,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 												setReplyToID(item.ID)
 												setReplyToOID(item.OID)
 												setReplyToName(item.name)
+												setReplyToContent(item.content)
 												setRandom(Math.random())
 												scrollToElementById("nexment-comment-area")
 											}}
@@ -377,7 +381,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 															<span> · </span>
 															<b>{format(replyItem.date)}</b>
 															{replyItem.hasReplies &&
-															NexmentConfigs.enableReplyListModal ? (
+															NexmentConfigs.features?.replyListModal ? (
 																<b className="nexment-comments-replyto">
 																	<span> · </span>
 																	<button
@@ -398,13 +402,14 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 																onClick={() => {
 																	if (
 																		replyItem.hasReplies &&
-																		NexmentConfigs.enableReplyListModal
+																		NexmentConfigs.features?.replyListModal
 																	) {
 																		toggleModal(replyItem.OID)
 																	} else {
 																		setReplyToID(replyItem.ID)
 																		setReplyToOID(replyItem.OID)
 																		setReplyToName(replyItem.name)
+																		setReplyToContent(replyItem.content)
 																		setRandom(Math.random())
 																		scrollToElementById("nexment-comment-area")
 																	}
@@ -421,7 +426,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 														/>
 													</div>
 												</div>
-												{!NexmentConfigs.enableReplyListModal ? (
+												{!NexmentConfigs.features?.replyListModal ? (
 													<div>
 														{replyItem.hasReplies
 															? innerReplyList(replyItem)
@@ -431,7 +436,7 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 													""
 												)}
 											</li>
-											{NexmentConfigs.enableReplyListModal ? (
+											{NexmentConfigs.features?.replyListModal ? (
 												<div>
 													{replyItem.hasReplies &&
 													modalVisibility[replyItem.OID] ? (

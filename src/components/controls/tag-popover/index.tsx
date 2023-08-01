@@ -18,23 +18,30 @@ const TagCard = (Props: { tag: string; handler: any }) => {
 	const tagContent = () => {
 		return (
 			<div className="nexment-popover">
-				<div className="nexment-popover-text">
+				<div className="nexment-popover-title">
 					<b>{Translation.desTag}</b>
 				</div>
-				<p>{Translation.desTagDes}</p>
-				<div className="nexment-popover-input">
-					<input
-						placeholder={Props.tag ? Props.tag : Translation.desTag}
-						onChange={Props.handler}
-					/>
-					<button
-						className={getBestLanguage() === "zh" ? "nexment-tag-button" : ""}
-						onClick={() => {
-							setTagPopoverStatus(!tagPopoverStatus)
-						}}
-					>
-						{Translation.confirm}
-					</button>
+				<div className="nexment-popover-content">
+					<p>
+						{Translation.desTagDes} ({(Props.tag || "").length} / 50)
+					</p>
+					<div className="nexment-popover-input">
+						<input
+							placeholder={Props.tag ? Props.tag : Translation.desTag}
+							onChange={Props.handler}
+							value={Props.tag}
+							type="text"
+							maxLength={50}
+						/>
+						<button
+							className={getBestLanguage() === "zh" ? "nexment-tag-button" : ""}
+							onClick={() => {
+								setTagPopoverStatus(!tagPopoverStatus)
+							}}
+						>
+							{Translation.confirm}
+						</button>
+					</div>
 				</div>
 			</div>
 		)

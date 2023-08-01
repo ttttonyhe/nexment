@@ -1,6 +1,6 @@
 import "../../styles/container.scss"
 import getIdentifier from "../../lib/utils/getIdentifier"
-import CommentsList from "../../components/sections/CommentsList"
+import CommentList from "../sections/CommentList"
 import { NexmentConfig, Provider } from "../../lib/utils/configContext"
 
 /**
@@ -20,7 +20,7 @@ const NexmentContainer = (Props: { config: NexmentConfig }) => {
 	const nexmentContainer = (
 		<div className="nexment-container">
 			<Provider value={Props.config}>
-				<CommentsList type="primary" pageKey={pageKey} />
+				<CommentList type="primary" pageKey={pageKey} />
 			</Provider>
 		</div>
 	)

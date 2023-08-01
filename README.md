@@ -73,9 +73,12 @@ Setup nexment configuration:
 ```js
 const config = {
   pageKey: 'xxx' | undefined;
-  enableLinkInput: true | false | undefined,
-  enableReplyListModal: true | false | undefined,
-  descriptionTag: true | false | undefined,
+  features: {
+		linkInput: true | false | undefined,
+		replyListModal: true | false | undefined,
+		replyEmailNotifications: true | false | undefined,
+		descriptionTag: true | false | undefined,
+	} | undefined,
   leancloud: {
     appId: 'xxx',
     appKey: 'xxx',
@@ -112,9 +115,12 @@ import Nexment from "nexment";
 const Nexment = () => {
   const config = {
     pageKey: "xxx",
-    enableLinkInput: true,
-    enableReplyListModal: false,
-    descriptionTag: false,
+    features: {
+			linkInput: true,
+			replyListModal: true,
+			replyEmailNotifications: true,
+			descriptionTag: true,
+		},
     leancloud: {
       appId: "xxx",
       appKey: "xxx",

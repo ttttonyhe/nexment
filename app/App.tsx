@@ -3,9 +3,12 @@ import Nexment from "../src"
 const App = () => {
 	const config = {
 		pageKey: "demoPage",
-		enableLinkInput: true,
-		enableReplyListModal: true,
-		enableReplyEmail: true,
+		features: {
+			linkInput: true,
+			replyListModal: true,
+			replyEmailNotifications: true,
+			descriptionTag: true,
+		},
 		leancloud: {
 			appId: "6Kcb9HB1iOR87HUbAvnMyUER-gzGzoHsz",
 			appKey: "zf3gAf9CGIHLL8Crctb0sJLV",

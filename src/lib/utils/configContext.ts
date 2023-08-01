@@ -3,10 +3,12 @@ import React from "react"
 // Nexment Configuration Interface
 export interface NexmentConfig {
 	pageKey?: string
-	enableLinkInput?: boolean
-	enableReplyListModal?: boolean
-	enableReplyEmail?: boolean
-	descriptionTag?: boolean
+	features?: {
+		linkInput?: boolean
+		replyListModal?: boolean
+		replyEmailNotifications?: boolean
+		descriptionTag?: boolean
+	}
 	leancloud: {
 		appId: string
 		appKey: string

@@ -1,7 +1,7 @@
 import React from "react"
 import "../../styles/reply.scss"
 import { CommentItem } from "../../lib/database/getCommentsList"
-import CommentsArea from "../../components/sections/CommentsArea"
+import CommentsArea from "./CommentArea"
 import Rodal from "rodal"
 import "../../styles/modal.scss"
 import { format } from "timeago.js"
@@ -15,18 +15,6 @@ import formatLink from "../../lib/utils/linkFormatter"
 
 /**
  * Nexment Reply list
- *
- * @param {{
- *   dataContent: CommentItem[];
- *   replyTo?: string;
- *   pageKey: string;
- *   replyToID?: number;
- *   replyToOID?: string;
- *   replyToName?: string;
- *   visibilityFunction?: Function;
- *   replyItem?: any;
- * }} Props
- * @returns
  */
 const RepliesList = (Props: {
 	dataContent: CommentItem[]
@@ -62,6 +50,7 @@ const RepliesList = (Props: {
 	const [replyToName, setReplyToName] = React.useState<string>(
 		Props.replyToName ? Props.replyToName : ""
 	)
+	const [replyToContent, setReplyToContent] = React.useState<string>("")
 	const [commentsAreaRandom, setRandom] = React.useState<number>(Math.random())
 
 	/**
@@ -120,6 +109,7 @@ const RepliesList = (Props: {
 					replyTo={replyToID}
 					replyToOID={replyToOID}
 					replyToName={replyToName}
+					replyToContent={replyToContent}
 					primaryReplyTo={Props.replyToID}
 					primaryReplyToOID={Props.replyToOID}
 					primaryReplyToName={Props.replyToName}
@@ -137,6 +127,7 @@ const RepliesList = (Props: {
 								setReplyToID(Props.replyItem.ID)
 								setReplyToOID(Props.replyItem.OID)
 								setReplyToName(Props.replyItem.name)
+								setReplyToContent("")
 								setRandom(Math.random())
 								window.location.href = "#nexment-comment-area"
 							}}
@@ -229,6 +220,7 @@ const RepliesList = (Props: {
 															setReplyToID(item.ID)
 															setReplyToOID(item.OID)
 															setReplyToName(item.name)
+															setReplyToContent(item.content)
 															setRandom(Math.random())
 															window.location.href = "#nexment-comment-area"
 														}

@@ -73,9 +73,9 @@ const translate = createTranslations<TranslationLanguages>()(
 				zh: "键入一些内容吧",
 				en: "Say something",
 			},
-			replyingTo: {
-				zh: "回复对象:",
-				en: "Replying to:",
+			cancelReply: {
+				zh: "取消回复",
+				en: "Cancel",
 			},
 			desTag: {
 				zh: "描述标签",
@@ -123,7 +123,7 @@ const translate = createTranslations<TranslationLanguages>()(
 			},
 			desTagDes: {
 				zh: "使用描述标签让观众了解你的专业、知识和身份背景",
-				en: "Add a description tag to help others to know about you",
+				en: "Add a description tag to help others know about you.",
 			},
 			confirm: {
 				zh: "确认",
