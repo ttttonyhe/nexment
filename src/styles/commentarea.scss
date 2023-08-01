@@ -220,6 +220,8 @@ $borderColor: #e8e8e8;
 		display: flex;
 
 		.nexment-comment-area-toolbar {
+			display: flex;
+			align-items: center;
 			flex: 2;
 			padding-left: 8px;
 			white-space: nowrap;
