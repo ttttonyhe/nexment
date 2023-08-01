@@ -1,14 +1,14 @@
 import React from "react"
 import "../../styles/reply.scss"
-import { commentsItemType } from "../../lib/database/getCommentsList"
+import { CommentItem } from "../../lib/database/getCommentsList"
 import CommentsArea from "../../components/sections/CommentsArea"
 import Rodal from "rodal"
 import "../../styles/modal.scss"
 import { format } from "timeago.js"
 import md5 from "js-md5"
-import Icons from "../icons/index"
+import Icon from "../icon"
 import ContentLoader from "react-content-loader"
-import translate from "../../lib/translation/index"
+import translate from "../../lib/translation"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
 import converter from "../../lib/utils/showDown"
 import formatLink from "../../lib/utils/linkFormatter"
@@ -17,7 +17,7 @@ import formatLink from "../../lib/utils/linkFormatter"
  * Nexment Reply list
  *
  * @param {{
- *   dataContent: commentsItemType[];
+ *   dataContent: CommentItem[];
  *   replyTo?: string;
  *   pageKey: string;
  *   replyToID?: number;
@@ -29,7 +29,7 @@ import formatLink from "../../lib/utils/linkFormatter"
  * @returns
  */
 const RepliesList = (Props: {
-	dataContent: commentsItemType[]
+	dataContent: CommentItem[]
 	replyTo?: string
 	pageKey: string
 	replyToID?: number
@@ -98,7 +98,11 @@ const RepliesList = (Props: {
 			name === NexmentConfigs.admin.name &&
 			email === NexmentConfigs.admin.email
 		) {
-			return <div className="nexment-admin-badge">{Icons().admin}</div>
+			return (
+				<div className="nexment-admin-badge">
+					<Icon name="admin" />
+				</div>
+			)
 		} else {
 			return ""
 		}
@@ -158,7 +162,9 @@ const RepliesList = (Props: {
 									</a>
 									<span> · </span>
 									<b>{format(Props.replyItem.date)}</b>
-									<em className="nexment-reply-icon">{Icons().reply}</em>
+									<em className="nexment-reply-icon">
+										<Icon name="reply" />
+									</em>
 								</h5>
 								<p className="nexment-comments-des">{Props.replyItem.tag}</p>
 								<div
@@ -257,14 +263,14 @@ const RepliesList = (Props: {
 																		{item.replyList.length > 1
 																			? Translation.replies
 																			: Translation.reply}
-																		{Icons().down}
+																		<Icon name="down" />
 																	</button>
 																</b>
 															) : (
 																""
 															)}
 															<em className="nexment-reply-icon">
-																{Icons().reply}
+																<Icon name="reply" />
 															</em>
 														</h5>
 														<p className="nexment-comments-des">{item.tag}</p>
@@ -314,7 +320,9 @@ const RepliesList = (Props: {
 									))
 								) : (
 									<div className="nexment-empty">
-										<div>{Icons().comments}</div>
+										<div>
+											<Icon name="comments" />
+										</div>
 										<p>{Translation.noComments}</p>
 									</div>
 								)}

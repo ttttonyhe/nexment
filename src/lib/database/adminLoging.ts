@@ -1,4 +1,4 @@
-import { NexmentConfig } from "lib/utils/configContext"
+import { NexmentConfig } from "../utils/configContext"
 import leanCloud from "./initiation"
 
 /**

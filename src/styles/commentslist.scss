@@ -379,3 +379,23 @@ $borderColor: #e8e8e8;
 		margin-left: 10px !important;
 	}
 }
+
+@keyframes flash {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+		background: #f1f2f3;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.nexment-flash {
+	.nexment-comments-div {
+		animation: forwards 2s ease-in-out flash;
+		border-radius: 5px;
+	}
+}

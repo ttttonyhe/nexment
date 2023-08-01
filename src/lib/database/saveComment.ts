@@ -1,11 +1,10 @@
-import Qs from "qs"
 import * as EmailValidator from "email-validator"
 import similarity from "string-similarity"
 import leanCloud from "./initiation"
 import converter from "../utils/showDown"
 import { NexmentConfig } from "../utils/configContext"
 
-interface commentType {
+interface NewCommentItem {
 	identifier: string
 	ID: number
 	name: string
@@ -25,31 +24,49 @@ interface commentType {
  * @param {string} url
  * @param {string} content
  */
-const sendEmail = async (email: string, url: string, content: string) => {
-	const opts = {
-		method: "POST", //请求方法
+const sendEmail = async (
+	fromName: string,
+	toEmail: string,
+	content: string,
+	url: string
+) => {
+	await fetch("https://nexment-mailer.lune.one", {
+		method: "POST",
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
 		},
-	}
-	const qeuryParams = Qs.stringify({
-		toEmail: email,
-		toContent: content,
-		atUrl: url,
+		body: JSON.stringify({
+			fromName,
+			toEmail,
+			content,
+			url,
+		}),
 	})
-	await fetch("https://node.ouorz.com/send/mail?" + qeuryParams, opts)
+}
+
+/**
+ * Make sure the link is valid
+ *
+ * @param {string} link
+ */
+const cleanLink = (link: string) => {
+	const finalLink = link.replace(/\s*/g, "")
+	if (finalLink.startsWith("http://") || finalLink.startsWith("https://")) {
+		return link
+	} else {
+		return "https://" + finalLink
+	}
 }
 
 /**
  * Submit comment to LeanCloud
  *
- * @param {commentType} info
+ * @param {NewCommentItem} info
  * @param {NexmentConfig} config
- * @returns {Promise<{ status: number; savedComment?: any }>}
  */
 const useSavingComment = async (
-	info: commentType,
+	info: NewCommentItem,
 	config: NexmentConfig
 ): Promise<{ status: number; savedComment?: any }> => {
 	// initialize leancloud storage
@@ -142,9 +159,10 @@ const useSavingComment = async (
 				})
 			if (replyToEmailStatus[0]) {
 				sendEmail(
+					info.name,
 					replyToEmailStatus[1],
-					window.location.href,
-					converter.makeHtml("From " + info.name + " : " + info.content)
+					converter.makeHtml(info.content),
+					window.location.href
 				)
 			}
 
@@ -168,7 +186,7 @@ const useSavingComment = async (
 		}
 
 		if (info.link) {
-			commentsStorage.set("link", info.link.replace(/\s*/g, ""))
+			commentsStorage.set("link", cleanLink(info.link))
 		}
 
 		// Save the comment

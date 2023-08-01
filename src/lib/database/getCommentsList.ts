@@ -1,9 +1,9 @@
 import leanCloud from "./initiation"
 import { Queriable } from "leancloud-storage"
-import { NexmentConfig } from "lib/utils/configContext"
+import { NexmentConfig } from "../utils/configContext"
 import useSWR, { mutate } from "swr"
 
-export interface commentsItemType {
+export interface CommentItem {
 	OID: string
 	ID: number
 	identifier: string
@@ -12,10 +12,12 @@ export interface commentsItemType {
 	date: Date
 	email: string
 	tag: string
-	replyList: commentsItemType[]
+	replyList: CommentItem[]
 	hasReplies: boolean
 	link: string
 }
+
+type CommentReplyItem = Omit<CommentItem, "replyList">
 
 /**
  * Refetch data using SWR
@@ -32,17 +34,12 @@ export const refetchData = async (pageKey: string) => {
  *
  * @param {string} pageKey
  * @param {NexmentConfig} config
- * @returns {({
- *   commentsData: commentsItemType[] | undefined;
- *   isLoading: boolean;
- *   isError: string;
- * })}
  */
 const useComments = (
 	pageKey: string,
 	config: NexmentConfig
 ): {
-	commentsData: commentsItemType[] | undefined
+	commentsData: CommentItem[] | undefined
 	isLoading: boolean
 	isError: string
 } => {
@@ -55,34 +52,35 @@ const useComments = (
 	 *  Fetch comments data from the cloud
 	 *
 	 * @param {string | number} queryKey or replyID
-	 * @returns {Promise<commentsItemType[]>}
+	 * @returns {Promise<CommentItem[]>}
 	 */
-	const ListGet = async (
-		queryKey: string | number
-	): Promise<commentsItemType[]> => {
-		// Maximum reply display depth 2
+	const ListGet = async (queryKey: string | number): Promise<CommentItem[]> => {
 		const query = new AV.Query("nexment_comments")
-		let combineData: commentsItemType[] = []
-		let repliesData: any[] = []
-
-		// querykey is of type string, querying identifier
 		query.equalTo("identifier", queryKey)
 		query.descending("createdAt")
 
+		let commentItems: CommentItem[] = []
+		let commentItemReplyItems: {
+			[commentItemId: string]: CommentReplyItem[]
+		} = {}
+
 		return await query.find().then(async (items: Queriable[]) => {
-			// Store all reply data
+			// Iterate through all comments to determine the replies of each comment
 			items.map(async (item) => {
 				if (item.get("reply") !== undefined) {
-					if (repliesData[item.get("reply").toString()] === undefined) {
-						repliesData[item.get("reply").toString()] = []
+					const replyToCommentId = item.get("reply").toString()
+
+					if (commentItemReplyItems[replyToCommentId] === undefined) {
+						commentItemReplyItems[replyToCommentId] = []
 					}
-					repliesData[item.get("reply").toString()].push({
+
+					commentItemReplyItems[replyToCommentId].push({
 						OID: item.get("objectId"),
 						ID: item.get("ID"),
 						identifier: item.get("identifier"),
 						name: item.get("name"),
 						content: item.get("content"),
-						date: item.createdAt,
+						date: item.createdAt || new Date(),
 						email: item.get("email"),
 						tag: item.get("tag"),
 						link: item.get("link"),
@@ -90,49 +88,62 @@ const useComments = (
 					})
 				}
 			})
-			// Construct list structure
+
+			// Construct the comment list structure
 			items.map(async (item) => {
 				if (
 					(item.get("reply") === undefined && typeof queryKey === "string") ||
 					typeof queryKey === "number"
 				) {
-					// Get reply list recursively
-					const repliesRecursion = (replyItemData: any[]) => {
-						const data = replyItemData || []
-						data.map((item) => {
+					// Populate reply comments
+					const populateReplyList = (
+						replyItems?: CommentReplyItem[]
+					): CommentItem[] => {
+						const populatedReplyItems: CommentReplyItem[] = replyItems || []
+
+						populatedReplyItems.map((item) => {
 							if (item.hasReplies) {
-								item["replyList"] = repliesRecursion(
-									repliesData[item.ID.toString()]
-								)
+								Object.assign(item, {
+									replyList: populateReplyList(
+										commentItemReplyItems[item.ID.toString()]
+									),
+								})
 							}
 						})
-						return data.reverse()
+
+						return (populatedReplyItems as CommentItem[]).reverse()
 					}
-					// Get all corresponding replies of current comment
-					let replyItemData: any[] = []
+
+					// Form a list of replies for current comment
+					let replyItemsList: CommentItem[] = []
 					if (item.get("hasReplies")) {
-						replyItemData = repliesData[item.get("ID").toString()]
-						replyItemData = repliesRecursion(replyItemData)
+						replyItemsList = populateReplyList(
+							commentItemReplyItems[item.get("ID").toString()]
+						)
 					}
-					const itemData = {
+
+					const itemData: CommentItem = {
 						OID: item.get("objectId"),
 						ID: item.get("ID"),
 						identifier: item.get("identifier"),
 						name: item.get("name"),
 						content: item.get("content"),
 						date: item.createdAt || new Date(),
-						replyList: replyItemData,
+						replyList: replyItemsList,
 						email: item.get("email"),
 						tag: item.get("tag"),
 						link: item.get("link"),
 						hasReplies: item.get("hasReplies"),
 					}
-					combineData.push(itemData)
+
+					commentItems.push(itemData)
 				}
 			})
-			return combineData
+
+			return commentItems
 		})
 	}
+
 	const { data, error } = useSWR(pageKey, ListGet)
 	return {
 		commentsData: data,

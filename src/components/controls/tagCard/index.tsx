@@ -1,7 +1,7 @@
 import React from "react"
 import { Popover } from "react-tiny-popover"
-import Icons from "../../icons/index"
-import translate, { getBestLanguage } from "../../../lib/translation/index"
+import Icon from "../../icon"
+import translate, { getBestLanguage } from "../../../lib/translation"
 
 const TagCard = (Props: { tag: string; handler: any }) => {
 	// Translation
@@ -48,8 +48,13 @@ const TagCard = (Props: { tag: string; handler: any }) => {
 				setTagPopoverStatus(!tagPopoverStatus)
 			}}
 		>
-			<button onClick={() => setTagPopoverStatus(!tagPopoverStatus)}>
-				{Props.tag ? Icons().tagFill : Icons().tag}
+			<button
+				type="button"
+				data-tooltip-id="nexment-tooltip"
+				data-tooltip-content={Translation.desTag}
+				onClick={() => setTagPopoverStatus(!tagPopoverStatus)}
+			>
+				{Props.tag ? <Icon name="tagFill" /> : <Icon name="tag" />}
 			</button>
 		</Popover>
 	)

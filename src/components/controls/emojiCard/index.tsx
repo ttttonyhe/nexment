@@ -1,7 +1,7 @@
 import React from "react"
 import { Popover } from "react-tiny-popover"
 import emojis from "./emoji"
-import Icons from "../../icons/index"
+import Icon from "../../icon"
 
 /**
  * Nexment Emoji Card
@@ -63,7 +63,14 @@ const EmojiCard = (Props: { handler: any }) => {
 				toggleEmojiCard()
 			}}
 		>
-			<button onClick={() => toggleEmojiCard()}>{Icons().emoji}</button>
+			<button
+				type="button"
+				data-tooltip-id="nexment-tooltip"
+				data-tooltip-content="Emoji"
+				onClick={() => toggleEmojiCard()}
+			>
+				<Icon name="emoji" />
+			</button>
 		</Popover>
 	)
 }

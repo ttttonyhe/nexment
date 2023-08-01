@@ -123,6 +123,43 @@ $borderColor: #e8e8e8;
 	.nexment-comment-area-top {
 		display: flex;
 		border-radius: 4px 4px 0px 0px;
+
+		.nexment-comment-area-name {
+			display: flex;
+			align-items: center;
+			flex: 1;
+			width: 100%;
+			border-radius: 5px 0px 0px 0px;
+			border-right: 1px solid $borderColor;
+			border-bottom: 1px solid $borderColor;
+
+			.nexment-comment-area-name-avatar {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-right: -5px;
+				margin-left: 12px;
+
+				img {
+					flex-shrink: 0;
+					height: 16px;
+					width: 16px;
+					border-radius: 50%;
+					border: 1px solid $borderColor;
+				}
+			}
+
+			.nexment-comment-area-name-input {
+				margin-left: 12px;
+				input {
+					padding-left: 0px;
+					box-sizing: border-box;
+					border-radius: 5px 0px 0px 0px !important;
+					border-bottom: none !important;
+				}
+			}
+		}
+
 		input {
 			flex: 1;
 			width: 100%;
@@ -135,14 +172,13 @@ $borderColor: #e8e8e8;
 				outline: none;
 			}
 			&:nth-child(1) {
-				border-right: 1px solid $borderColor;
-				border-radius: 4px 0px 0px 0px;
+				border-radius: 5px 0px 0px 0px;
 			}
 			border-right: 1px solid $borderColor;
 			border-bottom: 1px solid $borderColor;
 			&:last-child {
 				border-right: none;
-				border-radius: 0px 4px 0px 0px;
+				border-radius: 0px 5px 0px 0px;
 			}
 		}
 	}
@@ -183,9 +219,9 @@ $borderColor: #e8e8e8;
 	.nexment-comment-area-bottom {
 		display: flex;
 
-		div:nth-child(1) {
+		.nexment-comment-area-toolbar {
 			flex: 2;
-			padding-left: 10px;
+			padding-left: 8px;
 			white-space: nowrap;
 
 			b {
@@ -194,14 +230,16 @@ $borderColor: #e8e8e8;
 
 			.nexment-replying {
 				background: #f1f2f3;
-				border-radius: 5px;
+				border-radius: 3px 3px 3px 5px;
+				border: 1px solid $borderColor;
 				padding: 4px 5px 0px 4px;
-				transform: translateY(-1.5px);
 				margin-right: 10px;
-				margin-left: 5px;
+				transform: translateY(-1.5px);
+
 				svg {
 					height: 16px;
 				}
+
 				em {
 					font-style: normal;
 					color: #8491a6;
@@ -210,6 +248,7 @@ $borderColor: #e8e8e8;
 					transform: translateY(-3.3px);
 					margin-left: 2px;
 				}
+
 				&:hover {
 					b {
 						display: inline-block;
@@ -234,7 +273,7 @@ $borderColor: #e8e8e8;
 			}
 		}
 
-		div:nth-child(2) {
+		.nexment-comment-area-submit {
 			flex: 1;
 
 			button {
@@ -249,6 +288,32 @@ $borderColor: #e8e8e8;
 				margin-top: -1px;
 				margin-right: -1px;
 				padding: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				column-gap: 2px;
+				transition: all 0.1s ease-in-out;
+
+				svg {
+					width: 18px;
+					height: 18px;
+				}
+
+				@keyframes spin {
+					0% {
+						transform: rotate(0deg);
+					}
+					100% {
+						transform: rotate(360deg);
+					}
+				}
+
+				.spinner {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					animation: spin 0.75s linear infinite;
+				}
 
 				&:focus {
 					outline: none;
@@ -256,6 +321,7 @@ $borderColor: #e8e8e8;
 
 				&:hover {
 					background: #359aff;
+					column-gap: 4px;
 				}
 			}
 		}
@@ -1309,3 +1375,8 @@ $borderColor: #e8e8e8;
 }
 
 /* github markdown css */
+
+.nexment-tooltip {
+	padding: 4px 8px !important;
+	font-size: 12px !important;
+}

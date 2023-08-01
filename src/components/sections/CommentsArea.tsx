@@ -1,18 +1,20 @@
 import React from "react"
-import Floater from "react-floater"
+import md5 from "js-md5"
+import { Tooltip } from "react-tooltip"
+import TextareaAutosize from "react-textarea-autosize"
+import insertTextAtCursor from "insert-text-at-cursor"
 import usingSaveComment from "../../lib/database/saveComment"
 import generateCommentID from "../../lib/utils/generateCommentID"
 import { refetchData } from "../../lib/database/getCommentsList"
-import EmojiCard from "../controls/emojiCard/index"
+import EmojiCard from "../controls/emojiCard"
 import VerificationModal from "../modal/verification"
 import leanCloud from "../../lib/database/initiation"
 import TagCard from "../controls/tagCard"
-import TextareaAutosize from "react-textarea-autosize"
-import Icons from "../icons/index"
-import translate from "../../lib/translation/index"
+import Icon from "../icon"
+import translate from "../../lib/translation"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
-import insertTextAtCursor from "insert-text-at-cursor"
 import converter from "../../lib/utils/showDown"
+import { scrollToElementById } from "../../lib/utils/scrollToElement"
 
 import "../../styles/commentarea.scss"
 
@@ -109,6 +111,8 @@ const CommentsArea = (Props: {
 	// Markdown preview state
 	const [previewStatus, setPreviewStatus] = React.useState<boolean>(false)
 
+	const [sendingComment, setSendingComment] = React.useState<boolean>(false)
+
 	React.useEffect(() => {
 		const commenterName = getCommenterInfo("name")
 		const commenterEmail = getCommenterInfo("email")
@@ -181,6 +185,8 @@ const CommentsArea = (Props: {
 
 	// Comment submitting function
 	const sendComment = async () => {
+		setSendingComment(true)
+
 		if (Props.reloadFunc) {
 			Props.reloadFunc(true)
 		}
@@ -227,19 +233,31 @@ const CommentsArea = (Props: {
 			// Set content to empty
 			setCommentContent("")
 			// Refetch data using swr mutate
-			await refetchData(Props.pageKey)
-			// Jump to replied to/comment item
-			if (replyingTo) {
-				window.location.href = "#" + replyingTo
-			} else {
-				window.location.href = "#" + thisID
-			}
+			await refetchData(Props.pageKey).finally(() => {
+				// Jump to replied to/comment item
+				if (replyingTo) {
+					scrollToElementById(replyingTo.toString())
+				} else {
+					scrollToElementById(thisID.toString())
+				}
+				// flash replied to/comment item
+				document
+					.getElementById(thisID.toString())
+					?.classList.add("nexment-flash")
+				setTimeout(() => {
+					document
+						.getElementById(thisID.toString())
+						?.classList.remove("nexment-flash")
+				}, 2000)
+			})
 			resetReplyTo()
 		}
 
 		if (Props.reloadFunc) {
 			Props.reloadFunc(false)
 		}
+
+		setSendingComment(false)
 	}
 
 	// Reset reply to initial
@@ -283,24 +301,53 @@ const CommentsArea = (Props: {
 	}
 
 	return (
-		<div className="nexment-comment-area" id="nexment-comment-area">
+		<form
+			className="nexment-comment-area"
+			id="nexment-comment-area"
+			onSubmit={(e) => {
+				e.preventDefault()
+				sendComment()
+			}}
+		>
 			<div className="nexment-comment-area-top">
-				<input
-					placeholder={commentName ? commentName : Translation.name}
-					onChange={handleNameChange}
-				/>
+				<div className="nexment-comment-area-name">
+					{commentEmail &&
+					commentEmail.match(
+						/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+					) ? (
+						<div className="nexment-comment-area-name-avatar">
+							<img
+								src={`https://gravatar.loli.net/avatar/${md5(
+									commentEmail
+								)}?d=mp`}
+							/>
+						</div>
+					) : null}
+					<div className="nexment-comment-area-name-input">
+						<input
+							placeholder={commentName ? commentName : Translation.name}
+							onChange={handleNameChange}
+							value={commentName}
+							type="text"
+							required
+						/>
+					</div>
+				</div>
 				<input
 					placeholder={commentEmail ? commentEmail : Translation.email}
 					onChange={handleEmailChange}
+					value={commentEmail}
+					type="email"
+					required
 				/>
 				{NexmentConfigs.enableLinkInput ? (
 					<input
 						placeholder={commentLink ? commentLink : Translation.link}
 						onChange={handleLinkChange}
+						value={commentLink}
+						type="url"
 					/>
-				) : (
-					""
-				)}
+				) : null}
 			</div>
 			<div className="nexment-comment-area-middle">
 				<TextareaAutosize
@@ -324,121 +371,93 @@ const CommentsArea = (Props: {
 				)}
 			</div>
 			<div className="nexment-comment-area-bottom">
-				<div>
-					<Floater
-						offset={5}
-						eventDelay={0}
-						placement="top"
-						event="hover"
-						content={Translation.resetReply}
-					>
-						<button onClick={resetReplyTo} className={getReplyDisplay()}>
-							{getReplyDisplay() === "nexment-replying"
-								? Icons().resetFill
-								: Icons().resetReply}
-							<em>{getReplyTo()}</em>
-							<b>{Icons().cancel}</b>
-						</button>
-					</Floater>
-					<Floater
-						offset={5}
-						eventDelay={0}
-						placement="top"
-						event="hover"
-						content="Emoji"
-					>
-						<EmojiCard handler={handleAddon} />
-					</Floater>
-					{NexmentConfigs.descriptionTag && (
-						<Floater
-							offset={5}
-							eventDelay={0}
-							placement="top"
-							event="hover"
-							content={Translation.desTag}
+				<div className="nexment-comment-area-toolbar">
+					{getReplyDisplay() === "nexment-replying" && (
+						<button
+							type="button"
+							data-tooltip-id="nexment-tooltip"
+							data-tooltip-content={`${Translation.replyingTo} ${getReplyTo()}`}
+							onClick={resetReplyTo}
+							className={getReplyDisplay()}
 						>
-							<TagCard tag={commentTag} handler={handleTagChange} />
-						</Floater>
+							<Icon name="resetFill" />
+							<em>{getReplyTo()}</em>
+							<b>
+								<Icon name="cancel" />
+							</b>
+						</button>
+					)}
+					<button
+						type="button"
+						data-tooltip-id="nexment-tooltip"
+						data-tooltip-content={Translation.avatar}
+					>
+						<a
+							href="https://cn.gravatar.com/support/what-is-gravatar"
+							target="_blank"
+							rel="noreferrer"
+						>
+							<Icon name="avatar" />
+						</a>
+					</button>
+					<EmojiCard handler={handleAddon} />
+					{NexmentConfigs.descriptionTag && (
+						<TagCard tag={commentTag} handler={handleTagChange} />
 					)}
 					{NexmentConfigs.enableReplyEmail && (
-						<Floater
-							placement="top"
-							event="hover"
-							content={commentEwr ? Translation.unSub : Translation.sub}
-							offset={5}
-							eventDelay={0}
-						>
-							<button
-								onClick={() => {
-									setCommentEwr(!commentEwr)
-								}}
-							>
-								{commentEwr ? Icons().email : Icons().emailFill}
-							</button>
-						</Floater>
-					)}
-					<Floater
-						offset={5}
-						eventDelay={0}
-						placement="top"
-						event="hover"
-						content={Translation.avatar}
-					>
-						<button>
-							<a
-								href="https://cn.gravatar.com/support/what-is-gravatar"
-								target="_blank"
-								rel="noreferrer"
-							>
-								{Icons().avatar}
-							</a>
-						</button>
-					</Floater>
-					<Floater
-						offset={5}
-						eventDelay={0}
-						placement="top"
-						event="hover"
-						content={
-							previewStatus ? Translation.stopPreview : Translation.mdPreview
-						}
-					>
 						<button
+							type="button"
+							data-tooltip-id="nexment-tooltip"
+							data-tooltip-content={
+								commentEwr ? Translation.unSub : Translation.sub
+							}
 							onClick={() => {
-								setPreviewStatus(!previewStatus)
+								setCommentEwr(!commentEwr)
 							}}
 						>
-							{previewStatus ? Icons().markdownFill : Icons().markdown}
+							{commentEwr ? <Icon name="email" /> : <Icon name="emailFill" />}
 						</button>
-					</Floater>
-					{AV.User.current() ? (
-						<Floater
-							offset={5}
-							eventDelay={0}
-							placement="top"
-							event="hover"
-							content={Translation.adminLogout}
-						>
-							<button
-								onClick={() => {
-									AV.User.logOut()
-									window.location.reload()
-								}}
-							>
-								{Icons().logout}
-							</button>
-						</Floater>
-					) : (
-						""
 					)}
-				</div>
-				<div>
 					<button
+						type="button"
+						data-tooltip-id="nexment-tooltip"
+						data-tooltip-content={
+							previewStatus ? Translation.stopPreview : Translation.mdPreview
+						}
 						onClick={() => {
-							sendComment()
+							setPreviewStatus(!previewStatus)
 						}}
 					>
-						{Translation.submit}
+						{previewStatus ? (
+							<Icon name="markdownFill" />
+						) : (
+							<Icon name="markdown" />
+						)}
+					</button>
+					{AV.User.current() ? (
+						<button
+							type="button"
+							data-tooltip-id="nexment-tooltip"
+							data-tooltip-content={Translation.adminLogout}
+							onClick={() => {
+								AV.User.logOut()
+								window.location.reload()
+							}}
+						>
+							<Icon name="logout" />
+						</button>
+					) : null}
+				</div>
+				<div className="nexment-comment-area-submit">
+					<button type="submit" disabled={sendingComment}>
+						<span>{Translation.submit}</span>
+						{sendingComment ? (
+							<span className="spinner">
+								<Icon name="loader" />
+							</span>
+						) : (
+							<Icon name="arrowRight" />
+						)}
 					</button>
 				</div>
 			</div>
@@ -451,7 +470,8 @@ const CommentsArea = (Props: {
 			) : (
 				""
 			)}
-		</div>
+			<Tooltip className="nexment-tooltip" id="nexment-tooltip" />
+		</form>
 	)
 }
 

@@ -3,6 +3,7 @@ import AV from "leancloud-storage"
 
 // To avoid reinitialization
 var initCount = 0
+
 /**
  * LeanCloud Database Initiation
  *

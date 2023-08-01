@@ -5,6 +5,7 @@ const App = () => {
 		pageKey: "demoPage",
 		enableLinkInput: true,
 		enableReplyListModal: true,
+		enableReplyEmail: true,
 		leancloud: {
 			appId: "6Kcb9HB1iOR87HUbAvnMyUER-gzGzoHsz",
 			appKey: "zf3gAf9CGIHLL8Crctb0sJLV",

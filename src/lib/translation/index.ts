@@ -73,9 +73,9 @@ const translate = createTranslations<TranslationLanguages>()(
 				zh: "键入一些内容吧",
 				en: "Say something",
 			},
-			resetReply: {
-				zh: "重置回复",
-				en: "Reset Reply",
+			replyingTo: {
+				zh: "回复对象:",
+				en: "Replying to:",
 			},
 			desTag: {
 				zh: "描述标签",
@@ -87,15 +87,15 @@ const translate = createTranslations<TranslationLanguages>()(
 			},
 			sub: {
 				zh: "订阅回复",
-				en: "Subscribe",
+				en: "Subscribe for Replies",
 			},
 			avatar: {
 				zh: "头像",
-				en: "Avatar",
+				en: "Gravatar",
 			},
 			mdPreview: {
 				zh: "预览",
-				en: "Preview",
+				en: "Markdown Preview",
 			},
 			stopPreview: {
 				zh: "关闭预览",

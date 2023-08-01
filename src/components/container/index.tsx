@@ -1,4 +1,3 @@
-import React from "react"
 import "../../styles/container.scss"
 import getIdentifier from "../../lib/utils/getIdentifier"
 import CommentsList from "../../components/sections/CommentsList"
