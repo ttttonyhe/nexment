@@ -1,4 +1,4 @@
-import * as EmailValidator from "email-validator"
+import { validate } from "email-validator"
 import similarity from "string-similarity"
 import leanCloud from "./initiation"
 import converter from "../utils/showDown"
@@ -92,7 +92,7 @@ const useSavingComment = async (
 		info.ID &&
 		info.name &&
 		info.email &&
-		EmailValidator.validate(info.email) &&
+		validate(info.email) &&
 		info.content
 	) {
 		// go through the blacklist to check if the comment is spam

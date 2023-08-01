@@ -1,6 +1,7 @@
 import React from "react"
 import md5 from "js-md5"
 import { Tooltip } from "react-tooltip"
+import { validate } from "email-validator"
 import TextareaAutosize from "react-textarea-autosize"
 import insertTextAtCursor from "insert-text-at-cursor"
 import usingSaveComment from "../../lib/database/saveComment"
@@ -328,10 +329,7 @@ const CommentsArea = (Props: {
 			>
 				<div className="nexment-comment-area-top">
 					<div className="nexment-comment-area-name">
-						{commentEmail &&
-						commentEmail.match(
-							/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
-						) ? (
+						{commentEmail && validate(commentEmail) ? (
 							<div className="nexment-comment-area-name-avatar">
 								<img
 									src={`https://gravatar.loli.net/avatar/${md5(
