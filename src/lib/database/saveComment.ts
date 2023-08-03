@@ -86,6 +86,14 @@ const useSavingComment = async (
 		}
 	}
 
+	// Check if content is empty or too long (enters, spaces, etc.)
+	const contentTrimed = info.content.trim()
+	if (contentTrimed == "" || contentTrimed.length > 1000) {
+		return {
+			status: 400,
+		}
+	}
+
 	// check if all info has been provided
 	if (
 		info.identifier &&

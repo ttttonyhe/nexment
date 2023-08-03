@@ -312,6 +312,15 @@ $borderColor: #e0e0e0;
 				border-bottom: 1px solid $borderColor;
 				animation: forwards 0.5s cubic-bezier(0.1, 0.9, 0.2, 1)
 					avatarContainerMoveIn;
+				transition: all 0.1s ease-in-out;
+
+				&:hover {
+					background: #f5f5f5;
+
+					img {
+						border-color: #d1d1d1;
+					}
+				}
 
 				img {
 					flex-shrink: 0;
@@ -403,8 +412,9 @@ $borderColor: #e0e0e0;
 				display: flex;
 				align-items: center;
 				flex: 2;
-				padding-left: 8px;
+				padding-left: 5px;
 				white-space: nowrap;
+				column-gap: 3px;
 
 				b {
 					display: none;
@@ -443,9 +453,10 @@ $borderColor: #e0e0e0;
 				button {
 					background: transparent;
 					border: none;
-					padding: 6px 10px 3px 5px;
+					padding: 6px 6px 3px 6px;
 					cursor: pointer;
 					color: #707070;
+					transition: background 50ms ease-in-out;
 
 					a {
 						text-decoration: none;
@@ -454,6 +465,14 @@ $borderColor: #e0e0e0;
 
 					&:focus {
 						outline: none;
+					}
+
+					&:hover {
+						background: #f5f5f5;
+					}
+
+					&:active {
+						background: #e0e0e0;
 					}
 				}
 			}
@@ -509,8 +528,15 @@ $borderColor: #e0e0e0;
 
 					&:hover {
 						background: #115ea3;
+
 						svg {
 							transform: translateX(2px);
+						}
+
+						.spinner {
+							svg {
+								transform: none;
+							}
 						}
 					}
 				}

@@ -135,6 +135,10 @@ const CommentsArea = (Props: {
 		setResetStatus(false)
 	}, [Props.replyTo, Props.random])
 
+	React.useEffect(() => {
+		resetReplyTo()
+	}, [Props.pageKey])
+
 	// Input change handlers
 	const handleNameChange = (e: {
 		target: { value: React.SetStateAction<string> }
@@ -199,47 +203,56 @@ const CommentsArea = (Props: {
 			NexmentConfigs
 		)
 
-		if (returnData.status === 500) {
-			alert(
-				"Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information."
-			)
-		} else if (returnData.status === 501) {
-			setModalStatus(true)
-		} else if (returnData.status === 401) {
-			alert(
-				"Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam."
-			)
-		} else {
-			// Comment success
-			// Store commenter info
-			setCommenterInfo({
-				name: commentName,
-				email: commentEmail,
-				tag: commentTag,
-				link: commentLink,
-				ewr: commentEwr,
-			})
-			// Set content to empty
-			setCommentContent("")
-			// Refetch data using swr mutate
-			await refetchData(Props.pageKey).finally(() => {
-				// Jump to replied to/comment item
-				if (replyingTo) {
-					scrollToElementById(replyingTo.toString())
-				} else {
-					scrollToElementById(thisID.toString())
-				}
-				// flash replied to/comment item
-				document
-					.getElementById(thisID.toString())
-					?.classList.add("nexment-flash")
-				setTimeout(() => {
+		switch (returnData.status) {
+			case 400:
+				alert(
+					"Nexment: An error occurred while submitting your comment.\nComment is too long or too short."
+				)
+				break
+			case 500:
+				alert(
+					"Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information."
+				)
+				break
+			case 501:
+				setModalStatus(true)
+				break
+			case 401:
+				alert(
+					"Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam."
+				)
+				break
+			default:
+				// Comment success
+				// Store commenter info
+				setCommenterInfo({
+					name: commentName,
+					email: commentEmail,
+					tag: commentTag,
+					link: commentLink,
+					ewr: commentEwr,
+				})
+				// Set content to empty
+				setCommentContent("")
+				// Refetch data using swr mutate
+				await refetchData(Props.pageKey).finally(() => {
+					// Jump to replied to/comment item
+					if (replyingTo) {
+						scrollToElementById(replyingTo.toString())
+					} else {
+						scrollToElementById(thisID.toString())
+					}
+					// flash replied to/comment item
 					document
 						.getElementById(thisID.toString())
-						?.classList.remove("nexment-flash")
-				}, 2000)
-			})
-			resetReplyTo()
+						?.classList.add("nexment-flash")
+					setTimeout(() => {
+						document
+							.getElementById(thisID.toString())
+							?.classList.remove("nexment-flash")
+					}, 2000)
+				})
+				resetReplyTo()
 		}
 
 		if (Props.reloadFunc) {
@@ -327,13 +340,19 @@ const CommentsArea = (Props: {
 			>
 				<div className="nexment-comment-area-top">
 					{commentEmail && validate(commentEmail) ? (
-						<div className="nexment-comment-area-top-name-avatar">
+						<a
+							className="nexment-comment-area-top-name-avatar"
+							href="https://cn.gravatar.com/support/what-is-gravatar"
+							target="_blank"
+							rel="noreferrer"
+						>
 							<img
 								src={`https://gravatar.loli.net/avatar/${md5(
 									commentEmail
 								)}?d=mp`}
+								data-tooltip-content={Translation.avatar}
 							/>
-						</div>
+						</a>
 					) : null}
 					<input
 						className="nexment-comment-area-top-name-input"
@@ -366,6 +385,7 @@ const CommentsArea = (Props: {
 						onChange={handleContentChange}
 						className={previewStatus ? "nexment-previewing" : ""}
 						ref={nexmentTextarea}
+						maxLength={1000}
 					/>
 					{previewStatus ? (
 						<div
@@ -382,19 +402,6 @@ const CommentsArea = (Props: {
 				</div>
 				<div className="nexment-comment-area-bottom">
 					<div className="nexment-comment-area-toolbar">
-						<button
-							type="button"
-							data-tooltip-id="nexment-tooltip"
-							data-tooltip-content={Translation.avatar}
-						>
-							<a
-								href="https://cn.gravatar.com/support/what-is-gravatar"
-								target="_blank"
-								rel="noreferrer"
-							>
-								<Icon name="avatar" />
-							</a>
-						</button>
 						<EmojiPopover handler={handleAddon} />
 						{NexmentConfigs.features?.descriptionTag && (
 							<TagPopover tag={commentTag} handler={handleTagChange} />
