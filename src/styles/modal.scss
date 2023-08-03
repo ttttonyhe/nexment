@@ -42,7 +42,7 @@
 		overflow: hidden;
 		overflow-y: auto;
 		@media screen and (min-width: 1000px) {
-			width: 75vh !important;
+			width: 70vh !important;
 		}
 	}
 }
@@ -126,7 +126,7 @@
 	z-index: 101;
 	padding: 15px;
 	background: #fff;
-	border-radius: 3px;
+	border-radius: 8px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -381,8 +381,8 @@
 }
 
 .rodal-slideUp-enter {
-	-webkit-animation: rodal-slideUp-enter both cubic-bezier(0.4, 0, 0, 1.5);
-	animation: rodal-slideUp-enter both cubic-bezier(0.4, 0, 0, 1.5);
+	-webkit-animation: rodal-slideUp-enter both cubic-bezier(0.1, 0.9, 0.2, 1);
+	animation: rodal-slideUp-enter both cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
 @-webkit-keyframes rodal-slideUp-leave {

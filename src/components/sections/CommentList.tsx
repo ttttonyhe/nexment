@@ -240,14 +240,17 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 					</h1>
 				</div>
 				<div>
-					<p>
+					<p className="nexment-header-logo">
 						{Translation.poweredBy}{" "}
 						<a
 							href="https://github.com/ttttonyhe/nexment"
 							target="_blank"
 							rel="noreferrer"
 						>
-							Nexment
+							<img
+								src="https://static.ouorz.com/nexment-logo-with-text.webp"
+								alt="nexment comment system"
+							/>
 						</a>
 					</p>
 				</div>

@@ -309,8 +309,6 @@ const CommentsArea = (Props: {
 					</div>
 					<div
 						className="nexment-comment-area-replying-to-cta"
-						data-tooltip-id="nexment-tooltip"
-						data-tooltip-content={Translation.cancelReply}
 						onClick={resetReplyTo}
 					>
 						<button>
