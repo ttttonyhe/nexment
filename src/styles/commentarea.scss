@@ -541,7 +541,7 @@ $borderColor: #e0e0e0;
 
 						.spinner {
 							svg {
-								transform: none;
+								transform: none !important;
 							}
 						}
 					}

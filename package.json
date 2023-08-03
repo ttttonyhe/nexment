@@ -1,7 +1,7 @@
 {
   "name": "nexment",
   "author": "ttttonyhe",
-  "version": "0.0.685",
+  "version": "0.0.686",
   "description": "A feature-rich serverless comment library for React",
   "repository": "git@github.com:ttttonyhe/nexment.git",
   "license": "MIT",
@@ -15,7 +15,8 @@
   "scripts": {
     "dev": "vite --port 6006",
     "build": "tsx ./scripts/build.ts",
-    "lint": "eslint --fix --ext .ts,.tsx src && prettier src --write --log-level silent"
+    "lint": "eslint --fix --ext .ts,.tsx src && prettier src --write --log-level silent",
+    "publish": "npx changeset publish"
   },
   "dependencies": {
     "email-validator": "^2.0.4",
