@@ -538,6 +538,12 @@ $borderColor: #e0e0e0;
 					&:disabled {
 						background: #bdbdbd !important;
 						cursor: not-allowed;
+
+						.spinner {
+							svg {
+								transform: none;
+							}
+						}
 					}
 
 					&:focus,
