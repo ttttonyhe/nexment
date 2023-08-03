@@ -298,46 +298,34 @@ $borderColor: #e0e0e0;
 		.nexment-comment-area-top {
 			display: flex;
 			border-radius: 4px 4px 0px 0px;
+			height: 34px;
+			overflow: hidden;
 
-			.nexment-comment-area-name {
+			&-name-avatar {
 				display: flex;
 				align-items: center;
-				flex: 1;
-				width: 100%;
-				border-radius: 5px 0px 0px 0px;
+				justify-content: center;
+				margin-right: 0px;
+				padding-left: 11px;
+				padding-right: 11px;
 				border-right: 1px solid $borderColor;
-				overflow: hidden;
+				border-bottom: 1px solid $borderColor;
+				animation: forwards 0.5s cubic-bezier(0.1, 0.9, 0.2, 1)
+					avatarContainerMoveIn;
 
-				.nexment-comment-area-name-avatar {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					margin-right: 0px;
-					padding-left: 11px;
-					padding-right: 11px;
-					border-right: 1px solid $borderColor;
-					border-bottom: 1px solid $borderColor;
-					height: calc(100% - 1px);
-					animation: forwards 0.5s cubic-bezier(0.1, 0.9, 0.2, 1)
-						avatarContainerMoveIn;
-
-					img {
-						flex-shrink: 0;
-						height: 18px;
-						width: 18px;
-						border-radius: 50%;
-						border: 1px solid $borderColor;
-						animation: forwards 0.5s cubic-bezier(0.1, 0.9, 0.2, 1) avatarAppear;
-					}
+				img {
+					flex-shrink: 0;
+					height: 18px;
+					width: 18px;
+					border-radius: 50%;
+					border: 1px solid $borderColor;
+					animation: forwards 0.5s cubic-bezier(0.1, 0.9, 0.2, 1) avatarAppear;
 				}
+			}
 
-				.nexment-comment-area-name-input {
-					flex: 1;
-					input {
-						padding-left: 12px;
-						box-sizing: border-box;
-						border-radius: 5px 0px 0px 0px !important;
-					}
+			&-name-input {
+				input {
+					border-radius: 5px 0px 0px 0px !important;
 				}
 			}
 

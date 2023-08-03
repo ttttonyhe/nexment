@@ -326,26 +326,23 @@ const CommentsArea = (Props: {
 				}}
 			>
 				<div className="nexment-comment-area-top">
-					<div className="nexment-comment-area-name">
-						{commentEmail && validate(commentEmail) ? (
-							<div className="nexment-comment-area-name-avatar">
-								<img
-									src={`https://gravatar.loli.net/avatar/${md5(
-										commentEmail
-									)}?d=mp`}
-								/>
-							</div>
-						) : null}
-						<div className="nexment-comment-area-name-input">
-							<input
-								placeholder={commentName ? commentName : Translation.name}
-								onChange={handleNameChange}
-								value={commentName}
-								type="text"
-								required
+					{commentEmail && validate(commentEmail) ? (
+						<div className="nexment-comment-area-top-name-avatar">
+							<img
+								src={`https://gravatar.loli.net/avatar/${md5(
+									commentEmail
+								)}?d=mp`}
 							/>
 						</div>
-					</div>
+					) : null}
+					<input
+						className="nexment-comment-area-top-name-input"
+						placeholder={commentName ? commentName : Translation.name}
+						onChange={handleNameChange}
+						value={commentName}
+						type="text"
+						required
+					/>
 					<input
 						placeholder={commentEmail ? commentEmail : Translation.email}
 						onChange={handleEmailChange}
