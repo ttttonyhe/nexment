@@ -49,7 +49,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
 	return (
 		<Popover
 			isOpen={tagPopoverStatus}
-			positions={["top", "bottom", "left", "right"]}
+			positions={["right", "bottom", "left", "top"]}
 			content={tagContent}
 			onClickOutside={() => {
 				setTagPopoverStatus(!tagPopoverStatus)

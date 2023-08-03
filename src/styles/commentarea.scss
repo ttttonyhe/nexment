@@ -145,7 +145,7 @@ $borderColor: #e0e0e0;
 	.nexment-popover-content {
 		display: flex;
 		flex-direction: column;
-		padding: 15px 20px 18px 18px;
+		padding: 10px 15px 15px 15px;
 		max-width: 250px;
 		row-gap: 12px;
 		font-size: 14px;
@@ -322,6 +322,10 @@ $borderColor: #e0e0e0;
 					}
 				}
 
+				&:active {
+					background: #e0e0e0;
+				}
+
 				img {
 					flex-shrink: 0;
 					height: 18px;
@@ -371,6 +375,17 @@ $borderColor: #e0e0e0;
 
 		.nexment-comment-area-middle {
 			display: flex;
+			position: relative;
+
+			&-progress-bar {
+				width: 0%;
+				transition: width 0.1s ease-in-out;
+				position: absolute;
+				height: 1px;
+				background: #0f6cbd;
+				z-index: 1;
+				top: -1px;
+			}
 
 			.nexment-previewing {
 				border-right: 1px solid $borderColor;
@@ -395,7 +410,7 @@ $borderColor: #e0e0e0;
 			.nexment-md-preview {
 				flex: 1;
 				padding: 11px 12px 10px 12px;
-				font-size: 10px;
+				font-size: 13px;
 				margin-top: -2px;
 				border-bottom: 1px solid $borderColor;
 				width: calc(100% - 23px);
@@ -518,6 +533,11 @@ $borderColor: #e0e0e0;
 						align-items: center;
 						justify-content: center;
 						animation: spin 0.75s linear infinite;
+					}
+
+					&:disabled {
+						background: #bdbdbd !important;
+						cursor: not-allowed;
 					}
 
 					&:focus,

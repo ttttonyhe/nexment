@@ -101,6 +101,21 @@ const CommentsArea = (Props: {
 	const [previewStatus, setPreviewStatus] = React.useState<boolean>(false)
 
 	const [sendingComment, setSendingComment] = React.useState<boolean>(false)
+	const [showProgressBar, setShowProgressBar] = React.useState<boolean>(false)
+	const [progress, setProgress] = React.useState<number>(10)
+
+	React.useEffect(() => {
+		if (showProgressBar) {
+			let currentProgress = 10
+			const increment = setInterval(() => {
+				currentProgress += 10 + Math.floor(currentProgress / 10)
+				setProgress(currentProgress + 10)
+				if (currentProgress > 60) {
+					clearInterval(increment)
+				}
+			}, 150)
+		}
+	}, [showProgressBar])
 
 	React.useEffect(() => {
 		const commenterName = getCommenterInfo("name")
@@ -180,10 +195,6 @@ const CommentsArea = (Props: {
 	const sendComment = async () => {
 		setSendingComment(true)
 
-		if (Props.reloadFunc) {
-			Props.reloadFunc(true)
-		}
-
 		let replyingTo = resetStatus ? primaryReplyTo : Props.replyTo
 		let replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID
 		let thisID = generateCommentID().idData
@@ -208,22 +219,27 @@ const CommentsArea = (Props: {
 				alert(
 					"Nexment: An error occurred while submitting your comment.\nComment is too long or too short."
 				)
+				setSendingComment(false)
 				break
 			case 500:
 				alert(
 					"Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information."
 				)
+				setSendingComment(false)
 				break
 			case 501:
 				setModalStatus(true)
+				setSendingComment(false)
 				break
 			case 401:
 				alert(
 					"Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam."
 				)
+				setSendingComment(false)
 				break
 			default:
-				// Comment success
+				setShowProgressBar(true)
+
 				// Store commenter info
 				setCommenterInfo({
 					name: commentName,
@@ -232,34 +248,42 @@ const CommentsArea = (Props: {
 					link: commentLink,
 					ewr: commentEwr,
 				})
-				// Set content to empty
-				setCommentContent("")
-				// Refetch data using swr mutate
-				await refetchData(Props.pageKey).finally(() => {
-					// Jump to replied to/comment item
-					if (replyingTo) {
-						scrollToElementById(replyingTo.toString())
-					} else {
-						scrollToElementById(thisID.toString())
-					}
-					// flash replied to/comment item
-					document
-						.getElementById(thisID.toString())
-						?.classList.add("nexment-flash")
-					setTimeout(() => {
-						document
-							.getElementById(thisID.toString())
-							?.classList.remove("nexment-flash")
-					}, 2000)
-				})
-				resetReplyTo()
-		}
 
-		if (Props.reloadFunc) {
-			Props.reloadFunc(false)
-		}
+				setTimeout(() => {
+					setProgress(100)
 
-		setSendingComment(false)
+					setTimeout(async () => {
+						setShowProgressBar(false)
+						setProgress(10)
+
+						// Refetch data using swr mutate
+						await refetchData(Props.pageKey).finally(() => {
+							// Set content to empty
+							setCommentContent("")
+
+							// Jump to replied to/comment item
+							if (replyingTo) {
+								scrollToElementById(replyingTo.toString())
+							} else {
+								scrollToElementById(thisID.toString())
+							}
+
+							// flash replied to/comment item
+							document
+								.getElementById(thisID.toString())
+								?.classList.add("nexment-flash")
+							setTimeout(() => {
+								document
+									.getElementById(thisID.toString())
+									?.classList.remove("nexment-flash")
+							}, 2000)
+
+							setSendingComment(false)
+							resetReplyTo()
+						})
+					}, 500)
+				}, 1500)
+		}
 	}
 
 	// Reset reply to initial
@@ -379,6 +403,14 @@ const CommentsArea = (Props: {
 					) : null}
 				</div>
 				<div className="nexment-comment-area-middle">
+					{showProgressBar && (
+						<div
+							className="nexment-comment-area-middle-progress-bar"
+							style={{
+								width: `${progress}%`,
+							}}
+						/>
+					)}
 					<TextareaAutosize
 						value={commentContent}
 						placeholder={Translation.placeHolder + "..."}
@@ -386,6 +418,7 @@ const CommentsArea = (Props: {
 						className={previewStatus ? "nexment-previewing" : ""}
 						ref={nexmentTextarea}
 						maxLength={1000}
+						disabled={sendingComment}
 					/>
 					{previewStatus ? (
 						<div
