@@ -3,16 +3,11 @@ import { dtsPlugin } from "esbuild-plugin-d.ts"
 import { sassPlugin } from "esbuild-sass-plugin"
 import { dependencies } from "../package.json"
 
-const isDevelopment = process.env.NODE_ENV === "development"
-
 const ESBUILD_CONFIG_BASE = {
 	outdir: "dist",
 	bundle: true,
-	minify: !isDevelopment,
-	sourcemap: isDevelopment,
-	define: {
-		DEBUG: isDevelopment ? "true" : "false",
-	},
+	minify: true,
+	sourcemap: false,
 }
 
 export const ESBUILD_CONFIG: BuildOptions = {
