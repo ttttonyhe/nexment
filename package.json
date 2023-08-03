@@ -1,7 +1,7 @@
 {
   "name": "nexment",
   "author": "ttttonyhe",
-  "version": "0.0.687",
+  "version": "0.0.688",
   "description": "A feature-rich serverless comment library for React",
   "repository": "git@github.com:ttttonyhe/nexment.git",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "react-ridge-translations": "^1.0.4",
     "react-textarea-autosize": "^8.5.2",
     "react-tiny-popover": "^7.2.4",
-    "react-tooltip": "^5.19.0",
+    "react-tooltip": "^5.20.0",
     "rodal": "^2.1.0",
     "showdown": "^2.1.0",
     "smoothscroll-polyfill": "^0.4.4",
@@ -57,13 +57,13 @@
     "esbuild-plugin-d.ts": "^1.1.0",
     "esbuild-sass-plugin": "^2.10.0",
     "eslint": "^8.46.0",
-    "eslint-config-prettier": "^8.9.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-react": "^7.33.1",
     "husky": "^8.0.3",
-    "prettier": "^3.0.0",
+    "prettier": "^3.0.1",
     "tslib": "^2.6.1",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vite": "^4.4.7"
+    "vite": "^4.4.8"
   }
 }
