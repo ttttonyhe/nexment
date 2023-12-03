@@ -44,8 +44,9 @@ $borderColor: #e0e0e0;
 	}
 }
 
-.react-tiny-popover-container {
+#react-tiny-popover-container {
 	background: #fff;
+	font-family: sans-serif;
 	z-index: 102;
 	border-radius: 5px;
 	box-shadow:
@@ -129,6 +130,8 @@ $borderColor: #e0e0e0;
 }
 
 .nexment-popover {
+	font-family: sans-serif;
+
 	.nexment-popover-title {
 		border-bottom: 1px solid $borderColor;
 		padding: 5px 0px;
@@ -220,6 +223,7 @@ $borderColor: #e0e0e0;
 		border-radius: 5px;
 		animation: forwards 0.5s ease-in-out cardSlideUp;
 		margin: 0 5px;
+		background: #ffffff;
 
 		&-info {
 			flex: 1;
@@ -300,6 +304,7 @@ $borderColor: #e0e0e0;
 			border-radius: 4px 4px 0px 0px;
 			height: 34px;
 			overflow: hidden;
+			background: #ffffff;
 
 			&-name-avatar {
 				display: flex;
@@ -376,6 +381,7 @@ $borderColor: #e0e0e0;
 		.nexment-comment-area-middle {
 			display: flex;
 			position: relative;
+			background: #ffffff;
 
 			&-progress-bar {
 				width: 0%;
@@ -387,19 +393,16 @@ $borderColor: #e0e0e0;
 				top: -1px;
 			}
 
-			.nexment-previewing {
-				border-right: 1px solid $borderColor;
-			}
-
 			textarea {
 				flex: 1;
+				line-height: 1.5;
 				padding: 10px 12px;
 				border-color: unset;
 				border-style: unset;
 				border-radius: 0px;
-				border-bottom: 1px solid $borderColor;
-				width: calc(100% - 23px);
+				width: 50%;
 				font-family: sans-serif;
+				font-size: 14px;
 				resize: none;
 				min-height: 130px;
 
@@ -407,21 +410,26 @@ $borderColor: #e0e0e0;
 					outline: none;
 				}
 			}
+
+			.nexment-previewing {
+				border-left: 1px solid $borderColor;
+			}
+
 			.nexment-md-preview {
 				flex: 1;
 				padding: 11px 12px 10px 12px;
-				font-size: 13px;
-				margin-top: -2px;
-				border-bottom: 1px solid $borderColor;
-				width: calc(100% - 23px);
+				font-size: 14px;
+				width: calc(50% - 24px);
 				font-family: sans-serif;
 				min-height: 130px;
-				height: inherit;
+				height: 100%;
+				background: #ffffff;
 			}
 		}
 
 		.nexment-comment-area-bottom {
 			display: flex;
+			border-top: 1px solid $borderColor;
 
 			.nexment-comment-area-toolbar {
 				display: flex;
@@ -430,6 +438,8 @@ $borderColor: #e0e0e0;
 				padding-left: 5px;
 				white-space: nowrap;
 				column-gap: 3px;
+				background: #ffffff;
+				border-radius: 0px 0px 5px 5px;
 
 				b {
 					display: none;
@@ -644,7 +654,7 @@ $borderColor: #e0e0e0;
 		sans-serif,
 		Apple Color Emoji,
 		Segoe UI Emoji;
-	font-size: 16px;
+	font-size: 14px;
 	line-height: 1.5;
 	word-wrap: break-word;
 }

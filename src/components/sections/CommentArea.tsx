@@ -1,5 +1,5 @@
 import React from "react"
-import md5 from "js-md5"
+import { md5 } from "js-md5"
 import { Tooltip } from "react-tooltip"
 import { validate } from "email-validator"
 import TextareaAutosize from "react-textarea-autosize"
@@ -415,14 +415,15 @@ const CommentsArea = (Props: {
 						value={commentContent}
 						placeholder={Translation.placeHolder + "..."}
 						onChange={handleContentChange}
-						className={previewStatus ? "nexment-previewing" : ""}
 						ref={nexmentTextarea}
 						maxLength={1000}
 						disabled={sendingComment}
 					/>
 					{previewStatus ? (
 						<div
-							className="nexment-md-preview markdown-body"
+							className={`nexment-md-preview markdown-body ${
+								previewStatus ? "nexment-previewing" : ""
+							}`}
 							dangerouslySetInnerHTML={{
 								__html: converter.makeHtml(
 									commentContent ? commentContent : Translation.nothing
