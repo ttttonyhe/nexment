@@ -19,7 +19,7 @@
 ## Foreword
 
 > **Note**
-> This project is undergoing a major refactoring, stay tune for exciting updates to come.
+> This project is undergoing a major refactorization, stay tune for exciting updates to come.
 
 <br/>
 
