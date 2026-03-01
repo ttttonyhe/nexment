@@ -1,6 +1,7 @@
 import { validate } from "email-validator"
 import similarity from "string-similarity"
-import leanCloud from "./initiation"
+import getSupabase from "./initiation"
+import { getCurrentUser } from "./initiation"
 import converter from "../utils/showDown"
 import { NexmentConfig } from "../utils/configContext"
 
@@ -17,13 +18,6 @@ interface NewCommentItem {
 	link?: string
 }
 
-/**
- * Send email when receiving a reply
- *
- * @param {string} email
- * @param {string} url
- * @param {string} content
- */
 const sendEmail = async (
 	fromName: string,
 	toEmail: string,
@@ -45,11 +39,6 @@ const sendEmail = async (
 	})
 }
 
-/**
- * Make sure the link is valid
- *
- * @param {string} link
- */
 const cleanLink = (link: string) => {
 	const finalLink = link.replace(/\s*/g, "")
 	if (finalLink.startsWith("http://") || finalLink.startsWith("https://")) {
@@ -59,34 +48,21 @@ const cleanLink = (link: string) => {
 	}
 }
 
-/**
- * Submit comment to LeanCloud
- *
- * @param {NewCommentItem} info
- * @param {NexmentConfig} config
- */
 const useSavingComment = async (
 	info: NewCommentItem,
 	config: NexmentConfig
 ): Promise<{ status: number; savedComment?: any }> => {
-	// initialize leancloud storage
-	const AV = leanCloud(
-		config.leancloud.appId,
-		config.leancloud.appKey,
-		config.leancloud.serverURL
-	)
+	const supabase = getSupabase(config.supabase.url, config.supabase.anonKey)
 
-	// If commenting as admin, then user must be logged in
 	if (
 		(info.email === config.admin.email || info.name === config.admin.name) &&
-		!AV.User.current()
+		!getCurrentUser()
 	) {
 		return {
 			status: 501,
 		}
 	}
 
-	// Check if content is empty or too long (enters, spaces, etc.)
 	const contentTrimed = info.content.trim()
 	if (contentTrimed == "" || contentTrimed.length > 1000) {
 		return {
@@ -94,7 +70,6 @@ const useSavingComment = async (
 		}
 	}
 
-	// check if all info has been provided
 	if (
 		info.identifier &&
 		info.ID &&
@@ -103,7 +78,6 @@ const useSavingComment = async (
 		validate(info.email) &&
 		info.content
 	) {
-		// go through the blacklist to check if the comment is spam
 		let i = 0
 		while (config.blackList && config.blackList[i]) {
 			const rule = config.blackList[i]
@@ -137,80 +111,68 @@ const useSavingComment = async (
 			++i
 		}
 
-		// Initialize the comment object
-		const commentsStorageClass = AV.Object.extend("nexment_comments")
-		const commentsStorage = new commentsStorageClass()
-		commentsStorage.set("identifier", info.identifier)
-		commentsStorage.set("ID", info.ID)
-		commentsStorage.set("name", info.name)
-		commentsStorage.set("email", info.email)
-		commentsStorage.set("content", info.content)
+		const newComment: Record<string, any> = {
+			identifier: info.identifier,
+			comment_id: info.ID,
+			name: info.name,
+			email: info.email,
+			content: info.content,
+		}
 
-		// If current comment is a reply
 		if (info.reply && info.replyOID) {
-			// Set reply ID for current comment
-			commentsStorage.set("reply", info.reply)
+			newComment.reply = info.reply
 
-			// Get reply-to comment object
-			const replyToObject = await AV.Object.createWithoutData(
-				"nexment_comments",
-				info.replyOID
-			)
-			replyToObject.set("hasReplies", true)
+			// Update parent comment's has_replies flag
+			await supabase
+				.from("nexment_comments")
+				.update({ has_replies: true })
+				.eq("id", info.replyOID)
 
-			// Email when replied
-			const query = new AV.Query("nexment_comments")
-			const replyToEmailStatus = await query
-				.get(info.replyOID)
-				.then((item: { get: (arg0: string) => any }) => {
-					return [item.get("emailWhenReplied"), item.get("email")]
-				})
-			if (replyToEmailStatus[0]) {
+			// Check email notification preference
+			const { data: parentComment } = await supabase
+				.from("nexment_comments")
+				.select("email_when_replied, email")
+				.eq("id", info.replyOID)
+				.single()
+
+			if (parentComment?.email_when_replied) {
 				sendEmail(
 					info.name,
-					replyToEmailStatus[1],
+					parentComment.email,
 					converter.makeHtml(info.content),
 					window.location.href
 				)
 			}
-
-			// Update the comment currently replying to
-			await replyToObject.save().then(
-				() => {
-					console.log("Nexment: Comment sent successfully")
-				},
-				(error: any) => {
-					console.log(error)
-				}
-			)
 		}
 
 		if (info.tag) {
-			commentsStorage.set("tag", info.tag)
+			newComment.tag = info.tag
 		}
 
 		if (info.ewr) {
-			commentsStorage.set("emailWhenReplied", info.ewr)
+			newComment.email_when_replied = info.ewr
 		}
 
 		if (info.link) {
-			commentsStorage.set("link", cleanLink(info.link))
+			newComment.link = cleanLink(info.link)
 		}
 
-		// Save the comment
-		return await commentsStorage.save().then(
-			(savedComment: any) => {
-				return {
-					status: 201,
-					savedComment: savedComment,
-				}
-			},
-			() => {
-				return {
-					status: 500,
-				}
+		const { data: savedComment, error } = await supabase
+			.from("nexment_comments")
+			.insert(newComment)
+			.select()
+			.single()
+
+		if (error) {
+			return {
+				status: 500,
 			}
-		)
+		}
+
+		return {
+			status: 201,
+			savedComment: savedComment,
+		}
 	} else {
 		return {
 			status: 500,

@@ -10,7 +10,12 @@ import { refetchData } from "../../lib/database/getCommentsList"
 import EmojiPopover from "../controls/emoji-popover"
 import TagPopover from "../controls/tag-popover"
 import VerificationModal from "../modal/verification"
-import leanCloud from "../../lib/database/initiation"
+import getSupabase from "../../lib/database/initiation"
+import {
+	getCurrentUser,
+	setCurrentUser,
+	initAuth,
+} from "../../lib/database/initiation"
 import Icon from "../icon"
 import translate from "../../lib/translation"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
@@ -67,12 +72,25 @@ const CommentsArea = (Props: {
 	// Translation
 	const Translation = translate.use().text
 
-	// Initialize leancloud storage
-	const AV = leanCloud(
-		NexmentConfigs.leancloud.appId,
-		NexmentConfigs.leancloud.appKey,
-		NexmentConfigs.leancloud.serverURL
+	// Initialize Supabase client
+	const supabase = getSupabase(
+		NexmentConfigs.supabase.url,
+		NexmentConfigs.supabase.anonKey
 	)
+
+	// Admin auth state
+	const [adminUser, setAdminUser] = React.useState(getCurrentUser())
+
+	React.useEffect(() => {
+		initAuth(supabase).then((user) => {
+			setAdminUser(user)
+			setCurrentUser(user)
+			if (user) {
+				setCommentName(user.user_metadata?.username || "")
+				setCommentEmail(user.email || "")
+			}
+		})
+	}, [])
 
 	// Get initial replyto / replytoOID
 	const primaryReplyTo = Props.primaryReplyTo
@@ -81,10 +99,10 @@ const CommentsArea = (Props: {
 
 	// Current comment states
 	const [commentName, setCommentName] = React.useState<string>(
-		AV.User.current() ? AV.User.current().attributes.username : ""
+		getCurrentUser()?.user_metadata?.username || ""
 	)
 	const [commentEmail, setCommentEmail] = React.useState<string>(
-		AV.User.current() ? AV.User.current().attributes.email : ""
+		getCurrentUser()?.email || ""
 	)
 	const [commentLink, setCommentLink] = React.useState<string>("")
 	const [commentContent, setCommentContent] = React.useState<string>("")
@@ -159,7 +177,7 @@ const CommentsArea = (Props: {
 		target: { value: React.SetStateAction<string> }
 	}) => {
 		setCommentName(e.target.value)
-		if (e.target.value === NexmentConfigs.admin.name && !AV.User.current()) {
+		if (e.target.value === NexmentConfigs.admin.name && !adminUser) {
 			setModalStatus(true)
 		}
 	}
@@ -168,7 +186,7 @@ const CommentsArea = (Props: {
 		target: { value: React.SetStateAction<string> }
 	}) => {
 		setCommentEmail(e.target.value)
-		if (e.target.value === NexmentConfigs.admin.email && !AV.User.current()) {
+		if (e.target.value === NexmentConfigs.admin.email && !adminUser) {
 			setModalStatus(true)
 		}
 	}
@@ -470,13 +488,15 @@ const CommentsArea = (Props: {
 								<Icon name="markdown" />
 							)}
 						</button>
-						{AV.User.current() ? (
+						{adminUser ? (
 							<button
 								type="button"
 								data-tooltip-id="nexment-tooltip"
 								data-tooltip-content={Translation.adminLogout}
-								onClick={() => {
-									AV.User.logOut()
+								onClick={async () => {
+									await supabase.auth.signOut()
+									setCurrentUser(null)
+									setAdminUser(null)
 									window.location.reload()
 								}}
 							>

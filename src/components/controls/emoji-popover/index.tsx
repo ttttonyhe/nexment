@@ -59,6 +59,7 @@ const EmojiCard = (Props: { handler: any }) => {
 			isOpen={emojiPopoverStatus}
 			positions={["right", "bottom", "left", "top"]}
 			content={emojiContent}
+			containerClassName="nexment-popover-container"
 			onClickOutside={() => {
 				toggleEmojiCard()
 			}}

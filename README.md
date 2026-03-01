@@ -1,6 +1,6 @@
 <img src="https://i.loli.net/2020/08/18/HSa25hE1bdZ9gCM.jpg" />
 <div align="center">
-  <p>A feature-rich serverless comment library based on LeanCloud</p>
+  <p>A feature-rich serverless comment library powered by Supabase</p>
   <a href="https://github.com/ttttonyhe/nexment/actions?query=workflow%3ACI">
     <img src="https://github.com/ttttonyhe/nexment/workflows/CI/badge.svg" alt="github ci">
   </a>
@@ -16,172 +16,172 @@
 
 <br/>
 
-## Foreword
-
-> **Note**
-> This project is undergoing a major refactorization, stay tune for exciting updates to come.
-
-<br/>
-
 ## See also
-+ Nexment for Vue.js / Web Component [https://github.com/ttttonyhe/nexment-vue](https://github.com/ttttonyhe/nexment-vue)
++ Nexment for Vue.js / Web Component (outdated, still based on Leancloud) [https://github.com/ttttonyhe/nexment-vue](https://github.com/ttttonyhe/nexment-vue)
 + Nexment for React.js [https://github.com/ttttonyhe/nexment](https://github.com/ttttonyhe/nexment)
 
 <br/>
 
-## Docs
-Visit Nexment documentation site at [https://nexment.ouorz.com](https://nexment.ouorz.com)
-
-<br/>
-
-## Demo
-Visit Nexment demo site at [https://nexment-demo.ouorz.com](https://nexment-demo.ouorz.com)
-
-<br/>
-
 ## Installation
-### Part I - LeanCloud
-1. Register / Login [LeanCloud](https://leancloud.cn/dashboard/login.html#/signup)
-2. Create an App in [Dashboard](https://leancloud.cn/dashboard/applist.html#/apps)
-3. Go to Your App => **LeanStorage** tab => Objects
-4. Create a class named "test" using default settings
-5. Go to Your App => **Settings** tab => App keys
-6. Copy AppID and AppKey
-7. Configure REST API Server URL. For configuration instructions, see [How to Specify API Server URL (Chinese)](https://leancloud.cn/docs/custom-api-domain-guide.html#hash810845114)
-8. Go to Your App => **Settings** tab => Security and add your project domain to Web secure domains
+
+### Part I - Supabase
+
+1. Create a project on [Supabase](https://supabase.com)
+2. Go to **SQL Editor** and run the contents of [`migration/schema.sql`](./migration/schema.sql) to create the `nexment_comments` table
+3. Go to **Authentication** → **Providers** → **Email** and disable "Confirm email" (required for admin registration)
+4. Go to **Project Settings** → **API** and copy your **Project URL** and **Publishable** key
 
 <br/>
 
 ### Part II - Nexment
-Add Nexment to your project dependencies
-using Yarn:
-```shell
-yarn add nexment
-```
-or using NPM:
+
+Add Nexment to your project:
 ```shell
 npm install nexment
 ```
 
-Use Nexment in your project:
-
-Import nexment library:
-```js
+Import and use:
+```jsx
 import Nexment from "nexment"
-```
-Setup nexment configuration:
-```js
+
 const config = {
-  pageKey: 'xxx' | undefined;
+  pageKey: "xxx", // optional, defaults to window.location.pathname
   features: {
-		linkInput: true | false | undefined,
-		replyListModal: true | false | undefined,
-		replyEmailNotifications: true | false | undefined,
-		descriptionTag: true | false | undefined,
-	} | undefined,
-  leancloud: {
-    appId: 'xxx',
-    appKey: 'xxx',
-    serverURL: 'https://xxx.xxx',
+    linkInput: true,
+    replyListModal: true,
+    replyEmailNotifications: true,
+    descriptionTag: true,
+  },
+  supabase: {
+    url: "https://your-project.supabase.co",
+    anonKey: "your-anon-key",
   },
   admin: {
-    name: 'xxx',
-    email: 'xxx@xxx.xxx',
-  },
-  blackList:[{
     name: "xxx",
-    email: "xxx",
-    keyword: "xxx",
-    link: "xxx"
+    email: "xxx@xxx.xxx",
   },
-  {
-    keyword: "xxx"
-  }]
+  blackList: [
+    { name: "xxx", email: "xxx", keyword: "xxx", link: "xxx" },
+    { keyword: "xxx" },
+  ],
 };
-```
-Use the nexment component:
-```jsx
+
 <Nexment config={config} />
 ```
 
 <br/>
 
 ## Use Nexment in Next.js
-Create a Nexment component(Nexment.tsx):
+
+Create a wrapper component:
 ```tsx
-import React from "react";
 import Nexment from "nexment";
 
-const Nexment = () => {
+const NexmentComponent = () => {
   const config = {
     pageKey: "xxx",
     features: {
-			linkInput: true,
-			replyListModal: true,
-			replyEmailNotifications: true,
-			descriptionTag: true,
-		},
-    leancloud: {
-      appId: "xxx",
-      appKey: "xxx",
-      serverURL: "xxx",
+      linkInput: true,
+      replyListModal: true,
+      replyEmailNotifications: true,
+      descriptionTag: true,
+    },
+    supabase: {
+      url: "https://your-project.supabase.co",
+      anonKey: "your-anon-key",
     },
     admin: {
       name: "xxx",
-      email: "xxx",
+      email: "xxx@xxx.xxx",
     },
-    blackList:[
-      {
-        name: "xxx",
-        email: "xxx",
-        keyword: "xxx",
-        link: "xxx"
-      },
-      {
-        keyword: "xxx"
-      }
-    ]
   };
+
   return <Nexment config={config} />;
 };
 
-export default Nexment;
+export default NexmentComponent;
 ```
 
-import this Nexment component anywhere in your project using "next/dynamic":
+Import it using `next/dynamic` to disable SSR:
 ```tsx
 import dynamic from "next/dynamic";
-const NexmentDiv = dynamic(() => import("./Nexment"), {
+
+const NexmentDiv = dynamic(() => import("./NexmentComponent"), {
   ssr: false,
 });
 
-const Index = () =>{
+const Page = () => {
   return (
     <div>
       <NexmentDiv />
     </div>
-  )
-}
+  );
+};
 
-export default Index;
+export default Page;
 ```
 
 <br/>
 
+## Migrating from LeanCloud
+
+If you were previously using the LeanCloud-based version of Nexment, follow these steps to migrate your data to Supabase:
+
+### 1. Export your LeanCloud data
+
+Go to your LeanCloud app → **Data Storage** → **Import/Export** → **Export** to download a backup. The backup will contain a `nexment_comments.0.jsonl` file with all your comments.
+
+### 2. Set up the Supabase table
+
+Follow the [Supabase setup instructions](#part-i---supabase) above to create the `nexment_comments` table.
+
+### 3. Run the migration script
+
+```shell
+node migration/leancloud-to-supabase.mjs <path-to-backup-dir> <output.sql>
+```
+
+For example:
+```shell
+node migration/leancloud-to-supabase.mjs ./my-backup ./seed.sql
+```
+
+This reads the `nexment_comments.0.jsonl` file from the backup directory and generates a `seed.sql` file containing INSERT statements for all your comments.
+
+### 4. Import the data
+
+Paste the contents of the generated `seed.sql` file into the Supabase **SQL Editor** and run it. All your comments (including reply threading) will be preserved.
+
+### 5. Update your config
+
+Replace the `leancloud` config with `supabase`:
+
+```diff
+  const config = {
+-   leancloud: {
+-     appId: "xxx",
+-     appKey: "xxx",
+-     serverURL: "https://xxx",
+-   },
++   supabase: {
++     url: "https://your-project.supabase.co",
++     anonKey: "your-anon-key",
++   },
+    admin: {
+      name: "xxx",
+      email: "xxx@xxx.xxx",
+    },
+  };
+```
+
+An example LeanCloud backup is included in the [`backup/`](./backup) directory for reference.
+
+<br/>
+
 ## TypeScript Support
-Nexment for React has full support for TypeScript type-checking
-
-<br/>
-
-## Roadmap
-See Github [projects→](https://github.com/ttttonyhe/nexment/projects)
-
-<br/>
-
-## Sponsor
-Your name will be on the list [Sponsors](https://www.ouorz.com/sponsor)
+Nexment has full TypeScript type-checking support.
 
 <br/>
 
 ## Contribution
-File an issue whenever you encountered a problem, pull requests are always welcomed
+File an issue whenever you encounter a problem, pull requests are always welcomed.

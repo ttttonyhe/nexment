@@ -51,6 +51,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
 			isOpen={tagPopoverStatus}
 			positions={["right", "bottom", "left", "top"]}
 			content={tagContent}
+			containerClassName="nexment-popover-container"
 			onClickOutside={() => {
 				setTagPopoverStatus(!tagPopoverStatus)
 			}}

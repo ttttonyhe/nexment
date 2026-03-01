@@ -1,0 +1,2 @@
+#filetype:JSON-streaming {"type":"Class","class":"_User"}
+{"salt":"fc0y55pg9xq8fw4cldz79bs6xdcgnv85ki7go37bk5zurp4t","email":"he@holptech.com","sessionToken":"yunwpzlnb0h6202lkojhvhqoi","updatedAt":"2020-07-28T17:45:28.984Z","ACL":{"*":{"read":true,"write":true}},"password":"LQu9grNRNwtHKBhrp6UbRieH/ekAVqC5crucKva9hA8HD6NpTfg6xNtLrK+d/x8RhxOU09eqPLVB/QB97TOy0g==","objectId":"5f206438d1509d0008606e3f","username":"TonyHe","createdAt":"2020-07-28T17:45:28.984Z","emailVerified":false,"mobilePhoneVerified":false}

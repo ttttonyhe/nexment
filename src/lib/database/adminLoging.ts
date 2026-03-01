@@ -1,64 +1,52 @@
 import { NexmentConfig } from "../utils/configContext"
-import leanCloud from "./initiation"
+import getSupabase from "./initiation"
+import { setCurrentUser } from "./initiation"
 
-/**
- * Nexment Admin Login
- *
- * @param {string} name
- * @param {string} email
- * @param {string} pwd
- * @param {NexmentConfig} config
- * @returns
- */
 const adminLogin = async (
 	name: string,
 	email: string,
 	pwd: string,
 	config: NexmentConfig
 ) => {
-	const AV = leanCloud(
-		config.leancloud.appId,
-		config.leancloud.appKey,
-		config.leancloud.serverURL
-	)
+	const supabase = getSupabase(config.supabase.url, config.supabase.anonKey)
 
-	const returnJson = await AV.User.loginWithEmail(email, pwd).then(
-		() => {
+	const { data, error } = await supabase.auth.signInWithPassword({
+		email,
+		password: pwd,
+	})
+
+	if (!error && data.user) {
+		setCurrentUser(data.user)
+		return {
+			status: 200,
+			msg: "Login success",
+		}
+	}
+
+	// If login fails, try to sign up (first-time admin registration)
+	if (name && email && pwd) {
+		const { data: signUpData, error: signUpError } =
+			await supabase.auth.signUp({
+				email,
+				password: pwd,
+				options: {
+					data: { username: name },
+				},
+			})
+
+		if (!signUpError && signUpData.user) {
+			setCurrentUser(signUpData.user)
 			return {
 				status: 200,
-				msg: "Login success",
-			}
-		},
-		async () => {
-			if (name && email && pwd) {
-				const possibleAdmin = new AV.User()
-				possibleAdmin.setUsername(name)
-				possibleAdmin.setPassword(pwd)
-				possibleAdmin.setEmail(email)
-				return possibleAdmin.signUp().then(
-					() => {
-						return {
-							status: 200,
-							msg: "Admin successfully registered",
-						}
-					},
-					() => {
-						return {
-							status: 500,
-							msg: "Login failed",
-						}
-					}
-				)
-			} else {
-				return {
-					status: 500,
-					msg: "Login failed",
-				}
+				msg: "Admin successfully registered",
 			}
 		}
-	)
+	}
 
-	return returnJson
+	return {
+		status: 500,
+		msg: "Login failed",
+	}
 }
 
 export default adminLogin

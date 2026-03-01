@@ -9,10 +9,9 @@ export interface NexmentConfig {
 		replyEmailNotifications?: boolean
 		descriptionTag?: boolean
 	}
-	leancloud: {
-		appId: string
-		appKey: string
-		serverURL: string
+	supabase: {
+		url: string
+		anonKey: string
 	}
 	admin: {
 		name: string
@@ -27,10 +26,9 @@ export interface NexmentConfig {
 }
 
 const Context = React.createContext<NexmentConfig>({
-	leancloud: {
-		appId: "",
-		appKey: "",
-		serverURL: "",
+	supabase: {
+		url: "",
+		anonKey: "",
 	},
 	admin: {
 		name: "",

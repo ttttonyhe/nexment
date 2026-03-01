@@ -1,7 +1,7 @@
 {
   "name": "nexment",
   "author": "ttttonyhe",
-  "version": "0.0.69",
+  "version": "0.0.7",
   "description": "A feature-rich serverless comment library for React",
   "repository": "git@github.com:ttttonyhe/nexment.git",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "github-markdown-css": "^5.4.0",
     "insert-text-at-cursor": "^0.3.0",
     "js-md5": "^0.8.3",
-    "leancloud-storage": "^4.15.2",
+    "@supabase/supabase-js": "^2.49.4",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",

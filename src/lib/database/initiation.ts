@@ -1,27 +1,29 @@
-// LeanCloud storage initiation
-import AV from "leancloud-storage"
+import { createClient, SupabaseClient, User } from "@supabase/supabase-js"
 
-// To avoid reinitialization
-var initCount = 0
+let supabaseInstance: SupabaseClient | null = null
+let cachedUser: User | null = null
 
-/**
- * LeanCloud Database Initiation
- *
- * @param {string} appId
- * @param {string} appKey
- * @param {string} serverURL
- * @returns
- */
-const leanCloud = (appId: string, appKey: string, serverURL: string) => {
-	if (initCount === 0) {
-		AV.init({
-			appId: appId,
-			appKey: appKey,
-			serverURL: serverURL,
-		})
-		initCount++
+const getSupabase = (url: string, anonKey: string): SupabaseClient => {
+	if (!supabaseInstance) {
+		supabaseInstance = createClient(url, anonKey)
 	}
-	return AV
+	return supabaseInstance
 }
 
-export default leanCloud
+export const getCurrentUser = (): User | null => cachedUser
+
+export const setCurrentUser = (user: User | null) => {
+	cachedUser = user
+}
+
+export const initAuth = async (
+	supabase: SupabaseClient
+): Promise<User | null> => {
+	const {
+		data: { session },
+	} = await supabase.auth.getSession()
+	cachedUser = session?.user ?? null
+	return cachedUser
+}
+
+export default getSupabase
