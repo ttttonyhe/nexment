@@ -140,6 +140,7 @@ html.nexment-scroll-locked body {
 	max-height: none;
 	overflow: hidden;
 	overflow-y: auto;
+	margin: auto;
 	overscroll-behavior: contain;
 
 	.nexment-dialog-close {
@@ -168,6 +169,7 @@ html.nexment-scroll-locked body {
 /* -- Notification modal -- */
 .nexment-modal-notification {
 	width: auto;
+	margin: auto;
 	max-width: min(360px, calc(100vw - 40px));
 	height: fit-content;
 
