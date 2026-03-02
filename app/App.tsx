@@ -17,6 +17,9 @@ const App = () => {
 			name: "Tony He",
 			email: "tony.hlp@hotmail.com",
 		},
+		email: {
+			endpoint: "https://lipeng.ac/api/resend",
+		},
 	}
 
 	return (

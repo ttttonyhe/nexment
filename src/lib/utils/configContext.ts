@@ -17,6 +17,9 @@ export interface NexmentConfig {
 		name: string
 		email: string
 	}
+	email?: {
+		endpoint: string
+	}
 	blackList?: {
 		name?: string
 		email?: string

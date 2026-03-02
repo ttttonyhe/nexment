@@ -19,12 +19,13 @@ interface NewCommentItem {
 }
 
 const sendEmail = async (
+	endpoint: string,
 	fromName: string,
 	toEmail: string,
 	content: string,
 	url: string
 ) => {
-	await fetch("https://nexment-mailer.lune.one", {
+	await fetch(endpoint, {
 		method: "POST",
 		headers: {
 			Accept: "application/json",
@@ -135,8 +136,9 @@ const useSavingComment = async (
 				.eq("id", info.replyOID)
 				.single()
 
-			if (parentComment?.email_when_replied) {
+			if (parentComment?.email_when_replied && config.email?.endpoint) {
 				sendEmail(
+					config.email.endpoint,
 					info.name,
 					parentComment.email,
 					converter.makeHtml(info.content),
