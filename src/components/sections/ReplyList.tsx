@@ -1,21 +1,33 @@
-import React from "react"
-import "../../styles/reply.scss"
+import React, { useCallback, useMemo } from "react"
 import { CommentItem } from "../../lib/database/getCommentsList"
 import CommentsArea from "./CommentArea"
-import Rodal from "rodal"
-import "../../styles/modal.scss"
-import { format } from "timeago.js"
-import { md5 } from "js-md5"
+import CommentItemCard from "./CommentItemCard"
+import CommentSkeleton from "./Skeleton"
 import Icon from "../icon"
-import ContentLoader from "react-content-loader"
 import translate from "../../lib/translation"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
-import converter from "../../lib/utils/showDown"
-import formatLink from "../../lib/utils/linkFormatter"
+import { useReplyTarget } from "../../lib/hooks/useReplyTarget"
+import "../../styles/modal.scss"
 
-/**
- * Nexment Reply list
- */
+interface FlatReply {
+	item: CommentItem
+	depth: number
+}
+
+const flattenReplies = (
+	items: CommentItem[],
+	depth: number = 0
+): FlatReply[] => {
+	const result: FlatReply[] = []
+	for (const item of items) {
+		result.push({ item, depth })
+		if (item.replyList.length > 0) {
+			result.push(...flattenReplies(item.replyList, depth + 1))
+		}
+	}
+	return result
+}
+
 const RepliesList = (Props: {
 	dataContent: CommentItem[]
 	replyTo?: string
@@ -23,79 +35,46 @@ const RepliesList = (Props: {
 	replyToID?: number
 	replyToOID?: string
 	replyToName?: string
-	visibilityFunction?: Function
-	replyItem?: any
+	visibilityFunction?: (oid: string) => void
+	replyItem: CommentItem
 }) => {
-	// Configs
 	const NexmentConfigs: NexmentConfig = React.useContext(Context)
-
-	// Translation
 	const Translation = translate.use().text
 
-	// Modal states
-	const [modalVisibility, setModalVisibility] = React.useState<{
-		[propsName: string]: boolean
-	}>({})
+	const [loadingStatus, setLoadingStatus] = React.useState(false)
 
-	// Loading state
-	const [loadingStatus, setLoadingStatus] = React.useState<boolean>(false)
-
-	// Comment state
-	const [replyToID, setReplyToID] = React.useState<number>(
-		Props.replyToID ? Props.replyToID : 0
+	const {
+		target: replyTarget,
+		random,
+		setReply,
+	} = useReplyTarget(
+		Props.replyToID && Props.replyToOID && Props.replyToName
+			? {
+					id: Props.replyToID,
+					oid: Props.replyToOID,
+					name: Props.replyToName,
+					content: "",
+				}
+			: null
 	)
-	const [replyToOID, setReplyToOID] = React.useState<string>(
-		Props.replyToOID ? Props.replyToOID : ""
+
+	const flatReplies = useMemo(
+		() => flattenReplies(Props.dataContent),
+		[Props.dataContent]
 	)
-	const [replyToName, setReplyToName] = React.useState<string>(
-		Props.replyToName ? Props.replyToName : ""
+
+	const handleItemReply = useCallback(
+		(id: number, oid: string, name: string, content: string) => {
+			setReply(id, oid, name, content)
+			window.location.href = "#nexment-comment-area"
+		},
+		[setReply]
 	)
-	const [replyToContent, setReplyToContent] = React.useState<string>("")
-	const [commentsAreaRandom, setRandom] = React.useState<number>(Math.random())
 
-	/**
-	 * Modal toggling function
-	 *
-	 * @param {string} repliesBelongOID
-	 */
-	const toggleModal = (repliesBelongOID: string) => {
-		/**
-		 * State updating solution
-		 * refer to https://blog.csdn.net/vandavidchou/article/details/102618866
-		 */
-		setModalVisibility((prevState: any) => {
-			const nowState = { ...prevState }
-			nowState[repliesBelongOID] = nowState[repliesBelongOID] ? false : true
-			return nowState
-		})
-	}
-
-	// Modal closing event handler
-	const handleClose = (OID: string) => {
-		toggleModal(OID)
-	}
-
-	/**
-	 * Admin badge display
-	 *
-	 * @param {string} name
-	 * @param {string} email
-	 * @returns
-	 */
-	const adminBadge = (name: string, email: string) => {
-		if (
-			name === NexmentConfigs.admin.name &&
-			email === NexmentConfigs.admin.email
-		) {
-			return (
-				<div className="nexment-admin-badge">
-					<Icon name="admin" />
-				</div>
-			)
-		} else {
-			return ""
-		}
-	}
+	const handlePrimaryClick = useCallback(() => {
+		setReply(Props.replyItem.ID, Props.replyItem.OID, Props.replyItem.name, "")
+		window.location.href = "#nexment-comment-area"
+	}, [Props.replyItem, setReply])
 
 	return (
 		<div>
@@ -106,14 +85,14 @@ const RepliesList = (Props: {
 			<div className="nexment-reply-container">
 				<CommentsArea
 					pageKey={Props.pageKey}
-					replyTo={replyToID}
-					replyToOID={replyToOID}
-					replyToName={replyToName}
-					replyToContent={replyToContent}
+					replyTo={replyTarget?.id}
+					replyToOID={replyTarget?.oid}
+					replyToName={replyTarget?.name}
+					replyToContent={replyTarget?.content}
 					primaryReplyTo={Props.replyToID}
 					primaryReplyToOID={Props.replyToOID}
 					primaryReplyToName={Props.replyToName}
-					random={commentsAreaRandom}
+					random={random}
 					reloadFunc={setLoadingStatus}
 				/>
 				<ul className="nexment-comments-list">
@@ -121,192 +100,39 @@ const RepliesList = (Props: {
 						className="nexment-comments-list-item"
 						id={Props.replyItem.ID.toString()}
 					>
-						<div
-							className="nexment-comments-div nexment-reply-primary"
-							onClick={() => {
-								setReplyToID(Props.replyItem.ID)
-								setReplyToOID(Props.replyItem.OID)
-								setReplyToName(Props.replyItem.name)
-								setReplyToContent("")
-								setRandom(Math.random())
-								window.location.href = "#nexment-comment-area"
-							}}
-						>
-							<div className="nexment-comments-avatar">
-								<img
-									src={
-										"https://gravatar.loli.net/avatar/" +
-										md5(Props.replyItem.email) +
-										"?d=mp"
-									}
-								/>
-								{adminBadge(Props.replyItem.name, Props.replyItem.email)}
-							</div>
-							<div className="nexment-comments-title">
-								<h5>
-									<a
-										href={formatLink(Props.replyItem.link)}
-										target="_blank"
-										rel="noreferrer"
-									>
-										{Props.replyItem.name}
-									</a>
-									<span> · </span>
-									<b>{format(Props.replyItem.date)}</b>
-									<em className="nexment-reply-icon">
-										<Icon name="reply" />
-									</em>
-								</h5>
-								<p className="nexment-comments-des">{Props.replyItem.tag}</p>
-								<div
-									className={
-										"nexment-comments-content " +
-										(Props.replyItem.tag ? "" : "margin-top")
-									}
-									dangerouslySetInnerHTML={{
-										__html: converter.makeHtml(Props.replyItem.content),
-									}}
-								/>
-							</div>
+						<div onClick={handlePrimaryClick}>
+							<CommentItemCard
+								item={Props.replyItem}
+								config={NexmentConfigs}
+								variant="modalPrimary"
+							/>
 						</div>
 						<div>
 							<ul className="nexment-comments-reply-list">
-								{loadingStatus ? (
-									<div className="nexment-loading">
-										<ContentLoader
-											speed={2}
-											width={100}
-											style={{ width: "100%" }}
-											height={45}
-											backgroundColor="#f3f3f3"
-											foregroundColor="#ecebeb"
-										>
-											<rect
-												x="52"
-												y="8"
-												rx="3"
-												ry="3"
-												width="100%"
-												height="10"
-											/>
-											<rect
-												x="52"
-												y="30"
-												rx="3"
-												ry="3"
-												width="80%"
-												height="10"
-											/>
-											<circle cx="20" cy="24" r="20" />
-										</ContentLoader>
-									</div>
-								) : (
-									""
-								)}
-								{Props.dataContent !== undefined && Props.dataContent.length ? (
-									Props.dataContent.map((item) => (
+								{loadingStatus && <CommentSkeleton variant="compact" />}
+								{flatReplies.length ? (
+									flatReplies.map(({ item, depth }) => (
 										<div
 											className="nexment-comments-list-item-div"
 											key={item.ID}
 											id={item.ID.toString()}
+											style={
+												depth > 0
+													? {
+															borderLeft: `${2 + depth}px dashed #eee`,
+															paddingLeft: 10,
+															marginLeft: 5,
+														}
+													: undefined
+											}
 										>
 											<li className="nexment-comments-list-item">
-												<div
-													className="nexment-comments-div"
-													onClick={() => {
-														if (item.hasReplies) {
-															toggleModal(item.OID)
-														} else {
-															setReplyToID(item.ID)
-															setReplyToOID(item.OID)
-															setReplyToName(item.name)
-															setReplyToContent(item.content)
-															setRandom(Math.random())
-															window.location.href = "#nexment-comment-area"
-														}
-													}}
-												>
-													<div className="nexment-comments-avatar">
-														<img
-															src={
-																"https://gravatar.loli.net/avatar/" +
-																md5(item.email) +
-																"?d=mp"
-															}
-														/>
-														{adminBadge(item.name, item.email)}
-													</div>
-													<div className="nexment-comments-title">
-														<h5>
-															<a
-																href={formatLink(item.link)}
-																target="_blank"
-																rel="noreferrer"
-															>
-																{item.name}
-															</a>
-															<span> · </span>
-															<b>{format(item.date)}</b>
-															{item.hasReplies ? (
-																<b className="nexment-comments-replyto">
-																	<span> · </span>
-																	<button>
-																		{item.replyList.length}{" "}
-																		{item.replyList.length > 1
-																			? Translation.replies
-																			: Translation.reply}
-																		<Icon name="down" />
-																	</button>
-																</b>
-															) : (
-																""
-															)}
-															<em className="nexment-reply-icon">
-																<Icon name="reply" />
-															</em>
-														</h5>
-														<p className="nexment-comments-des">{item.tag}</p>
-														<div
-															className={
-																"nexment-comments-content " +
-																(item.tag ? "" : "margin-top")
-															}
-															dangerouslySetInnerHTML={{
-																__html: converter.makeHtml(item.content),
-															}}
-														/>
-													</div>
-												</div>
-
-												{/* Replies */}
-												<div>
-													{
-														// Recursive reply modal
-														item.hasReplies && modalVisibility[item.OID] ? (
-															<Rodal
-																visible={modalVisibility[item.OID]}
-																onClose={() => {
-																	handleClose(item.OID)
-																}}
-																duration={0}
-																showMask={false}
-															>
-																<RepliesList
-																	key={item.OID}
-																	dataContent={item.replyList}
-																	replyTo={item.name}
-																	pageKey={Props.pageKey}
-																	replyToID={item.ID}
-																	replyToOID={item.OID}
-																	replyToName={item.name}
-																	replyItem={item}
-																/>
-															</Rodal>
-														) : (
-															""
-														)
-													}
-												</div>
+												<CommentItemCard
+													item={item}
+													config={NexmentConfigs}
+													variant="modal"
+													onReply={handleItemReply}
+												/>
 											</li>
 										</div>
 									))
@@ -326,4 +152,5 @@ const RepliesList = (Props: {
 		</div>
 	)
 }
+
 export default RepliesList

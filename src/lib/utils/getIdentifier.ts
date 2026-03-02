@@ -1,14 +1,3 @@
-/**
- * Get current page key
- *
- * @returns {{status:number,identifierData:string}}
- */
-const getIdentifier = (): { status: number; identifierData: string } => {
-	let identifier: string = window.location.pathname
-	return {
-		status: 200,
-		identifierData: identifier,
-	}
-}
+const getIdentifier = (): string => window.location.pathname
 
 export default getIdentifier

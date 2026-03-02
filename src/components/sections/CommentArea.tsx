@@ -1,10 +1,7 @@
 import React from "react"
-import { md5 } from "js-md5"
-import { Tooltip } from "react-tooltip"
 import { validate } from "email-validator"
 import TextareaAutosize from "react-textarea-autosize"
-import insertTextAtCursor from "insert-text-at-cursor"
-import usingSaveComment from "../../lib/database/saveComment"
+import saveComment from "../../lib/database/saveComment"
 import generateCommentID from "../../lib/utils/generateCommentID"
 import { refetchData } from "../../lib/database/getCommentsList"
 import EmojiPopover from "../controls/emoji-popover"
@@ -19,28 +16,25 @@ import {
 import Icon from "../icon"
 import translate from "../../lib/translation"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
-import converter from "../../lib/utils/showDown"
+import { renderMarkdown } from "../../lib/utils/showDown"
+import { getGravatarUrl } from "../../lib/utils/gravatar"
 import { scrollToElementById } from "../../lib/utils/scrollToElement"
 
 import "../../styles/commentarea.scss"
 
-// Get commenter info from local storage
-const getCommenterInfo = (type: string) => {
-	const commenterInfo = JSON.parse(
-		localStorage.getItem("nexment-commenterInfo") || "{}"
-	)
-	if (commenterInfo) {
-		return commenterInfo[type]
-	} else {
-		if (type === "ewr") {
-			return false
-		} else {
-			return ""
-		}
-	}
+interface CommentsAreaProps {
+	pageKey: string
+	replyTo: number | undefined
+	replyToOID: string | undefined
+	replyToName: string | undefined
+	replyToContent: string | undefined
+	primaryReplyTo: number | undefined
+	primaryReplyToOID: string | undefined
+	primaryReplyToName: string | undefined
+	random?: number
+	reloadFunc?: (loading: boolean) => void
 }
 
-// Store commenter info in local storage
 const setCommenterInfo = (info: {
 	name: string
 	email: string
@@ -51,34 +45,15 @@ const setCommenterInfo = (info: {
 	localStorage.setItem("nexment-commenterInfo", JSON.stringify(info))
 }
 
-/**
- * Nexment Comment area
- */
-const CommentsArea = (Props: {
-	pageKey: string
-	replyTo: number | undefined
-	replyToOID: string | undefined
-	replyToName: string | undefined
-	replyToContent: string | undefined
-	primaryReplyTo: number | undefined
-	primaryReplyToOID: string | undefined
-	primaryReplyToName: string | undefined
-	random?: number
-	reloadFunc?: Function
-}) => {
-	// Configs
+const CommentsArea = (Props: CommentsAreaProps) => {
 	const NexmentConfigs: NexmentConfig = React.useContext(Context)
-
-	// Translation
 	const Translation = translate.use().text
 
-	// Initialize Supabase client
 	const supabase = getSupabase(
 		NexmentConfigs.supabase.url,
 		NexmentConfigs.supabase.anonKey
 	)
 
-	// Admin auth state
 	const [adminUser, setAdminUser] = React.useState(getCurrentUser())
 
 	React.useEffect(() => {
@@ -92,78 +67,51 @@ const CommentsArea = (Props: {
 		})
 	}, [])
 
-	// Get initial replyto / replytoOID
 	const primaryReplyTo = Props.primaryReplyTo
 	const primaryReplyToOID = Props.primaryReplyToOID
 	const primaryReplyToName = Props.primaryReplyToName
 
-	// Current comment states
 	const [commentName, setCommentName] = React.useState<string>(
 		getCurrentUser()?.user_metadata?.username || ""
 	)
 	const [commentEmail, setCommentEmail] = React.useState<string>(
 		getCurrentUser()?.email || ""
 	)
-	const [commentLink, setCommentLink] = React.useState<string>("")
-	const [commentContent, setCommentContent] = React.useState<string>("")
-	const [commentTag, setCommentTag] = React.useState<string>("")
-	const [commentEwr, setCommentEwr] = React.useState<boolean>(false)
-
-	// Resetting state
-	const [resetStatus, setResetStatus] = React.useState<boolean>(false)
-
-	// Modal state
-	const [modalStatus, setModalStatus] = React.useState<boolean>(false)
-
-	// Markdown preview state
-	const [previewStatus, setPreviewStatus] = React.useState<boolean>(false)
-
-	const [sendingComment, setSendingComment] = React.useState<boolean>(false)
-	const [showProgressBar, setShowProgressBar] = React.useState<boolean>(false)
-	const [progress, setProgress] = React.useState<number>(10)
+	const [commentLink, setCommentLink] = React.useState("")
+	const [commentContent, setCommentContent] = React.useState("")
+	const [commentTag, setCommentTag] = React.useState("")
+	const [commentEwr, setCommentEwr] = React.useState(false)
+	const [resetStatus, setResetStatus] = React.useState(false)
+	const [modalStatus, setModalStatus] = React.useState(false)
+	const [previewStatus, setPreviewStatus] = React.useState(false)
+	const [sendingComment, setSendingComment] = React.useState(false)
+	const [showProgressBar, setShowProgressBar] = React.useState(false)
+	const [progress, setProgress] = React.useState(10)
 
 	React.useEffect(() => {
-		if (showProgressBar) {
-			let currentProgress = 10
-			const increment = setInterval(() => {
-				currentProgress += 10 + Math.floor(currentProgress / 10)
-				setProgress(currentProgress + 10)
-				if (currentProgress > 60) {
-					clearInterval(increment)
-				}
-			}, 150)
-		}
+		if (!showProgressBar) return
+		let currentProgress = 10
+		const increment = setInterval(() => {
+			currentProgress += 10 + Math.floor(currentProgress / 10)
+			setProgress(currentProgress + 10)
+			if (currentProgress > 60) {
+				clearInterval(increment)
+			}
+		}, 150)
+		return () => clearInterval(increment)
 	}, [showProgressBar])
 
 	React.useEffect(() => {
-		const commenterName = getCommenterInfo("name")
-		const commenterEmail = getCommenterInfo("email")
-		const commenterLink = getCommenterInfo("link")
-		const commenterTag = getCommenterInfo("tag")
-		const commenterEwr = getCommenterInfo("ewr")
-
-		if (commenterName) {
-			setCommentName(commenterName)
-		}
-		if (commenterEmail) {
-			setCommentEmail(commenterEmail)
-		}
-		if (commenterLink) {
-			setCommentLink(commenterLink)
-		}
-		if (commenterTag) {
-			setCommentTag(commenterTag)
-		}
-		if (commenterEwr) {
-			setCommentEwr(commenterEwr)
-		}
+		const info = JSON.parse(
+			localStorage.getItem("nexment-commenterInfo") || "{}"
+		)
+		if (info.name) setCommentName(info.name)
+		if (info.email) setCommentEmail(info.email)
+		if (info.link) setCommentLink(info.link)
+		if (info.tag) setCommentTag(info.tag)
+		if (info.ewr) setCommentEwr(info.ewr)
 	}, [])
 
-	/**
-	 * Listen to replyTo / random change
-	 * random is a random number
-	 * designed to make reset status false when replying to the previous comment
-	 */
 	React.useEffect(() => {
 		setResetStatus(false)
 	}, [Props.replyTo, Props.random])
@@ -172,57 +120,45 @@ const CommentsArea = (Props: {
 		resetReplyTo()
 	}, [Props.pageKey])
 
-	// Input change handlers
-	const handleNameChange = (e: {
-		target: { value: React.SetStateAction<string> }
-	}) => {
+	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setCommentName(e.target.value)
 		if (e.target.value === NexmentConfigs.admin.name && !adminUser) {
 			setModalStatus(true)
 		}
 	}
 
-	const handleEmailChange = (e: {
-		target: { value: React.SetStateAction<string> }
-	}) => {
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setCommentEmail(e.target.value)
 		if (e.target.value === NexmentConfigs.admin.email && !adminUser) {
 			setModalStatus(true)
 		}
 	}
 
-	const handleLinkChange = (e: {
-		target: { value: React.SetStateAction<string> }
-	}) => {
+	const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setCommentLink(e.target.value)
 	}
 
-	const handleContentChange = (e: {
-		target: { value: React.SetStateAction<string> }
-	}) => {
+	const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setCommentContent(e.target.value)
 	}
 
-	const handleTagChange = (e: {
-		target: { value: React.SetStateAction<string> }
-	}) => {
+	const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setCommentTag(e.target.value)
 	}
 
-	// Comment submitting function
-	const sendComment = async () => {
+	const sendCommentHandler = async () => {
 		setSendingComment(true)
 
-		let replyingTo = resetStatus ? primaryReplyTo : Props.replyTo
-		let replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID
-		let thisID = generateCommentID().idData
-		const returnData = await usingSaveComment(
+		const replyingTo = resetStatus ? primaryReplyTo : Props.replyTo
+		const replyingToOID = resetStatus ? primaryReplyToOID : Props.replyToOID
+		const thisID = generateCommentID()
+		const returnData = await saveComment(
 			{
 				ID: thisID,
 				identifier: Props.pageKey,
 				name: commentName,
 				email: commentEmail,
-				link: commentLink ? commentLink : undefined,
+				link: commentLink || undefined,
 				content: commentContent,
 				tag: commentTag,
 				reply: replyingTo,
@@ -234,15 +170,11 @@ const CommentsArea = (Props: {
 
 		switch (returnData.status) {
 			case 400:
-				alert(
-					"Nexment: An error occurred while submitting your comment.\nComment is too long or too short."
-				)
+				alert("Nexment: An error occurred while submitting your comment.\nComment is too long or too short.")
 				setSendingComment(false)
 				break
 			case 500:
-				alert(
-					"Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information."
-				)
+				alert("Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information.")
 				setSendingComment(false)
 				break
 			case 501:
@@ -250,15 +182,11 @@ const CommentsArea = (Props: {
 				setSendingComment(false)
 				break
 			case 401:
-				alert(
-					"Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam."
-				)
+				alert("Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam.")
 				setSendingComment(false)
 				break
 			default:
 				setShowProgressBar(true)
-
-				// Store commenter info
 				setCommenterInfo({
 					name: commentName,
 					email: commentEmail,
@@ -269,33 +197,20 @@ const CommentsArea = (Props: {
 
 				setTimeout(() => {
 					setProgress(100)
-
 					setTimeout(async () => {
 						setShowProgressBar(false)
 						setProgress(10)
-
-						// Refetch data using swr mutate
 						await refetchData(Props.pageKey).finally(() => {
-							// Set content to empty
 							setCommentContent("")
-
-							// Jump to replied to/comment item
 							if (replyingTo) {
 								scrollToElementById(replyingTo.toString())
 							} else {
 								scrollToElementById(thisID.toString())
 							}
-
-							// flash replied to/comment item
-							document
-								.getElementById(thisID.toString())
-								?.classList.add("nexment-flash")
+							document.getElementById(thisID.toString())?.classList.add("nexment-flash")
 							setTimeout(() => {
-								document
-									.getElementById(thisID.toString())
-									?.classList.remove("nexment-flash")
+								document.getElementById(thisID.toString())?.classList.remove("nexment-flash")
 							}, 2000)
-
 							setSendingComment(false)
 							resetReplyTo()
 						})
@@ -304,44 +219,28 @@ const CommentsArea = (Props: {
 		}
 	}
 
-	// Reset reply to initial
-	const resetReplyTo = () => {
-		setResetStatus(true)
-	}
+	const resetReplyTo = () => setResetStatus(true)
 
-	// Get who are we replying to
-	const getReplyTo = () => {
-		if (resetStatus) {
-			return primaryReplyToName
-		} else {
-			return Props.replyToName
-		}
-	}
+	const getReplyTo = () =>
+		resetStatus ? primaryReplyToName : Props.replyToName
 
-	// Reply className
 	const getReplyDisplay = () => {
 		if (resetStatus) {
-			if (primaryReplyToName) {
-				return "nexment-replying"
-			} else {
-				return ""
-			}
-		} else {
-			if (primaryReplyToName || Props.replyToName) {
-				return "nexment-replying"
-			} else {
-				return ""
-			}
+			return primaryReplyToName ? "nexment-replying" : ""
 		}
+		return primaryReplyToName || Props.replyToName ? "nexment-replying" : ""
 	}
 
-	// Create a ref for textarea
-	const nexmentTextarea: any = React.useRef(null)
+	const nexmentTextarea = React.useRef<HTMLTextAreaElement>(null)
 
-	// Process data sending from content addons, insert content at cursor
 	const handleAddon = (content: string) => {
-		// Insert emoji at cursor
-		insertTextAtCursor(nexmentTextarea.current, content)
+		const el = nexmentTextarea.current
+		if (!el) return
+		const start = el.selectionStart
+		const end = el.selectionEnd
+		el.setRangeText(content, start, end, "end")
+		el.dispatchEvent(new Event("input", { bubbles: true }))
+		setCommentContent(el.value)
 	}
 
 	return (
@@ -358,14 +257,11 @@ const CommentsArea = (Props: {
 						<div
 							className="nexment-comment-area-replying-to-content"
 							dangerouslySetInnerHTML={{
-								__html: converter.makeHtml(Props.replyToContent),
+								__html: renderMarkdown(Props.replyToContent),
 							}}
 						/>
 					</div>
-					<div
-						className="nexment-comment-area-replying-to-cta"
-						onClick={resetReplyTo}
-					>
+					<div className="nexment-comment-area-replying-to-cta" onClick={resetReplyTo}>
 						<button>
 							<Icon name="cancel" />
 						</button>
@@ -377,7 +273,7 @@ const CommentsArea = (Props: {
 				id="nexment-comment-area"
 				onSubmit={(e) => {
 					e.preventDefault()
-					sendComment()
+					sendCommentHandler()
 				}}
 			>
 				<div className="nexment-comment-area-top">
@@ -389,23 +285,21 @@ const CommentsArea = (Props: {
 							rel="noreferrer"
 						>
 							<img
-								src={`https://gravatar.loli.net/avatar/${md5(
-									commentEmail
-								)}?d=mp`}
-								data-tooltip-content={Translation.avatar}
+								src={getGravatarUrl(commentEmail)}
+								title={Translation.avatar}
 							/>
 						</a>
 					) : null}
 					<input
 						className="nexment-comment-area-top-name-input"
-						placeholder={commentName ? commentName : Translation.name}
+						placeholder={commentName || Translation.name}
 						onChange={handleNameChange}
 						value={commentName}
 						type="text"
 						required
 					/>
 					<input
-						placeholder={commentEmail ? commentEmail : Translation.email}
+						placeholder={commentEmail || Translation.email}
 						onChange={handleEmailChange}
 						value={commentEmail}
 						type="email"
@@ -413,7 +307,7 @@ const CommentsArea = (Props: {
 					/>
 					{NexmentConfigs.features?.linkInput ? (
 						<input
-							placeholder={commentLink ? commentLink : Translation.link}
+							placeholder={commentLink || Translation.link}
 							onChange={handleLinkChange}
 							value={commentLink}
 							type="url"
@@ -424,9 +318,7 @@ const CommentsArea = (Props: {
 					{showProgressBar && (
 						<div
 							className="nexment-comment-area-middle-progress-bar"
-							style={{
-								width: `${progress}%`,
-							}}
+							style={{ width: `${progress}%` }}
 						/>
 					)}
 					<TextareaAutosize
@@ -439,18 +331,12 @@ const CommentsArea = (Props: {
 					/>
 					{previewStatus ? (
 						<div
-							className={`nexment-md-preview markdown-body ${
-								previewStatus ? "nexment-previewing" : ""
-							}`}
+							className={`nexment-md-preview markdown-body ${previewStatus ? "nexment-previewing" : ""}`}
 							dangerouslySetInnerHTML={{
-								__html: converter.makeHtml(
-									commentContent ? commentContent : Translation.nothing
-								),
+								__html: renderMarkdown(commentContent || Translation.nothing),
 							}}
 						/>
-					) : (
-						""
-					)}
+					) : null}
 				</div>
 				<div className="nexment-comment-area-bottom">
 					<div className="nexment-comment-area-toolbar">
@@ -461,38 +347,23 @@ const CommentsArea = (Props: {
 						{NexmentConfigs.features?.replyEmailNotifications && (
 							<button
 								type="button"
-								data-tooltip-id="nexment-tooltip"
-								data-tooltip-content={
-									commentEwr ? Translation.unSub : Translation.sub
-								}
-								onClick={() => {
-									setCommentEwr(!commentEwr)
-								}}
+								title={commentEwr ? Translation.unSub : Translation.sub}
+								onClick={() => setCommentEwr(!commentEwr)}
 							>
 								{commentEwr ? <Icon name="email" /> : <Icon name="emailFill" />}
 							</button>
 						)}
 						<button
 							type="button"
-							data-tooltip-id="nexment-tooltip"
-							data-tooltip-content={
-								previewStatus ? Translation.stopPreview : Translation.mdPreview
-							}
-							onClick={() => {
-								setPreviewStatus(!previewStatus)
-							}}
+							title={previewStatus ? Translation.stopPreview : Translation.mdPreview}
+							onClick={() => setPreviewStatus(!previewStatus)}
 						>
-							{previewStatus ? (
-								<Icon name="markdownFill" />
-							) : (
-								<Icon name="markdown" />
-							)}
+							{previewStatus ? <Icon name="markdownFill" /> : <Icon name="markdown" />}
 						</button>
 						{adminUser ? (
 							<button
 								type="button"
-								data-tooltip-id="nexment-tooltip"
-								data-tooltip-content={Translation.adminLogout}
+								title={Translation.adminLogout}
 								onClick={async () => {
 									await supabase.auth.signOut()
 									setCurrentUser(null)
@@ -508,7 +379,7 @@ const CommentsArea = (Props: {
 						<button type="submit" disabled={sendingComment}>
 							<span>{Translation.submit}</span>
 							{sendingComment ? (
-								<span className="spinner">
+								<span className="nexment-spinner">
 									<Icon name="loader" />
 								</span>
 							) : (
@@ -517,16 +388,12 @@ const CommentsArea = (Props: {
 						</button>
 					</div>
 				</div>
-				{/* Modals */}
-				{modalStatus ? (
+				{modalStatus && (
 					<VerificationModal
 						config={NexmentConfigs}
 						visibilityFunction={setModalStatus}
 					/>
-				) : (
-					""
 				)}
-				<Tooltip className="nexment-tooltip" id="nexment-tooltip" />
 			</form>
 		</div>
 	)

@@ -27,28 +27,6 @@ const IconSvgs = {
 			/>
 		</svg>
 	),
-	viewReply: (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-			<path
-				d="M2 8.99374C2 5.68349 4.67654 3 8.00066 3H15.9993C19.3134 3 22 5.69478 22 8.99374V21H8.00066C4.68659 21 2 18.3052 2 15.0063V8.99374ZM20 19V8.99374C20 6.79539 18.2049 5 15.9993 5H8.00066C5.78458 5 4 6.78458 4 8.99374V15.0063C4 17.2046 5.79512 19 8.00066 19H20ZM14 11H16V13H14V11ZM8 11H10V13H8V11Z"
-				fill="currentColor"
-			/>
-		</svg>
-	),
-	resetReply: (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 24 24"
-			width="20"
-			height="20"
-		>
-			<path fill="none" d="M0 0h24v24H0z" />
-			<path
-				d="M2.808 1.393l19.799 19.8-1.415 1.414-3.608-3.608L6.455 19 2 22.5V4c0-.17.042-.329.116-.469l-.723-.723 1.415-1.415zm1.191 4.02L4 18.385 5.763 17h9.821L4 5.412zM21 3a1 1 0 0 1 1 1v13.785l-2-2V5L9.213 4.999 7.214 3H21z"
-				fill="currentColor"
-			/>
-		</svg>
-	),
 	resetFill: (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -260,23 +238,10 @@ const IconSvgs = {
 			/>
 		</svg>
 	),
-	arrowRightFill: (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-			<path d="M16 12L10 18V6L16 12Z" fill="currentColor" />
-		</svg>
-	),
 	loader: (
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 			<path
 				d="M18.364 5.63604L16.9497 7.05025C15.683 5.7835 13.933 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12H21C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C14.4853 3 16.7353 4.00736 18.364 5.63604Z"
-				fill="currentColor"
-			/>
-		</svg>
-	),
-	return: (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-			<path
-				d="M19.0003 10.0003L19.0004 19.0002L17.0004 19.0002L17.0003 12.0003L6.82845 12.0002L10.7782 15.9499L9.36396 17.3642L3 11.0002L9.36396 4.63623L10.7782 6.05044L6.8284 10.0002L19.0003 10.0003Z"
 				fill="currentColor"
 			/>
 		</svg>

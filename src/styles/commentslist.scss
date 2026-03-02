@@ -29,7 +29,7 @@ $greyerGrey: #949494;
 	margin-left: 60px;
 	list-style: none;
 	padding-left: 10px;
-	margin-top: -10px;
+	margin-top: -5px;
 	margin-bottom: 15px;
 	border-left: 2px solid #eee;
 	.nexment-comments-div {
@@ -250,11 +250,11 @@ $borderColor: #e0e0e0;
 			overflow: hidden;
 		}
 
-		.margin-top {
+		.nexment-margin-top {
 			margin-top: 0px !important;
 		}
 
-		.margin-top-reply {
+		.nexment-margin-top-reply {
 			margin-top: -1px !important;
 			border: none !important;
 			padding: 0 !important;
@@ -381,8 +381,8 @@ $borderColor: #e0e0e0;
 }
 
 .nexment-inner-reply-list {
-	border-left: 2px dashed #eee !important;
-	margin-top: -5px;
+	border-left-color: #eee !important;
+	margin-top: 0;
 	.nexment-reply-icon-reply {
 		display: none !important;
 	}

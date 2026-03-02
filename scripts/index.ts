@@ -2,7 +2,7 @@ import { join } from "path"
 import type { BuildOptions } from "esbuild"
 import { dtsPlugin } from "esbuild-plugin-d.ts"
 import { sassPlugin } from "esbuild-sass-plugin"
-import { dependencies } from "../package.json"
+import { dependencies, peerDependencies } from "../package.json"
 
 const ESBUILD_CONFIG_BASE = {
 	outdir: "dist",
@@ -17,7 +17,11 @@ export const ESBUILD_CONFIG: BuildOptions = {
 	platform: "browser",
 	metafile: true,
 	format: "esm",
-	external: Object.keys(dependencies),
+	external: [
+		...Object.keys(dependencies),
+		...Object.keys(peerDependencies),
+		"react/jsx-runtime",
+	],
 	plugins: [
 		sassPlugin({
 			type: "style",

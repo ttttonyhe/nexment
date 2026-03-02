@@ -1,75 +1,54 @@
 import React from "react"
 import { Popover } from "react-tiny-popover"
-import emojis from "./emoji"
 import Icon from "../../icon"
 
-/**
- * Nexment Emoji Card
- *
- * @param {{ handler: any }} Props
- * @returns
- */
-const EmojiCard = (Props: { handler: any }) => {
-	// Popover state
-	const [emojiPopoverStatus, setEmojiPopoverStatus] =
-		React.useState<boolean>(false)
-	// Event handler for clicking in Emoji card
+const EmojiCard = (Props: { handler: (emoji: string) => void }) => {
+	const [emojiPopoverStatus, setEmojiPopoverStatus] = React.useState(false)
+	const [emojis, setEmojis] = React.useState<string[][] | null>(null)
+
 	const toggleEmojiCard = () => {
+		if (!emojiPopoverStatus && !emojis) {
+			import("./emoji").then((mod) => setEmojis(mod.default))
+		}
 		setEmojiPopoverStatus(!emojiPopoverStatus)
 	}
-	/**
-	 * Emoji Card Content
-	 *
-	 * @returns
-	 */
-	const emojiContent = () => {
-		return (
-			<div className="nexment-emoji-container">
-				{emojis.map((cate) => {
-					return (
-						<div className="nexment-emoji-section" key={"cate" + cate}>
-							<div className="nexment-emoji-section-header">
-								<b>{cate[0]}</b>
-							</div>
-							<div className="nexment-emoji-section-box">
-								<div className="nexment-emoji-section-container">
-									{cate.slice(1).map((item) => {
-										return (
-											<span
-												key={"emoji" + item}
-												onClick={() => {
-													Props.handler(item)
-													toggleEmojiCard()
-												}}
-											>
-												{item}
-											</span>
-										)
-									})}
-								</div>
-							</div>
+
+	const emojiContent = () => (
+		<div className="nexment-emoji-container">
+			{emojis?.map((cate) => (
+				<div className="nexment-emoji-section" key={cate[0]}>
+					<div className="nexment-emoji-section-header">
+						<b>{cate[0]}</b>
+					</div>
+					<div className="nexment-emoji-section-box">
+						<div className="nexment-emoji-section-container">
+							{cate.slice(1).map((item) => (
+								<span
+									key={item}
+									onClick={() => {
+										Props.handler(item)
+										toggleEmojiCard()
+									}}
+								>
+									{item}
+								</span>
+							))}
 						</div>
-					)
-				})}
-			</div>
-		)
-	}
+					</div>
+				</div>
+			))}
+		</div>
+	)
+
 	return (
 		<Popover
 			isOpen={emojiPopoverStatus}
 			positions={["right", "bottom", "left", "top"]}
 			content={emojiContent}
 			containerClassName="nexment-popover-container"
-			onClickOutside={() => {
-				toggleEmojiCard()
-			}}
+			onClickOutside={toggleEmojiCard}
 		>
-			<button
-				type="button"
-				data-tooltip-id="nexment-tooltip"
-				data-tooltip-content="Emoji"
-				onClick={() => toggleEmojiCard()}
-			>
+			<button type="button" title="Emoji" onClick={toggleEmojiCard}>
 				<Icon name="emoji" />
 			</button>
 		</Popover>

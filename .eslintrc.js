@@ -8,7 +8,7 @@ module.exports = {
 		es6: true,
 	},
 	rules: {
-		camelcase: "error",
+		camelcase: "warn",
 		"react/prop-types": "off",
 		"react/display-name": "off",
 		"react/react-in-jsx-scope": "off",

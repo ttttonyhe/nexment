@@ -16,6 +16,21 @@ export interface CommentItem {
 	link: string
 }
 
+interface SupabaseCommentRow {
+	id: string
+	comment_id: number
+	identifier: string
+	name: string
+	content: string
+	created_at: string
+	email: string
+	tag: string
+	link: string
+	has_replies: boolean
+	reply: number | null
+	email_when_replied: boolean
+}
+
 type CommentReplyItem = Omit<CommentItem, "replyList">
 
 export const refetchData = async (pageKey: string) => {
@@ -48,7 +63,7 @@ const useComments = (
 			[commentItemId: string]: CommentReplyItem[]
 		} = {}
 
-		items.map((item: any) => {
+		for (const item of items as SupabaseCommentRow[]) {
 			if (item.reply !== null && item.reply !== undefined) {
 				const replyToCommentId = item.reply.toString()
 
@@ -69,39 +84,36 @@ const useComments = (
 					hasReplies: item.has_replies,
 				})
 			}
-		})
+		}
 
-		items.map((item: any) => {
+		const populateReplyList = (
+			replyItems?: CommentReplyItem[]
+		): CommentItem[] => {
+			if (!replyItems) return []
+			return replyItems
+				.map((item): CommentItem => ({
+					...item,
+					replyList: item.hasReplies
+						? populateReplyList(
+								commentItemReplyItems[item.ID.toString()]
+							)
+						: [],
+				}))
+				.reverse()
+		}
+
+		for (const item of items as SupabaseCommentRow[]) {
 			if (
 				(item.reply === null && typeof queryKey === "string") ||
 				typeof queryKey === "number"
 			) {
-				const populateReplyList = (
-					replyItems?: CommentReplyItem[]
-				): CommentItem[] => {
-					const populatedReplyItems: CommentReplyItem[] = replyItems || []
+				const replyItemsList: CommentItem[] = item.has_replies
+					? populateReplyList(
+							commentItemReplyItems[item.comment_id.toString()]
+						)
+					: []
 
-					populatedReplyItems.map((item) => {
-						if (item.hasReplies) {
-							Object.assign(item, {
-								replyList: populateReplyList(
-									commentItemReplyItems[item.ID.toString()]
-								),
-							})
-						}
-					})
-
-					return (populatedReplyItems as CommentItem[]).reverse()
-				}
-
-				let replyItemsList: CommentItem[] = []
-				if (item.has_replies) {
-					replyItemsList = populateReplyList(
-						commentItemReplyItems[item.comment_id.toString()]
-					)
-				}
-
-				const itemData: CommentItem = {
+				commentItems.push({
 					OID: item.id,
 					ID: item.comment_id,
 					identifier: item.identifier,
@@ -113,11 +125,9 @@ const useComments = (
 					tag: item.tag,
 					link: item.link,
 					hasReplies: item.has_replies,
-				}
-
-				commentItems.push(itemData)
+				})
 			}
-		})
+		}
 
 		return commentItems
 	}

@@ -1,54 +1,37 @@
 import React from "react"
-import Rodal from "rodal"
+import NexmentDialog from "./Dialog"
 import "../../styles/modal.scss"
-import adminLogin from "../../lib/database/adminLoging"
+import adminLogin from "../../lib/database/adminLogin"
 import translate from "../../lib/translation/index"
 import Context, { NexmentConfig } from "../../lib/utils/configContext"
 
 const VerificationModal = (Props: {
-	visibilityFunction?: Function
+	visibilityFunction?: (visible: boolean) => void
 	config: NexmentConfig
 }) => {
-	// Configs
 	const NexmentConfigs: NexmentConfig = React.useContext(Context)
-
-	// Translation
 	const Translation = translate.use().text
 
-	// Modal state
 	const [notificationModalStatus, setNotificationModalStatus] =
-		React.useState<boolean>(true)
+		React.useState(true)
+	const [password, setPassword] = React.useState("")
+	const [loginText, setLoginText] = React.useState("Login")
 
-	// Admin state
-	const [password, setPassword] = React.useState<string>()
-	const [loginText, setLoginText] = React.useState<string>("Login")
-
-	// Modal closing event handler
 	const handleCloseNotification = () => {
-		setNotificationModalStatus(!notificationModalStatus)
-		if (Props.visibilityFunction) {
-			// Change visibility state in CommentsList
-			Props.visibilityFunction(false)
-		}
+		setNotificationModalStatus(false)
+		Props.visibilityFunction?.(false)
 	}
 
-	// Admin event handler
-	const handlePwdChange = (e: {
-		target: { value: React.SetStateAction<string | undefined> }
-	}) => {
+	const handlePwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value)
 	}
 
-	/**
-	 * Login event handler
-	 *
-	 */
 	const loginAction = async () => {
 		setLoginText("Verifying...")
 		const returnData = await adminLogin(
 			NexmentConfigs.admin.name,
 			NexmentConfigs.admin.email,
-			password || "",
+			password,
 			NexmentConfigs
 		)
 		if (returnData.status !== 200) {
@@ -61,11 +44,9 @@ const VerificationModal = (Props: {
 	}
 
 	return (
-		<Rodal
-			visible={notificationModalStatus}
-			onClose={() => {
-				handleCloseNotification()
-			}}
+		<NexmentDialog
+			open={notificationModalStatus}
+			onClose={handleCloseNotification}
 			className="nexment-modal-notification"
 			animation="fade"
 		>
@@ -75,15 +56,9 @@ const VerificationModal = (Props: {
 			</div>
 			<div className="nexment-modal-input-group">
 				<input placeholder={Translation.verifyPwd} onChange={handlePwdChange} />
-				<button
-					onClick={() => {
-						loginAction()
-					}}
-				>
-					{loginText}
-				</button>
+				<button onClick={loginAction}>{loginText}</button>
 			</div>
-		</Rodal>
+		</NexmentDialog>
 	)
 }
 

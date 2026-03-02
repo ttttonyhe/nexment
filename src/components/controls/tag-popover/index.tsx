@@ -58,8 +58,7 @@ const TagCard = (Props: { tag: string; handler: any }) => {
 		>
 			<button
 				type="button"
-				data-tooltip-id="nexment-tooltip"
-				data-tooltip-content={Translation.desTag}
+				title={Translation.desTag}
 				onClick={() => setTagPopoverStatus(!tagPopoverStatus)}
 			>
 				{Props.tag ? <Icon name="tagFill" /> : <Icon name="tag" />}

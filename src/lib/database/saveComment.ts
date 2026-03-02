@@ -1,9 +1,28 @@
 import { validate } from "email-validator"
-import similarity from "string-similarity"
 import getSupabase from "./initiation"
 import { getCurrentUser } from "./initiation"
-import converter from "../utils/showDown"
+import { renderMarkdown } from "../utils/showDown"
 import { NexmentConfig } from "../utils/configContext"
+
+function diceCoefficient(a: string, b: string): number {
+	if (a === b) return 1
+	if (a.length < 2 || b.length < 2) return 0
+	const bigramsA = new Map<string, number>()
+	for (let i = 0; i < a.length - 1; i++) {
+		const bigram = a.substring(i, i + 2)
+		bigramsA.set(bigram, (bigramsA.get(bigram) ?? 0) + 1)
+	}
+	let intersections = 0
+	for (let i = 0; i < b.length - 1; i++) {
+		const bigram = b.substring(i, i + 2)
+		const count = bigramsA.get(bigram) ?? 0
+		if (count > 0) {
+			bigramsA.set(bigram, count - 1)
+			intersections++
+		}
+	}
+	return (2 * intersections) / (a.length + b.length - 2)
+}
 
 interface NewCommentItem {
 	identifier: string
@@ -49,7 +68,7 @@ const cleanLink = (link: string) => {
 	}
 }
 
-const useSavingComment = async (
+const saveComment = async (
 	info: NewCommentItem,
 	config: NexmentConfig
 ): Promise<{ status: number; savedComment?: any }> => {
@@ -89,7 +108,7 @@ const useSavingComment = async (
 			}
 			if (
 				rule.name &&
-				similarity.compareTwoStrings(info.name, rule.name) > 0.6
+				diceCoefficient(info.name, rule.name) > 0.6
 			) {
 				return {
 					status: 401,
@@ -103,7 +122,7 @@ const useSavingComment = async (
 			if (
 				rule.link &&
 				info.link &&
-				similarity.compareTwoStrings(info.link, rule.link) > 0.8
+				diceCoefficient(info.link, rule.link) > 0.8
 			) {
 				return {
 					status: 401,
@@ -141,7 +160,7 @@ const useSavingComment = async (
 					config.email.endpoint,
 					info.name,
 					parentComment.email,
-					converter.makeHtml(info.content),
+					renderMarkdown(info.content),
 					window.location.href
 				)
 			}
@@ -182,4 +201,4 @@ const useSavingComment = async (
 	}
 }
 
-export default useSavingComment
+export default saveComment
