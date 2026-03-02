@@ -1,4 +1,4 @@
-import getSupabase from "./initiation"
+import getBackend from "./initiation"
 import { NexmentConfig } from "../utils/configContext"
 import useSWR, { mutate } from "swr"
 
@@ -16,21 +16,6 @@ export interface CommentItem {
 	link: string
 }
 
-interface SupabaseCommentRow {
-	id: string
-	comment_id: number
-	identifier: string
-	name: string
-	content: string
-	created_at: string
-	email: string
-	tag: string
-	link: string
-	has_replies: boolean
-	reply: number | null
-	email_when_replied: boolean
-}
-
 type CommentReplyItem = Omit<CommentItem, "replyList">
 
 export const refetchData = async (pageKey: string) => {
@@ -45,14 +30,10 @@ const useComments = (
 	isLoading: boolean
 	isError: string
 } => {
-	const supabase = getSupabase(config.supabase.url, config.supabase.anonKey)
+	const backend = getBackend(config)
 
 	const ListGet = async (queryKey: string | number): Promise<CommentItem[]> => {
-		const { data: items, error } = await supabase
-			.from("nexment_comments")
-			.select("*")
-			.eq("identifier", queryKey)
-			.order("created_at", { ascending: false })
+		const { data: items, error } = await backend.queryComments(queryKey)
 
 		if (error || !items) {
 			throw new Error(error?.message || "Failed to fetch comments")
@@ -63,7 +44,7 @@ const useComments = (
 			[commentItemId: string]: CommentReplyItem[]
 		} = {}
 
-		for (const item of items as SupabaseCommentRow[]) {
+		for (const item of items) {
 			if (item.reply !== null && item.reply !== undefined) {
 				const replyToCommentId = item.reply.toString()
 
@@ -91,26 +72,24 @@ const useComments = (
 		): CommentItem[] => {
 			if (!replyItems) return []
 			return replyItems
-				.map((item): CommentItem => ({
-					...item,
-					replyList: item.hasReplies
-						? populateReplyList(
-								commentItemReplyItems[item.ID.toString()]
-							)
-						: [],
-				}))
+				.map(
+					(item): CommentItem => ({
+						...item,
+						replyList: item.hasReplies
+							? populateReplyList(commentItemReplyItems[item.ID.toString()])
+							: [],
+					})
+				)
 				.reverse()
 		}
 
-		for (const item of items as SupabaseCommentRow[]) {
+		for (const item of items) {
 			if (
 				(item.reply === null && typeof queryKey === "string") ||
 				typeof queryKey === "number"
 			) {
 				const replyItemsList: CommentItem[] = item.has_replies
-					? populateReplyList(
-							commentItemReplyItems[item.comment_id.toString()]
-						)
+					? populateReplyList(commentItemReplyItems[item.comment_id.toString()])
 					: []
 
 				commentItems.push({

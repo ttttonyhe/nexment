@@ -22,7 +22,9 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 	)
 
 	const [loadingStatus, setLoadingStatus] = useState(false)
-	const [modalVisibility, setModalVisibility] = useState<Record<string, boolean>>({})
+	const [modalVisibility, setModalVisibility] = useState<
+		Record<string, boolean>
+	>({})
 	const { target: replyTarget, random, setReply } = useReplyTarget()
 
 	const toggleModal = useCallback((oid: string) => {
@@ -47,13 +49,19 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 	if (isError) {
 		return (
 			<div className="nexment-empty">
-				<div><Icon name="commentsError" /></div>
+				<div>
+					<Icon name="commentsError" />
+				</div>
 				<p>{Translation.serviceError}</p>
 				<div className="nexment-error">
 					<p>{Translation.problemShooting}</p>
 					<p>
 						{Translation.problemDes}&nbsp;|&nbsp;
-						<a href="https://nexment.ouorz.com" target="_blank" rel="noreferrer">
+						<a
+							href="https://nexment.ouorz.com"
+							target="_blank"
+							rel="noreferrer"
+						>
 							{Translation.documentation}
 						</a>
 					</p>
@@ -110,8 +118,15 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 				<div>
 					<p className="nexment-header-logo">
 						{Translation.poweredBy}{" "}
-						<a href="https://github.com/ttttonyhe/nexment" target="_blank" rel="noreferrer">
-							<img src="https://static.ouorz.com/nexment-logo-with-text.webp" alt="nexment comment system" />
+						<a
+							href="https://github.com/ttttonyhe/nexment"
+							target="_blank"
+							rel="noreferrer"
+						>
+							<img
+								src="https://static.ouorz.com/nexment-logo-with-text.webp"
+								alt="nexment comment system"
+							/>
 						</a>
 					</p>
 				</div>
@@ -122,7 +137,11 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 			<ul className="nexment-comments-list">
 				{commentsData?.length ? (
 					commentsData.map((item) => (
-						<li className="nexment-comments-list-item" key={item.ID} id={item.ID.toString()}>
+						<li
+							className="nexment-comments-list-item"
+							key={item.ID}
+							id={item.ID.toString()}
+						>
 							<CommentItemCard
 								item={item}
 								config={NexmentConfigs}
@@ -132,7 +151,11 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 							<div>
 								<ul className="nexment-comments-reply-list">
 									{item.replyList.map((replyItem) => (
-										<div className="nexment-comments-list-item-div" key={replyItem.ID} id={replyItem.ID.toString()}>
+										<div
+											className="nexment-comments-list-item-div"
+											key={replyItem.ID}
+											id={replyItem.ID.toString()}
+										>
 											<li className="nexment-comments-list-item">
 												<CommentItemCard
 													item={replyItem}
@@ -169,7 +192,9 @@ const CommentsList = (Props: { type: string; pageKey: string }) => {
 					))
 				) : (
 					<div className="nexment-empty">
-						<div><Icon name="comments" /></div>
+						<div>
+							<Icon name="comments" />
+						</div>
 						<p>{Translation.noComments}</p>
 					</div>
 				)}

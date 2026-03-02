@@ -299,11 +299,16 @@ $borderColor: #e0e0e0;
 
 .nexment-loading {
 	margin: 20px 0px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 10px;
 }
 
 .nexment-loading-index {
 	margin: 25px 0 0 0;
 	padding: 0 15px 0 10px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .nexment-header {

@@ -25,8 +25,10 @@ const NexmentContainer = (Props: { config: NexmentConfig }) => {
 		() => Props.config,
 		[
 			Props.config.pageKey,
-			Props.config.supabase.url,
-			Props.config.supabase.anonKey,
+			Props.config.supabase?.url,
+			Props.config.supabase?.anonKey,
+			Props.config.neon?.authUrl,
+			Props.config.neon?.dataApiUrl,
 			Props.config.admin.name,
 			Props.config.admin.email,
 			Props.config.email?.endpoint,

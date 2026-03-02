@@ -1,29 +1,39 @@
-import { createClient, SupabaseClient, User } from "@supabase/supabase-js"
+import { NexmentBackend, NexmentUser } from "./backend"
+import { NexmentConfig } from "../utils/configContext"
+import { createSupabaseBackend } from "./backends/supabase"
+import { createNeonBackend } from "./backends/neon"
 
-let supabaseInstance: SupabaseClient | null = null
-let cachedUser: User | null = null
+let backendInstance: NexmentBackend | null = null
+let cachedUser: NexmentUser | null = null
 
-const getSupabase = (url: string, anonKey: string): SupabaseClient => {
-	if (!supabaseInstance) {
-		supabaseInstance = createClient(url, anonKey)
+const getBackend = (config: NexmentConfig): NexmentBackend => {
+	if (!backendInstance) {
+		if (config.supabase) {
+			backendInstance = createSupabaseBackend(
+				config.supabase.url,
+				config.supabase.anonKey
+			)
+		} else {
+			backendInstance = createNeonBackend(
+				config.neon.authUrl,
+				config.neon.dataApiUrl
+			)
+		}
 	}
-	return supabaseInstance
+	return backendInstance
 }
 
-export const getCurrentUser = (): User | null => cachedUser
+export const getCurrentUser = (): NexmentUser | null => cachedUser
 
-export const setCurrentUser = (user: User | null) => {
+export const setCurrentUser = (user: NexmentUser | null) => {
 	cachedUser = user
 }
 
 export const initAuth = async (
-	supabase: SupabaseClient
-): Promise<User | null> => {
-	const {
-		data: { session },
-	} = await supabase.auth.getSession()
-	cachedUser = session?.user ?? null
+	backend: NexmentBackend
+): Promise<NexmentUser | null> => {
+	cachedUser = await backend.initAuth()
 	return cachedUser
 }
 
-export default getSupabase
+export default getBackend

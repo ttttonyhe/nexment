@@ -17,7 +17,15 @@ interface CommentItemCardProps {
 }
 
 const AdminBadge = React.memo(
-	({ name, email, config }: { name: string; email: string; config: NexmentConfig }) => {
+	({
+		name,
+		email,
+		config,
+	}: {
+		name: string
+		email: string
+		config: NexmentConfig
+	}) => {
 		if (name === config.admin.name && email === config.admin.email) {
 			return (
 				<div className="nexment-admin-badge">
@@ -33,11 +41,10 @@ const CommentItemCard = React.memo(
 	({ item, config, variant, onReply, onViewReplies }: CommentItemCardProps) => {
 		const Translation = translate.use().text
 
-		const showTag = variant === "primary" || variant === "modalPrimary" || variant === "modal"
+		const showTag =
+			variant === "primary" || variant === "modalPrimary" || variant === "modal"
 		const showViewReplies =
-			variant === "reply" &&
-			item.hasReplies &&
-			config.features?.replyListModal
+			variant === "reply" && item.hasReplies && config.features?.replyListModal
 		const isInnerReply = variant === "innerReply"
 		const isModalItem = variant === "modal" || variant === "modalPrimary"
 
@@ -47,7 +54,11 @@ const CommentItemCard = React.memo(
 				: `nexment-comments-content ${item.tag ? "" : "nexment-margin-top"}`
 
 		const handleReplyClick = () => {
-			if (variant === "reply" && item.hasReplies && config.features?.replyListModal) {
+			if (
+				variant === "reply" &&
+				item.hasReplies &&
+				config.features?.replyListModal
+			) {
 				onViewReplies?.(item.OID)
 			} else {
 				onReply?.(item.ID, item.OID, item.name, item.content)

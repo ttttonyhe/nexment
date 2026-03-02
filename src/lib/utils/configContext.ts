@@ -1,17 +1,12 @@
 import React from "react"
 
-// Nexment Configuration Interface
-export interface NexmentConfig {
+interface NexmentConfigBase {
 	pageKey?: string
 	features?: {
 		linkInput?: boolean
 		replyListModal?: boolean
 		replyEmailNotifications?: boolean
 		descriptionTag?: boolean
-	}
-	supabase: {
-		url: string
-		anonKey: string
 	}
 	admin: {
 		name: string
@@ -27,6 +22,12 @@ export interface NexmentConfig {
 		keyword?: string
 	}[]
 }
+
+export type NexmentConfig = NexmentConfigBase &
+	(
+		| { supabase: { url: string; anonKey: string }; neon?: undefined }
+		| { neon: { authUrl: string; dataApiUrl: string }; supabase?: undefined }
+	)
 
 const Context = React.createContext<NexmentConfig>({
 	supabase: {

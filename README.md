@@ -1,6 +1,6 @@
 <img src="https://i.loli.net/2020/08/18/HSa25hE1bdZ9gCM.jpg" />
 <div align="center">
-  <p>A feature-rich serverless comment library powered by Supabase</p>
+  <p>A feature-rich serverless comment library powered by Supabase or Neon</p>
   <a href="https://www.npmjs.com/package/nexment">
     <img src="https://img.shields.io/npm/dw/nexment" alt="npm downloads">
   </a>
@@ -22,12 +22,23 @@
 
 ## Installation
 
-### Part I - Supabase
+### Part I - Backend Setup
+
+Choose **one** of the following backends:
+
+#### Option A — Supabase
 
 1. Create a project on [Supabase](https://supabase.com)
 2. Go to **SQL Editor** and run the contents of [`migration/schema.sql`](./migration/schema.sql) to create the `nexment_comments` table
 3. Go to **Authentication** → **Providers** → **Email** and disable "Confirm email" (required for admin registration)
 4. Go to **Project Settings** → **API** and copy your **Project URL** and **Publishable** key
+
+#### Option B — Neon
+
+1. Create a project on [Neon](https://neon.tech)
+2. Enable **Neon Auth** in your project settings
+3. Go to **SQL Editor** and run the contents of [`migration/schema-neon.sql`](./migration/schema-neon.sql) to create the `nexment_comments` table with the required RLS policies and role grants
+4. Copy your **Auth URL** and **Data API URL** from the Neon project dashboard
 
 <br/>
 
@@ -39,7 +50,7 @@ Add Nexment to your project:
 npm install nexment
 ```
 
-Import and use:
+Import and use with **Supabase**:
 
 ```jsx
 import Nexment from "nexment"
@@ -69,11 +80,37 @@ const config = {
 ;<Nexment config={config} />
 ```
 
+Or with **Neon**:
+
+```jsx
+import Nexment from "nexment"
+
+const config = {
+	pageKey: "xxx",
+	features: {
+		linkInput: true,
+		replyListModal: true,
+		replyEmailNotifications: true,
+		descriptionTag: true,
+	},
+	neon: {
+		authUrl: "https://your-project.auth.neon.tech",
+		dataApiUrl: "https://your-project.data-api.neon.tech",
+	},
+	admin: {
+		name: "xxx",
+		email: "xxx@xxx.xxx",
+	},
+}
+
+;<Nexment config={config} />
+```
+
 <br/>
 
 ## Use Nexment in Next.js
 
-Create a wrapper component:
+Create a wrapper component (using either `supabase` or `neon` config):
 
 ```tsx
 import Nexment from "nexment"
@@ -87,10 +124,16 @@ const NexmentComponent = () => {
 			replyEmailNotifications: true,
 			descriptionTag: true,
 		},
+		// Use one of the following:
 		supabase: {
 			url: "https://your-project.supabase.co",
 			anonKey: "your-anon-key",
 		},
+		// OR
+		// neon: {
+		// 	authUrl: "https://your-project.auth.neon.tech",
+		// 	dataApiUrl: "https://your-project.data-api.neon.tech",
+		// },
 		admin: {
 			name: "xxx",
 			email: "xxx@xxx.xxx",

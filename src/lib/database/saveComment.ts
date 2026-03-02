@@ -1,5 +1,5 @@
 import { validate } from "email-validator"
-import getSupabase from "./initiation"
+import getBackend from "./initiation"
 import { getCurrentUser } from "./initiation"
 import { renderMarkdown } from "../utils/showDown"
 import { NexmentConfig } from "../utils/configContext"
@@ -72,7 +72,7 @@ const saveComment = async (
 	info: NewCommentItem,
 	config: NexmentConfig
 ): Promise<{ status: number; savedComment?: any }> => {
-	const supabase = getSupabase(config.supabase.url, config.supabase.anonKey)
+	const backend = getBackend(config)
 
 	if (
 		(info.email === config.admin.email || info.name === config.admin.name) &&
@@ -106,10 +106,7 @@ const saveComment = async (
 					status: 401,
 				}
 			}
-			if (
-				rule.name &&
-				diceCoefficient(info.name, rule.name) > 0.6
-			) {
+			if (rule.name && diceCoefficient(info.name, rule.name) > 0.6) {
 				return {
 					status: 401,
 				}
@@ -142,18 +139,12 @@ const saveComment = async (
 		if (info.reply && info.replyOID) {
 			newComment.reply = info.reply
 
-			// Update parent comment's has_replies flag
-			await supabase
-				.from("nexment_comments")
-				.update({ has_replies: true })
-				.eq("id", info.replyOID)
+			await backend.updateComment(info.replyOID, { has_replies: true })
 
-			// Check email notification preference
-			const { data: parentComment } = await supabase
-				.from("nexment_comments")
-				.select("email_when_replied, email")
-				.eq("id", info.replyOID)
-				.single()
+			const { data: parentComment } = await backend.getComment(
+				info.replyOID,
+				"email_when_replied, email"
+			)
 
 			if (parentComment?.email_when_replied && config.email?.endpoint) {
 				sendEmail(
@@ -178,11 +169,8 @@ const saveComment = async (
 			newComment.link = cleanLink(info.link)
 		}
 
-		const { data: savedComment, error } = await supabase
-			.from("nexment_comments")
-			.insert(newComment)
-			.select()
-			.single()
+		const { data: savedComment, error } =
+			await backend.insertComment(newComment)
 
 		if (error) {
 			return {

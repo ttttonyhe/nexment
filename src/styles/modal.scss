@@ -10,7 +10,6 @@ html.nexment-scroll-locked body {
 	border-radius: 10px;
 	padding: 0;
 	max-width: none;
-	max-height: none;
 	box-shadow: 0px 2px 8px rgba(213, 222, 231, 0.3);
 	z-index: 100;
 
@@ -138,7 +137,7 @@ html.nexment-scroll-locked body {
 	width: calc(var(--nexment-container-width) + 7.5%);
 	max-width: calc(100vw - 40px);
 	height: 90vh;
-	max-height: 90vh;
+	max-height: none;
 	overflow: hidden;
 	overflow-y: auto;
 	overscroll-behavior: contain;
@@ -169,7 +168,8 @@ html.nexment-scroll-locked body {
 /* -- Notification modal -- */
 .nexment-modal-notification {
 	width: auto;
-	height: auto;
+	max-width: min(360px, calc(100vw - 40px));
+	height: fit-content;
 
 	.nexment-modal-text {
 		h1 {

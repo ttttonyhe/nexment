@@ -1,5 +1,5 @@
 import { NexmentConfig } from "../utils/configContext"
-import getSupabase from "./initiation"
+import getBackend from "./initiation"
 import { setCurrentUser } from "./initiation"
 
 const adminLogin = async (
@@ -8,34 +8,23 @@ const adminLogin = async (
 	pwd: string,
 	config: NexmentConfig
 ) => {
-	const supabase = getSupabase(config.supabase.url, config.supabase.anonKey)
+	const backend = getBackend(config)
 
-	const { data, error } = await supabase.auth.signInWithPassword({
-		email,
-		password: pwd,
-	})
+	const { user } = await backend.signIn(email, pwd)
 
-	if (!error && data.user) {
-		setCurrentUser(data.user)
+	if (user) {
+		setCurrentUser(user)
 		return {
 			status: 200,
 			msg: "Login success",
 		}
 	}
 
-	// If login fails, try to sign up (first-time admin registration)
 	if (name && email && pwd) {
-		const { data: signUpData, error: signUpError } =
-			await supabase.auth.signUp({
-				email,
-				password: pwd,
-				options: {
-					data: { username: name },
-				},
-			})
+		const { user: signUpUser } = await backend.signUp(email, pwd, name)
 
-		if (!signUpError && signUpData.user) {
-			setCurrentUser(signUpData.user)
+		if (signUpUser) {
+			setCurrentUser(signUpUser)
 			return {
 				status: 200,
 				msg: "Admin successfully registered",

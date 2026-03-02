@@ -13,6 +13,12 @@ const App = () => {
 			url: "https://ainpzfmspbpvpfcatnwq.supabase.co",
 			anonKey: "sb_publishable_LT9i2hIpENWPlyXyj-jmSw_ra4mPiSP",
 		},
+		// neon: {
+		// 	authUrl:
+		// 		"https://ep-gentle-bird-aesld22f.neonauth.c-2.us-east-2.aws.neon.tech/neondb/auth",
+		// 	dataApiUrl:
+		// 		"https://ep-gentle-bird-aesld22f.apirest.c-2.us-east-2.aws.neon.tech/neondb/rest/v1",
+		// },
 		admin: {
 			name: "Tony He",
 			email: "tony.hlp@hotmail.com",

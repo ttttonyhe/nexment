@@ -1,4 +1,6 @@
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - '@sentry-internal/node-cpu-profiler'
   - '@swc/core'
+  - core-js
   - esbuild

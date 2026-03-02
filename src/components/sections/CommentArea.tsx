@@ -7,7 +7,7 @@ import { refetchData } from "../../lib/database/getCommentsList"
 import EmojiPopover from "../controls/emoji-popover"
 import TagPopover from "../controls/tag-popover"
 import VerificationModal from "../modal/verification"
-import getSupabase from "../../lib/database/initiation"
+import getBackend from "../../lib/database/initiation"
 import {
 	getCurrentUser,
 	setCurrentUser,
@@ -49,19 +49,16 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 	const NexmentConfigs: NexmentConfig = React.useContext(Context)
 	const Translation = translate.use().text
 
-	const supabase = getSupabase(
-		NexmentConfigs.supabase.url,
-		NexmentConfigs.supabase.anonKey
-	)
+	const backend = getBackend(NexmentConfigs)
 
 	const [adminUser, setAdminUser] = React.useState(getCurrentUser())
 
 	React.useEffect(() => {
-		initAuth(supabase).then((user) => {
+		initAuth(backend).then((user) => {
 			setAdminUser(user)
 			setCurrentUser(user)
 			if (user) {
-				setCommentName(user.user_metadata?.username || "")
+				setCommentName(user.name || "")
 				setCommentEmail(user.email || "")
 			}
 		})
@@ -72,7 +69,7 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 	const primaryReplyToName = Props.primaryReplyToName
 
 	const [commentName, setCommentName] = React.useState<string>(
-		getCurrentUser()?.user_metadata?.username || ""
+		getCurrentUser()?.name || ""
 	)
 	const [commentEmail, setCommentEmail] = React.useState<string>(
 		getCurrentUser()?.email || ""
@@ -87,6 +84,17 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 	const [sendingComment, setSendingComment] = React.useState(false)
 	const [showProgressBar, setShowProgressBar] = React.useState(false)
 	const [progress, setProgress] = React.useState(10)
+
+	React.useEffect(() => {
+		if (!modalStatus) {
+			const user = getCurrentUser()
+			if (user) {
+				setAdminUser(user)
+				setCommentName(user.name || "")
+				setCommentEmail(user.email || "")
+			}
+		}
+	}, [modalStatus])
 
 	React.useEffect(() => {
 		if (!showProgressBar) return
@@ -170,11 +178,15 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 
 		switch (returnData.status) {
 			case 400:
-				alert("Nexment: An error occurred while submitting your comment.\nComment is too long or too short.")
+				alert(
+					"Nexment: An error occurred while submitting your comment.\nComment is too long or too short."
+				)
 				setSendingComment(false)
 				break
 			case 500:
-				alert("Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information.")
+				alert(
+					"Nexment: An error occurred while submitting your comment.\nPlease check if you have entered the correct information."
+				)
 				setSendingComment(false)
 				break
 			case 501:
@@ -182,7 +194,9 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 				setSendingComment(false)
 				break
 			case 401:
-				alert("Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam.")
+				alert(
+					"Nexment: An error occurred while submitting your comment.\nYour comment has been identified as a spam."
+				)
 				setSendingComment(false)
 				break
 			default:
@@ -207,9 +221,13 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 							} else {
 								scrollToElementById(thisID.toString())
 							}
-							document.getElementById(thisID.toString())?.classList.add("nexment-flash")
+							document
+								.getElementById(thisID.toString())
+								?.classList.add("nexment-flash")
 							setTimeout(() => {
-								document.getElementById(thisID.toString())?.classList.remove("nexment-flash")
+								document
+									.getElementById(thisID.toString())
+									?.classList.remove("nexment-flash")
 							}, 2000)
 							setSendingComment(false)
 							resetReplyTo()
@@ -261,7 +279,10 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 							}}
 						/>
 					</div>
-					<div className="nexment-comment-area-replying-to-cta" onClick={resetReplyTo}>
+					<div
+						className="nexment-comment-area-replying-to-cta"
+						onClick={resetReplyTo}
+					>
 						<button>
 							<Icon name="cancel" />
 						</button>
@@ -355,17 +376,23 @@ const CommentsArea = (Props: CommentsAreaProps) => {
 						)}
 						<button
 							type="button"
-							title={previewStatus ? Translation.stopPreview : Translation.mdPreview}
+							title={
+								previewStatus ? Translation.stopPreview : Translation.mdPreview
+							}
 							onClick={() => setPreviewStatus(!previewStatus)}
 						>
-							{previewStatus ? <Icon name="markdownFill" /> : <Icon name="markdown" />}
+							{previewStatus ? (
+								<Icon name="markdownFill" />
+							) : (
+								<Icon name="markdown" />
+							)}
 						</button>
 						{adminUser ? (
 							<button
 								type="button"
 								title={Translation.adminLogout}
 								onClick={async () => {
-									await supabase.auth.signOut()
+									await backend.signOut()
 									setCurrentUser(null)
 									setAdminUser(null)
 									window.location.reload()
