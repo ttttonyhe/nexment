@@ -1,3 +1,4 @@
+import { join } from "path"
 import type { BuildOptions } from "esbuild"
 import { dtsPlugin } from "esbuild-plugin-d.ts"
 import { sassPlugin } from "esbuild-sass-plugin"
@@ -21,7 +22,7 @@ export const ESBUILD_CONFIG: BuildOptions = {
 		sassPlugin({
 			type: "style",
 		}),
-		dtsPlugin(),
+		dtsPlugin({ tsconfig: join(process.cwd(), "tsconfig.build.json") }),
 	],
 }
 

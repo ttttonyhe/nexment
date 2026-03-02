@@ -1,4 +1,4 @@
-import md5 from "js-md5"
+import { md5 } from "js-md5"
 import { format } from "timeago.js"
 import smoothScroll from "smoothscroll-polyfill"
 import { useState, useContext, useEffect } from "react"

@@ -336,7 +336,7 @@ const CommentsArea = (Props: {
 	}
 
 	// Create a ref for textarea
-	const nexmentTextarea: any = React.useRef()
+	const nexmentTextarea: any = React.useRef(null)
 
 	// Process data sending from content addons, insert content at cursor
 	const handleAddon = (content: string) => {
