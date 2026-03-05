@@ -1,6 +1,10 @@
+packages:
+  - .
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@sentry-internal/node-cpu-profiler'
   - '@swc/core'
   - core-js
+  - cypress
   - esbuild
+  - unrs-resolver

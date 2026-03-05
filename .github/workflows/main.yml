@@ -9,36 +9,75 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: 20
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Build Nexment
         run: pnpm run build
+
+  run-unit-tests:
+    name: Unit & Component tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Jest tests
+        run: pnpm test
+
+  run-e2e-tests:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    needs: run-smoke-test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Nexment
+        run: pnpm run build
+
+      - name: Start dev server
+        run: pnpm dev &
+
+      - name: Wait for dev server
+        run: npx wait-on http://localhost:6006 --timeout 30000
+
+      - name: Run Cypress tests
+        run: pnpm test:e2e

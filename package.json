@@ -22,6 +22,9 @@
     "dev": "vite --port 6006",
     "build": "tsx ./scripts/build.ts",
     "lint": "eslint --fix --ext .ts,.tsx src && prettier src --write --log-level silent",
+    "test": "jest",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open",
     "publish": "npx changeset publish"
   },
   "dependencies": {
@@ -45,6 +48,10 @@
     "@changesets/cli": "^2.29.8",
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/js-md5": "^0.8.0",
     "@types/qs": "^6.14.0",
     "@types/react": "^19.2.14",
@@ -53,6 +60,7 @@
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "@vitejs/plugin-react-swc": "^4.2.3",
+    "cypress": "^15.11.0",
     "esbuild": "^0.27.3",
     "esbuild-plugin-d.ts": "^1.3.1",
     "esbuild-sass-plugin": "^3.6.0",
@@ -60,11 +68,15 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "husky": "^9.1.7",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "prettier": "^3.8.1",
+    "ts-jest": "^29.4.6",
     "tslib": "^2.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },
-  "packageManager": "pnpm"
+  "packageManager": "pnpm@10.6.2"
 }
